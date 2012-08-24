@@ -1,0 +1,32 @@
+PivotX\CoreBundle\Entity\LocalEmbedResource:
+  type: entity
+  table: null
+  fields:
+    publicid:
+      type: string
+      length: 64
+      precision: 0
+      scale: 0
+      nullable: true
+      unique: true
+    fileid:
+      type: string
+      length: 40
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    filename:
+      type: string
+      length: 100
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    filesize:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false

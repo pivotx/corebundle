@@ -1,0 +1,79 @@
+PivotX\CoreBundle\Entity\ActivityLog:
+  type: entity
+  table: activitylog
+  repositoryClass: PivotX\CoreBundle\Model\ActivityLogRepository
+  fields:
+    id:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+      id: true
+      generator:
+        strategy: IDENTITY
+    sitename:
+      type: string
+      length: 128
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    date_logged:
+      type: datetime
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    level:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    importance:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    technical_context:
+      type: array
+      length: null
+      precision: 0
+      scale: 0
+      nullable: true
+      unique: false
+    friendly_language:
+      type: string
+      length: 8
+      precision: 0
+      scale: 0
+      nullable: true
+      unique: false
+    friendly_message:
+      type: text
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    friendly_arguments:
+      type: array
+      length: null
+      precision: 0
+      scale: 0
+      nullable: true
+      unique: false
+  manyToOne:
+    user:
+      targetEntity: User
+      inversedBy: activitylogs
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+      fetch: EXTRA_LAZY

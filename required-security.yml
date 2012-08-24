@@ -1,0 +1,52 @@
+jms_security_extra:
+    secure_all_services: false
+    expressions: true
+
+security:
+    encoders:
+        PivotX\CoreBundle\Entity\User:
+            algorithm:          sha512
+            iterations:         500
+            encode_as_base64:   true
+
+    role_hierarchy:
+        ROLE_ANONYMOUS:   ROLE_ANONYMOUS
+        ROLE_USER:        ROLE_ANONYMOUS
+        ROLE_EDITOR:      ROLE_USER
+        ROLE_ADMIN:       [ROLE_USER, ROLE_EDITOR]
+        ROLE_DEVELOPER:   [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_DEVELOPER, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        main:
+            entity: { class: PivotX\CoreBundle\Entity\User, property: email }
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern:  ^/pivotx/[a-z]{2}/login$
+            security: false
+
+        secured_area:
+            pattern:    ^/pivotx/[a-z]{2}/
+            form_login:
+                check_path: /pivotx/en/login_check
+                login_path: /pivotx/en/login
+            logout:
+                path:   /pivotx/en/logout
+                target: /pivotx/en/
+            remember_me:
+                key:      "%secret%"
+                lifetime: 604800
+                path:     /
+                domain:   ~ # Defaults to the current domain from $_SERVER
+            #anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"
+
+    access_control:
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }

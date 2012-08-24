@@ -1,0 +1,18 @@
+PivotX\CoreBundle\Entity\RemoteEmbedResource:
+  type: entity
+  table: null
+  fields:
+    uri:
+      type: string
+      length: 250
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    rawhtml:
+      type: text
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false

@@ -1,0 +1,60 @@
+PivotX\CoreBundle\Entity\GenericResource:
+  type: entity
+  table: resource
+  repositoryClass: PivotX\CoreBundle\Model\GenericResourceRepository
+  inheritanceType: SINGLE_TABLE
+  discriminatorColumn:
+    name: type
+    type: string
+    length: 32
+  discriminatorMap:
+    generic: PivotX\CoreBundle\Entity\GenericResource
+    embed: PivotX\CoreBundle\Entity\EmbedResource
+    localembed: PivotX\CoreBundle\Entity\LocalEmbedResource
+    remoteembed: PivotX\CoreBundle\Entity\RemoteEmbedResource
+  fields:
+    id:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+      id: true
+      generator:
+        strategy: IDENTITY
+    date_created:
+      type: datetime
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    date_modified:
+      type: datetime
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    title:
+      type: string
+      length: 250
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    author:
+      type: string
+      length: 250
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    media_type:
+      type: string
+      length: 250
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false

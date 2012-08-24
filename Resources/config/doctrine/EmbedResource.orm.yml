@@ -1,0 +1,18 @@
+PivotX\CoreBundle\Entity\EmbedResource:
+  type: entity
+  table: null
+  fields:
+    width:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    height:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false

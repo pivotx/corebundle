@@ -1,0 +1,82 @@
+PivotX\CoreBundle\Entity\User:
+  type: entity
+  table: user
+  repositoryClass: PivotX\CoreBundle\Model\UserRepository
+  fields:
+    id:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+      id: true
+      generator:
+        strategy: IDENTITY
+    date_created:
+      type: datetime
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+      auto_entity:
+        timestampable:
+          on: create
+    date_modified:
+      type: datetime
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+      auto_entity:
+        timestampable:
+          on: update
+    date_last_login:
+      type: datetime
+      length: null
+      precision: 0
+      scale: 0
+      nullable: true
+      unique: false
+    enabled:
+      type: boolean
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    level:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    email:
+      type: string
+      length: 250
+      precision: 0
+      scale: 0
+      nullable: true
+      unique: true
+    passwd_salt:
+      type: string
+      length: 128
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+    passwd:
+      type: string
+      length: 128
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+  oneToMany:
+    activitylogs:
+      targetEntity: User
+      mappedBy: user
+      fetch: EXTRA_LAZY

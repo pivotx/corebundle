@@ -1,0 +1,21 @@
+{
+    "name": "pivotx/core-bundle",
+    "description": "PivotX 4 Core Package",
+    "version": "0.0.1",
+    "type": "symfony-bundle",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Bob den Otter",
+            "email": "bob@twokings.nl",
+            "homepage": "http://twokings.nl",
+            "role": "Developer"
+        },
+        {
+            "name": "Marcel Wouters",
+            "email": "marcel@twokings.nl",
+            "homepage": "http://twokings.nl",
+            "role": "Developer"
+        }
+    ]
+}
