@@ -23,9 +23,20 @@ Next go to your new Symfony root:
     cd path/to/install
 
 
-### Installing PivotX CoreBundle and BackendBundle from local directory
+### Installing PivotX CoreBundle and BackendBundle 
+
+#### From local directory
 
     cp -rp /home/marcel/public_html/px4/src/PivotX/ src/
+
+#### From GitHub
+
+Execute these commands:
+
+    cd src/
+    git clone https://github.com/PivotX/CoreBundle.git CoreBundle
+    git clone https://github.com/PivotX/BackendBundle.git BackendBundle
+
 
 ### Adding Bundles
 
