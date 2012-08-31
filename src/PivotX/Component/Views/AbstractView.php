@@ -250,6 +250,23 @@ THEEND;
     }
 
     /**
+     * Return a single value from the result
+     */
+    public function getValue()
+    {
+        $result = $this->getResult();
+        if (is_array($result)) {
+            return $result[0];
+        }
+        if ($result instanceof \Iterator) {
+            list($key,$value) = each($result);
+            $result->rewind();
+            return $value;
+        }
+        return null;
+    }
+
+    /**
      * Return an iterator
      */
     public function getIterator()

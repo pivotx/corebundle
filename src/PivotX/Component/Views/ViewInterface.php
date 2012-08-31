@@ -109,14 +109,27 @@ interface ViewInterface
     public function getDescription();
 
     /**
-     * Return an iterator
+     * Return the value of the result
+     * 
+     * Even if the result is an array (returns the first)
+     *
+     * @return mixed return the value
+     */
+    public function getValue();
+
+    /**
+     * Return an iterator of the result
+     * 
+     * Even if the result is a single value
      *
      * @return Iterator return an iterator
      */
     public function getIterator();
 
     /**
-     * Return a HTML iterator
+     * Return a HTML iterator of the result
+     * 
+     * Even if the result is a single value
      *
      * @return Iterator return a HTML iterator
      */

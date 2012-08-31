@@ -278,6 +278,22 @@ class User implements UserInterface
         return array('ROLE_ANONYMOUS');
     }
 
+    /**
+     * Add a specific role to this user
+     *
+     * @todo incomplete interface
+     */
+    public function addRole($role)
+    {
+        switch ($role) {
+            case 'ROLE_SUPER_ADMIN':
+                if ($this->level < 900) {
+                    $this->level = 900;
+                }
+                break;
+        }
+    }
+
     function getPassword()
     {
         return $this->getPasswd();

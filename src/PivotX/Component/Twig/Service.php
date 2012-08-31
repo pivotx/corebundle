@@ -11,6 +11,7 @@ namespace PivotX\Component\Twig;
 use PivotX\Component\Routing\Service as RoutingService;
 use PivotX\Component\Translations\Service as TranslationsService;
 use PivotX\Component\Formats\Service as FormatsService;
+use PivotX\Component\Webresourcer\Service as WebresourcerService;
 
 /**
  * Twig Query interface
@@ -25,14 +26,16 @@ class Service extends \Twig_Extension
     protected $pivotx_routing = false;
     protected $pivotx_translations = false;
     protected $pivotx_formats = false;
+    protected $pivotx_webresourcer = false;
 
     /**
      */
-    public function __construct(RoutingService $pivotx_routing, TranslationsService $pivotx_translations, FormatsService $pivotx_formats)
+    public function __construct(RoutingService $pivotx_routing, TranslationsService $pivotx_translations, FormatsService $pivotx_formats, WebresourcerService $pivotx_webresourcer)
     {
         $this->pivotx_routing      = $pivotx_routing;
         $this->pivotx_translations = $pivotx_translations;
         $this->pivotx_formats      = $pivotx_formats;
+        $this->pivotx_webresourcer = $pivotx_webresourcer;
     }
 
     /**
@@ -52,7 +55,8 @@ class Service extends \Twig_Extension
         return array(
             'ref' =>  new \Twig_Function_Method($this, 'getReference'),
             'translate' => new \Twig_Function_Method($this, 'getTranslate'),
-            'pagination' => new \Twig_Function_Method($this, 'getPagination')
+            'pagination' => new \Twig_Function_Method($this, 'getPagination'),
+            'webresourcer' => new \Twig_Function_Method($this, 'getWebresourcer')
         );
     }
 
@@ -187,6 +191,14 @@ class Service extends \Twig_Extension
         $view = new \PivotX\Component\Views\ArrayView($array, 'Common/Pagination', 'PivotX/Core', 'This is a dynamic view for pagination');
 
         return $view;
+    }
+
+    /**
+     * Shortcut into the translation system
+     */
+    public function getWebresourcer($group)
+    {
+        return $this->pivotx_webresourcer->getWebresources($group);
     }
 
     public function filterFormatAs($in, $name = '')

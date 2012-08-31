@@ -42,6 +42,56 @@ public function addEmailAction($email)
 }
      */
 
+    public function addUser($output, $repository)
+    {
+        $existingUser = null;
+        $email        = null;
+
+        do {
+            $dialog = $this->getHelperSet()->get('dialog');
+            $email = $dialog->ask($output, 'Please enter e-mailaddress for the admin user: ', false);
+
+            $emailConstraint = new Email();
+
+            $errorList = $this->getContainer()->get('validator')->validateValue($email, $emailConstraint);
+
+            if (count($errorList) > 0) {
+                $email = false;
+
+                $output->writeln($errorList[0]->getMessage());
+            }
+            else {
+                $existingUser = $repository->findOneByEmail($email);
+                if (!is_null($existingUser)) {
+                    $output->writeln('E-mailaddress already exists.');
+
+                    if (!$existingUser->getEnabled()) {
+                        $output->writeln('User has been disabled, upgrading will mean the user gets enabled.');
+                    }
+
+                    $is_admin = false;
+                    foreach($existingUser->getRoles() as $role) {
+                        if ($role == 'ROLE_SUPER_ADMIN') {
+                            $is_admin = true;
+                        }
+                    }
+                    if (!$is_admin) {
+                        $output->writeln('User level is below admin level, user will be upgraded.');
+                    }
+
+                    if (!$dialog->askConfirmation($output, 'Do you want me to upgrade this user? ', false)) {
+                        $email = false;
+                    }
+
+                    // @todo maybe ask for new password? (that way we can fix hacked sites?)
+                }
+            }
+        }
+        while ($email === false);
+
+        return array($existingUser, $email);
+    }
+
     /**
      * Set-up PivotX users
      *
@@ -91,44 +141,13 @@ public function addEmailAction($email)
         if ($add_user) {
             $output->writeln('');
 
-            do {
-                $dialog = $this->getHelperSet()->get('dialog');
-                $email = $dialog->ask($output, 'Please enter e-mailaddress for the admin user: ', false);
-
-                $emailConstraint = new Email();
-
-                $errorList = $this->getContainer()->get('validator')->validateValue($email, $emailConstraint);
-
-                if (count($errorList) > 0) {
-                    $email = false;
-
-                    $output->writeln($errorList[0]->getMessage());
-                }
-                else {
-                    $existingUser = $repository->findOneByEmail($email);
-                    if (!is_null($existingUser)) {
-                        $output->writeln('E-mailaddress already exists.');
-
-                        if (!$existingUser->getEnabled()) {
-                            $output->writeln('User has been disabled, upgrading will mean the user gets enabled.');
-                        }
-
-                        if (!$dialog->askConfirmation($output, 'Do you want me to upgrade this user? ', false)) {
-                            $email = false;
-                        }
-
-                        // @todo maybe ask for new password? (that way we can fix hacked sites?)
-                    }
-                }
-            }
-            while ($email === false);
+            list($existingUser, $email) = $this->addUser($output, $repository);
 
             if (($email === false) || ($email == '')) {
                 $output->writeln('Set-up aborted.');
                 return false;
             }
 
-            $authLevel = 900;
             if (is_null($existingUser)) {
                 $user = new \PivotX\CoreBundle\Entity\User;
 
@@ -140,7 +159,7 @@ public function addEmailAction($email)
 
                 $user->initNewCrudRecord();
                 $user->setEnabled(true);
-                $user->setLevel($authLevel);
+                $user->addRole('ROLE_SUPER_ADMIN');
                 $user->setEmail($email);
                 $user->setPasswd($password);
 
@@ -151,9 +170,7 @@ public function addEmailAction($email)
                 // @todo mail this?
             }
             else {
-                if ($existingUser->getLevel() < $authLevel) {
-                    $existingUser->setLevel($authLevel);
-                }
+                $existingUser->addRole('ROLE_SUPER_ADMIN');
                 $existingUser->setEnabled(true);
 
                 $em->persist($existingUser);

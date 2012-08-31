@@ -79,7 +79,7 @@ class HtmlIterator implements \Iterator, \Countable
      */
     protected function _setup_normal($data)
     {
-        if ($data instanceof Iterator) {
+        if ($data instanceof \Iterator) {
             $this->data    = array();
             $this->length  = 0;
             $this->pointer = 0;
