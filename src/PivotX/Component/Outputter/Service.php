@@ -97,6 +97,12 @@ class Service
         return true;
     }
 
+    /**
+     * Concatenate output together if possible
+     *
+     * @param array $in_outputs   ungrouped Output's
+     * @return array              grouped Output's
+     */
     public function concatOutputs($in_outputs)
     {
         $out_outputs = array();

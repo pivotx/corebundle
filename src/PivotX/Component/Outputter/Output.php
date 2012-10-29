@@ -7,21 +7,11 @@
  *
  *
  *
- * @todo
+ * Rewritten non-assetic compatible version
  *
- * Bad, bad, bad. We attempt to keep the best from assetic and merge our own stuff
- * but the result now is something terrible! We keep it for now because it works,
- * but we need to fix it.
- *
- * Should we keep paths in cached filenames?
- * Should we filter css and copy url(..) etc, etc.?
  */
 
 namespace PivotX\Component\Outputter;
-
-use Assetic\Asset\AssetCollection;
-use Assetic\Asset\FileAsset;
-use Assetic\Asset\GlobAsset;
 
 /**
  * An output stores
@@ -35,7 +25,7 @@ class Output
     protected $content = false;
     protected $type;
 
-    private static $last_asset_directory = false;
+    private static $last_source_directory = false;
     private static $active_temp_directory = false;
 
     const TYPE_HTML = 'text/html';
@@ -79,6 +69,7 @@ class Output
     }
 
     /**
+     * @todo remove this?
      * Get a suggested cache filename (without extension)
      */
     public function getFilename()
@@ -105,11 +96,22 @@ class Output
      * @param string $extension  of the cached file
      * @return string            the cache url to use
      */
-    public static function prepareCacheFile($content, $extension, $temp_directory)
+    public function prepareCacheFile($content, $extension, $temp_directory, $name_suggestion)
     {
-        $hash = sha1(substr($content, 0, 500));
+        $dirname  = dirname($name_suggestion);
+        $basename = pathinfo($name_suggestion, PATHINFO_FILENAME);
 
-        $fname = $hash.'.'.$extension;
+        if (preg_match('#(.+)(/src|app|web/)(.+)#', $dirname, $match)) {
+            $dirname = $match[3];
+        }
+        $dirname = str_replace('/PivotX/', '/', $dirname);
+        $dirname = str_replace('/Resources/', '/', $dirname);
+        $dirname = str_replace('Bundle', '', $dirname);
+        $dirname = substr($dirname, 0, 40);
+        $dirname = trim(preg_replace('|[^a-zA-Z0-9+]|', ' ', $dirname));
+        $dirname = str_replace(' ', '_', $dirname);
+
+        $fname = $dirname.'_'.$basename.'.'.$extension;
 
         file_put_contents($temp_directory.'/'.$fname, $content);
 
@@ -126,7 +128,7 @@ class Output
      * @param string $temp_directory  our cache directory
      * @return string                 the cache url to use
      */
-    public static function copyFileToCache($source, $temp_directory)
+    public function copyFileToCache($source, $temp_directory)
     {
         $content = file_get_contents($source);
 
@@ -135,12 +137,13 @@ class Output
             $extension = $match[1];
         }
 
-        return self::prepareCacheFile($content, $extension, $temp_directory);
+        return $this->prepareCacheFile($content, $extension, $temp_directory, $source);
     }
 
     /**
+     * Internal preg callback
      */
-    public static function fixCssUrl($match)
+    public function fixCssUrl($match)
     {
         $target = trim($match[1]);
 
@@ -149,24 +152,21 @@ class Output
         }
 
         if (preg_match('/(https?|data)/', $target, $urlmatch)) {
-            // ignore this string
+            // ignore this string for now
             // @todo a https? target could match our host of course
-            // @todo then we should do something about it..
             return $match[0];
         }
 
-        //echo 'found-for-rewriting[ '.$match[0].' ]<br/>match[ '.$target.' ]<br/>';
-
-        $source_filename = self::$last_asset_directory . '/' . $target;
-        //echo 'source filename[ '.$source_filename.' ]<br/>';
+        $source_filename = realpath(self::$last_source_directory . '/' . $target);
 
         if (file_exists($source_filename)) {
-            return self::copyFileToCache($source_filename, self::$active_temp_directory);
+            $out = $this->copyFileToCache($source_filename, self::$active_temp_directory);
+
+            $out = 'url('.$out.')';
         }
-
-        //echo '<br/>';
-
-        $out = $match[0];
+        else {
+            $out = $match[0];
+        }
 
         return $out;
     }
@@ -179,9 +179,112 @@ class Output
      * @param string $content   the content to filter
      * @return string           the filtered content
      */
-    protected function rewriteCssUrlFilter($content)
+    private function rewriteCssUrlFilter($content)
     {
-        return preg_replace_callback('|url[(]([^)]+)[)]|U', array(get_class($this), 'fixCssUrl'), $content);
+        return preg_replace_callback('|url[(]([^)]+)[)]|U', array($this, 'fixCssUrl'), $content);
+    }
+
+    /**
+     * Our text/javascript filter
+     */
+    private function filterTextJavascript($content)
+    {
+        return 
+            '<script type="text/javascript">'."\n".
+            $content.
+            '</script>'."\n"
+            ;
+    }
+
+    /**
+     * Our text/x-javascript-src filter
+     */
+    private function filterTextJavascriptSrc($sources, $temp_directory)
+    {
+        if (!is_array($sources)) {
+            $sources = array($sources);
+        }
+
+        $content = '';
+
+        foreach($sources as $source) {
+            $src = $this->copyFileToCache($source, $temp_directory);
+
+            $content .= '<script type="text/javascript" src="'.$src.'"></script>'."\n";
+        }
+
+        return $content;
+    }
+
+    /**
+     * Our text/css filter
+     */
+    private function filterTextCss($content)
+    {
+        return
+            '<style type="text/css">'."\n".
+            $this->rewriteCssUrlFilter($content).
+            '</style>'."\n"
+            ;
+    }
+
+    /**
+     * Our text/x-css-href filter
+     */
+    private function filterTextCssHref($sources, $temp_directory)
+    {
+        if (!is_array($sources)) {
+            $sources = array($sources);
+        }
+
+        $content = '';
+
+        foreach($sources as $source) {
+            self::$last_source_directory = dirname($source);
+
+            $data = file_get_contents($source);
+
+            $data = $this->rewriteCssUrlFilter($data);
+
+            $href = $this->prepareCacheFile($data, 'css', $temp_directory, $source);
+
+            $content .= '<link rel="stylesheet" type="text/css" href="'.$href.'" />'."\n";
+        }
+
+        return $content;
+    }
+
+    /**
+     * Our text/x-less-href filter
+     */
+    private function filterTextLessHref($sources, $temp_directory)
+    {
+        if (!is_array($sources)) {
+            $sources = array($sources);
+        }
+
+        $content = '';
+
+        foreach($sources as $source) {
+            self::$last_source_directory = dirname($source);
+
+            $cmd = '/usr/local/bin/lessc '.$source;
+            //echo 'cmd[ '. $cmd .' ]<br/>';
+            $fp = popen($cmd, 'r');
+            $data = '';
+            while (!feof($fp)) {
+                $data .= fread($fp, 4096);
+            }
+            pclose($fp);
+
+            $data = $this->rewriteCssUrlFilter($data);
+
+            $href = $this->prepareCacheFile($data, 'css', $temp_directory, $source);
+
+            $content .= '<link rel="stylesheet" type="text/css" href="'.$href.'" />'."\n";
+        }
+
+        return $content;
     }
 
     /**
@@ -193,81 +296,27 @@ class Output
     {
         $output = '';
 
-        $assets = false;
-        $filters = array();
-        switch ($this->type) {
-            case 'text/x-less-href':
-                // @todo this should not be hard-coded
-                $filters[] = new \Assetic\Filter\LessFilter('/usr/bin/node', array('/usr/lib/nodejs', '/usr/local/lib/node_modules'));
-            case 'text/x-javascript-src':
-            case 'text/x-css-href':
-                $assets = new AssetCollection;
-                break;
-        }
-
-        // @todo our flawed implementation for CSS URL filtering
-        //       needs to know what the 'current' director is
-        self:$last_asset_directory   = false;
         self::$active_temp_directory = $temp_directory;
-
-        echo 'new assets<br/>';
-
-        $content = '';
-        if ($assets instanceof AssetCollection) {
-            if (is_array($this->content)) {
-                foreach($this->content as $c) {
-                    echo 'asset[ '.$c.' ]<br/>';
-                    self::$last_asset_directory = dirname($c);
-                    $assets->add(new FileAsset($c, $filters));
-                }
-            }
-            else {
-                self::$last_asset_directory = dirname($this->content);
-                echo 'asset[ '.$this->content.' ]<br/>';
-                $assets->add(new FileAsset($this->content, $filters));
-            }
-
-            $content = $assets->dump();
-        }
-        else {
-            $content = $this->content;
-        }
-
-        switch ($this->type) {
-            case 'text/x-css-href':
-            case 'text/x-less-href':
-            case 'text/css':
-                // @todo this filtering is now hard-coded
-                $content = $this->rewriteCssUrlFilter($content);
-                break;
-        }
 
         switch ($this->type) {
             case 'text/javascript':
-                $output .= '<script type="text/javascript">'."\n";
-                $output .= $content;
-                $output .= '</script>'."\n";
+                $output .= $this->filterTextJavascript($this->content);
                 break;
 
             case 'text/x-javascript-src':
-                $src = self::prepareCacheFile($content, 'js', $temp_directory);
-                $output .= '<script type="text/javascript" src="'.$src.'"></script>'."\n";
+                $output .= $this->filterTextJavascriptSrc($this->content, $temp_directory);
                 break;
 
             case 'text/css':
-                $output .= '<style type="text/css">'."\n";
-                $output .= $content;
-                $output .= '</style>'."\n";
+                $output .= $this->filterTextCss($this->content);
                 break;
 
             case 'text/x-css-href':
-                $href = self::prepareCacheFile($content, 'css', $temp_directory);
-                $output .= '<link rel="stylesheet" href="'.$href.'" />'."\n";
+                $output .= $this->filterTextCssHref($this->content, $temp_directory);
                 break;
 
             case 'text/x-less-href':
-                $href = self::prepareCacheFile($content, 'css', $temp_directory);
-                $output .= '<link rel="stylesheet" href="'.$href.'" />'."\n";
+                $output .= $this->filterTextLessHref($this->content, $temp_directory);
                 break;
 
             case 'text/html':

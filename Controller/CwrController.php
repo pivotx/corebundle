@@ -29,6 +29,16 @@ class CwrController extends \Symfony\Bundle\FrameworkBundle\Controller\Controlle
                 case 'css':
                     $headers['content-type'] = 'text/css';
                     break;
+                case 'png':
+                    $headers['content-type'] = 'image/png';
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                    $headers['content-type'] = 'image/jpeg';
+                    break;
+                case 'gif':
+                    $headers['content-type'] = 'image/gif';
+                    break;
             }
         }
 
