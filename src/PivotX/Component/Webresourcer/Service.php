@@ -9,9 +9,17 @@
 namespace PivotX\Component\Webresourcer;
 
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use PivotX\Component\Outputter\Service as OutputterService;
 
 /**
  * A Webresourcer Service
+ * 
+ * A service on top of assetic to easily manage various webresources.
+ * Activating a `webresource' automatically includes all necessary 
+ * resources: images, stylesheets, scripts and later possibly other stuff. 
+ * 
+ * @todo make it work at all ;)
+ * @todo added dependency management
  *
  * @author Marcel Wouters <marcel@twokings.nl>
  *
@@ -20,51 +28,40 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 class Service
 {
     private $logger;
-    private $groups;
+    private $webresources;
+    private $kernelservice;
+    private $outputterservice;
 
-    const HEAD_START = 'headStart';
-    const TITLE_AFTER = 'titleAfter';
-    const HEAD_END = 'headEnd';
-    const BODY_START = 'bodyStart';
-    const BODY_END = 'bodyEnd';
 
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(LoggerInterface $logger = null, \AppKernel $kernelservice, OutputterService $outputterservice)
     {
-        $this->logger = $logger;
+        $this->logger           = $logger;
+        $this->kernelservice    = $kernelservice;
+        $this->outputterservice = $outputterservice;
 
-        $this->groups = array(
-            self::HEAD_START => array(),
-            self::TITLE_AFTER => array(),
-            self::HEAD_END => array(),
-            self::BODY_START => array(),
-            self::BODY_END => array()
-        );
+        DirectoryWebresource::setKernelService($this->kernelservice);
     }
 
     /**
-     * Return all the webresources for a group in html form
-     * 
-     * @param string $group   webresource group to return
-     * @return string         html of the resources
+     * Add a webresource
      */
-    public function getWebresources($group)
+    public function addWebresource(Webresource $webresource)
     {
-        $html = '';
-
-        $html .= "\n\t\t".'<!-- webresources group: ['.$group.'] -->'."\n";
-        $html .= "\t\t".  '<!-- /webresources group: ['.$group.'] -->'."\n";
-
-        return new \Twig_Markup($html, 'utf-8');
-    }
-
-    public function addWebresource($group, Webresource $webresource)
-    {
-        if (!isset($this->groups[$group])) {
-            return false;
-        }
-
-        $this->groups[$group][] = $webresource;
+        $this->webresources[] = $webresource;
 
         return true;
+    }
+
+    /**
+     * Finalize webresources to the outputter
+     */
+    public function finalizeWebresources()
+    {
+        // @todo sort resources
+
+        // output them
+        foreach($this->webresources as $webresource) {
+            $webresource->finalizeOutput($this->outputterservice);
+        }
     }
 }

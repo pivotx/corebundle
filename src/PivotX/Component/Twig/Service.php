@@ -12,6 +12,7 @@ use PivotX\Component\Routing\Service as RoutingService;
 use PivotX\Component\Translations\Service as TranslationsService;
 use PivotX\Component\Formats\Service as FormatsService;
 use PivotX\Component\Webresourcer\Service as WebresourcerService;
+use PivotX\Component\Outputter\Service as OutputterService;
 
 /**
  * Twig Query interface
@@ -27,15 +28,17 @@ class Service extends \Twig_Extension
     protected $pivotx_translations = false;
     protected $pivotx_formats = false;
     protected $pivotx_webresourcer = false;
+    protected $pivotx_outputter = false;
 
     /**
      */
-    public function __construct(RoutingService $pivotx_routing, TranslationsService $pivotx_translations, FormatsService $pivotx_formats, WebresourcerService $pivotx_webresourcer)
+    public function __construct(RoutingService $pivotx_routing, TranslationsService $pivotx_translations, FormatsService $pivotx_formats, WebresourcerService $pivotx_webresourcer, OutputterService $pivotx_outputter)
     {
         $this->pivotx_routing      = $pivotx_routing;
         $this->pivotx_translations = $pivotx_translations;
         $this->pivotx_formats      = $pivotx_formats;
         $this->pivotx_webresourcer = $pivotx_webresourcer;
+        $this->pivotx_outputter    = $pivotx_outputter;
     }
 
     /**
@@ -56,7 +59,7 @@ class Service extends \Twig_Extension
             'ref' =>  new \Twig_Function_Method($this, 'getReference'),
             'translate' => new \Twig_Function_Method($this, 'getTranslate'),
             'pagination' => new \Twig_Function_Method($this, 'getPagination'),
-            'webresourcer' => new \Twig_Function_Method($this, 'getWebresourcer')
+            'outputter' => new \Twig_Function_Method($this, 'getOutputter')
         );
     }
 
@@ -196,9 +199,9 @@ class Service extends \Twig_Extension
     /**
      * Shortcut into the translation system
      */
-    public function getWebresourcer($group)
+    public function getOutputter($group)
     {
-        return $this->pivotx_webresourcer->getWebresources($group);
+        return $this->pivotx_outputter->getOutputs($group);
     }
 
     public function filterFormatAs($in, $name = '')

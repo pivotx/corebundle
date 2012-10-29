@@ -61,6 +61,13 @@ PivotX\CoreBundle\Entity\SiteOption:
       scale: 0
       nullable: false
       unique: false
+    human_editable:
+      type: boolean
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
     mediatype:
       type: string
       length: 32

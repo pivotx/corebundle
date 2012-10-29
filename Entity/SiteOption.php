@@ -42,6 +42,11 @@ class SiteOption
     private $autoload;
 
     /**
+     * @var boolean $human_editable
+     */
+    private $human_editable;
+
+    /**
      * @var string $mediatype
      */
     private $mediatype;
@@ -179,6 +184,26 @@ class SiteOption
     public function getAutoload()
     {
         return $this->autoload;
+    }
+
+    /**
+     * Set human_editable
+     *
+     * @param boolean $human_editable
+     */
+    public function setHumanEditable($human_editable)
+    {
+        $this->human_editable = $human_editable;
+    }
+
+    /**
+     * Get human_editable
+     *
+     * @return string 
+     */
+    public function getHumanEditable()
+    {
+        return $this->human_editable;
     }
 
     /**

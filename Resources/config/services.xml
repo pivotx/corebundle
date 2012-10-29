@@ -30,6 +30,9 @@
         <!-- activity -->
         <parameter key="pivotx.activity.class">PivotX\Component\Activity\Service</parameter>
 
+        <!-- outputter -->
+        <parameter key="pivotx.outputter.class">PivotX\Component\Outputter\Service</parameter>
+
         <!-- webresourcer -->
         <parameter key="pivotx.webresourcer.class">PivotX\Component\Webresourcer\Service</parameter>
     </parameters>
@@ -71,6 +74,7 @@
             <argument type="service" id="pivotx.translations" />
             <argument type="service" id="pivotx.formats" />
             <argument type="service" id="pivotx.webresourcer" />
+            <argument type="service" id="pivotx.outputter" />
         </service>
 
         <service id="pivotx.translations" class="%pivotx.translations.class%" public="true">
@@ -83,8 +87,15 @@
             <argument type="service" id="session" on-invalid="ignore" />
         </service>
 
+        <service id="pivotx.outputter" class="%pivotx.outputter.class%" public="true">
+            <argument type="service" id="logger" on-invalid="ignore" />
+            <argument type="service" id="kernel" />
+        </service>
+
         <service id="pivotx.webresourcer" class="%pivotx.webresourcer.class%" public="true">
             <argument type="service" id="logger" on-invalid="ignore" />
+            <argument type="service" id="kernel" />
+            <argument type="service" id="pivotx.outputter" />
         </service>
 
         <service id="twig.extension.pivotx.doctrine" class="%pivotx.doctrine.twig.class%" public="false">
