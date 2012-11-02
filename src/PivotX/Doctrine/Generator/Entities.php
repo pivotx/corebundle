@@ -167,7 +167,11 @@ class Entities
                     }
 
                     $texts = $this->convertTermsToLanguageTexts($terms, $languages);
-                    $this->translation_service->suggestTexts($entity, $key, 'pivotx-backend', 'utf-8', $texts);
+                    //$this->translation_service->suggestTexts($entity, $key, 'pivotx-backend', 'utf-8', $texts);
+
+                    $this->translation_service->suggestTexts($entity, 'crud-form.'.$key, 'pivotx-backend', 'utf-8', $texts);
+                    $this->translation_service->suggestTexts($entity, 'crud-heading.'.$key, 'pivotx-backend', 'utf-8', $texts);
+
                     return;
                 }
             }
@@ -203,7 +207,14 @@ class Entities
                 $_p = explode('\\',$class->name);
                 $base_class = $_p[count($_p)-1];
 
-                $entity = $this->deCamelCase($base_class);
+                //$entity = $this->deCamelCase($base_class);
+                $entity = mb_strtolower($base_class);
+
+                if (isset($translations[$entity]) && isset($translations[$entity]['entity.title'])) {
+                    $terms = $translations[$entity]['entity.title'];
+                    $texts = $this->convertTermsToLanguageTexts($terms, $languages);
+                    $this->translation_service->suggestTexts($entity, 'entity.title', 'pivotx-backend', 'utf-8', $texts);
+                }
 
                 foreach($class->fieldMappings as $key => $config) {
                     $this->addEntityTranslation($translations, $languages, $entity, $key);

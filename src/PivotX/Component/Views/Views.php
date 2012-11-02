@@ -33,8 +33,7 @@ class Views
 
         if (is_null($view)) {
             // @todo throw an exception?
-            //echo "view not found\n";
-            self::$logger->err('Call for loadView "'.$name.'"  - view not found');
+            self::$logger->warn('Call for loadView "'.$name.'"  - view not found');
             return new EmptyView();
         }
 

@@ -390,12 +390,112 @@ class GenericResource
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:05
+     * Generated on 2012-11-02, 17:12:44
      */
     public function getCrudConfiguration_date_created()
     {
@@ -410,7 +510,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:05
+     * Generated on 2012-11-02, 17:12:44
      */
     public function setPrePersist_date_created()
     {
@@ -422,7 +522,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:05
+     * Generated on 2012-11-02, 17:12:44
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -437,7 +537,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:05
+     * Generated on 2012-11-02, 17:12:44
      */
     public function setPrePersist_date_modified()
     {
@@ -449,7 +549,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:05
+     * Generated on 2012-11-02, 17:12:44
      */
     public function getCrudConfiguration_media_type()
     {

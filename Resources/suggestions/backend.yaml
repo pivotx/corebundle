@@ -27,3 +27,13 @@ header:
 
 footer:
     button.configuration:   { eng: 'Configuration', nld: 'Configuratie' }
+
+translationtext:
+    state-0:                { eng: 'Valid', nld: 'Valide' }
+    state-10:               { eng: 'Suggested', nld: 'Voorgesteld' }
+    state-20:               { eng: 'Auto-filled', nld: 'Automatisch gevuld' }
+    state-21:               { eng: 'Auto-filled with lorem ipsum', nld: 'Automatisch gevuld met lorem ipsum' }
+    state-29:               { eng: 'Auto-filled with old value', nld: 'Automatisch gevuld met oude waarde' }
+    state-90:               { eng: 'Old value', nld: 'Oude waarde' }
+    state-91:               { eng: 'Old value (locked)', nld: 'Oude waarde (vastgezet)' }
+    crud-heading.key:       { eng: 'key', nld: 'sleuteltekst' }

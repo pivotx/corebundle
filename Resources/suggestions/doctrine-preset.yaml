@@ -53,3 +53,15 @@ any:
     passwd_salt:        'password_salt'
     encoding:           { eng: 'encoding', nld: 'versleuteling' }
     technical_context:  { eng: 'technical context', nld: 'technische context' }
+
+translationtext:
+    entity.title:       { eng: 'translations', nld: 'vertalingen' }
+
+siteoption:
+    entity.title:       { eng: 'site options', nld: 'site instellingen' }
+
+genericresource:
+    entity.title:       { eng: 'site resources', nld: 'site bronnen' }
+
+user:
+    entity.title:       { eng: 'users', nld: 'gebruikers' }

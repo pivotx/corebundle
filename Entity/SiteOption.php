@@ -467,12 +467,112 @@ class SiteOption
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:06
+     * Generated on 2012-11-02, 17:12:44
      */
     public function getCrudConfiguration_date_created()
     {
@@ -487,7 +587,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:06
+     * Generated on 2012-11-02, 17:12:44
      */
     public function setPrePersist_date_created()
     {
@@ -501,7 +601,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:06
+     * Generated on 2012-11-02, 17:12:44
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -516,7 +616,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:06
+     * Generated on 2012-11-02, 17:12:44
      */
     public function setPrePersist_date_modified()
     {
@@ -528,7 +628,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 10:31:06
+     * Generated on 2012-11-02, 17:12:44
      */
     public function getCrudConfiguration_mediatype()
     {
