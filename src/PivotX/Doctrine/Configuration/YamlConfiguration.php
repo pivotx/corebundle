@@ -37,20 +37,11 @@ class YamlConfiguration extends Configuration
             foreach($entity['fields'] as $field => $definition) {
                 if (isset($definition['auto_entity'])) {
                     foreach($definition['auto_entity'] as $feature => $config) {
-                        $class = $this->getFeatureClass($feature);
-                        if ($class !== false) {
-                            $instance = new $class;
-                            $instance->setConfigFromArray($config);
-
-                            if (!isset($this->fields[$field])) {
-                                $this->fields[$field] = array();
-                            }
-                            $this->fields[$field][] = $instance;
-
-                            if (!in_array($feature,$this->features)) {
-                                $this->features[] = $feature;
-                            }
+                        if (!isset($this->features[$feature])) {
+                            $this->features[$feature] = array();
                         }
+
+                        $this->features[$feature][] = array($field, $config);
                     }
                 }
             }

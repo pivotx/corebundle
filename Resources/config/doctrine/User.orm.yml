@@ -40,6 +40,9 @@ PivotX\CoreBundle\Entity\User:
       scale: 0
       nullable: true
       unique: false
+      auto_entity:
+        pivotx_ignore:
+          ~
     enabled:
       type: boolean
       length: null
@@ -54,6 +57,15 @@ PivotX\CoreBundle\Entity\User:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        pivotx_type:
+          type:     'choice'
+          choices:
+            100:    'Site access (no PivotX access)'
+            200:    'Editorial access'
+            500:    'Administrative access'
+            800:    'Developer access'
+            900:    'Superadmin access'
     email:
       type: string
       length: 250
@@ -68,6 +80,9 @@ PivotX\CoreBundle\Entity\User:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        passwordable:
+          type: salt
     passwd:
       type: string
       length: 128
@@ -75,8 +90,14 @@ PivotX\CoreBundle\Entity\User:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        passwordable:
+          type: password
   oneToMany:
     activitylogs:
       targetEntity: User
       mappedBy: user
       fetch: EXTRA_LAZY
+  lifecycleCallbacks:
+    prePersist: [ setPrePersist_date_created, setPrePersist_date_modified ]
+    preUpdate: [ setPrePersist_date_modified ]

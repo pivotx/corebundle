@@ -258,73 +258,6 @@ class LocalEmbedResource extends EmbedResource
      */
 
     /**
-     * Ignore publicid
-     */
-    public function getCrudFormIgnore_publicid()
-    {
-        return true;
-    }
-
-    /**
-     * Ignore width
-     */
-    public function getCrudFormIgnore_width()
-    {
-        return true;
-    }
-
-    /**
-     * Ignore height
-     */
-    public function getCrudFormIgnore_height()
-    {
-        return true;
-    }
-
-    /**
-     * Ignore fileid
-     */
-    public function getCrudFormIgnore_fileid()
-    {
-        return true;
-    }
-
-    /**
-     * Ignore filesize
-     */
-    public function getCrudFormIgnore_filesize()
-    {
-        return true;
-    }
-
-    /**
-     * Override field type
-     */
-    public function getCrudFormType_filename()
-    {
-        return 'backend_file';
-    }
-
-    /**
-     * Override field arguments
-     */
-    public function getCrudFormArguments_filename()
-    {
-        $file_info = array(
-            'valid' => true,
-            'mimetype' => $this->media_type,
-            'size' => $this->filesize,
-            'name' => $this->filename
-        );
-        $file_info['json'] = json_encode($file_info);
-
-        return array(
-            'attr' => array('multiple' => false),
-            'files' => array( $file_info )
-        );
-    }
-
-    /**
      * @todo make a lifecycle event?
      */
     public function fixCrudBeforePersist()
@@ -358,4 +291,313 @@ class LocalEmbedResource extends EmbedResource
     public function fixCrudAfterPersist()
     {
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:05
+     */
+    public function getCrudConfiguration_publicid()
+    {
+        return array(
+            'name' => 'publicid',
+            'type' => false
+        );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:05
+     */
+    public function getCrudConfiguration_fileid()
+    {
+        return array(
+            'name' => 'fileid',
+            'type' => false
+        );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:05
+     */
+    public function getCrudConfiguration_filesize()
+    {
+        return array(
+            'name' => 'filesize',
+            'type' => false
+        );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:05
+     */
+    public function getCrudConfiguration_filename()
+    {
+        $file_info = array(
+            'valid' => true,
+            'mimetype' => $this->media_type,
+            'size' => $this->filesize,
+            'name' => $this->filename
+        );
+        $file_info['json'] = json_encode($file_info);
+
+        return array(
+            'name' => 'filename',
+            'type' => 'backend_file',
+            'arguments' => array(
+                'attr' => array('multiple' => false),
+                'files' => array($file_info)
+            )
+        );
+    }
+
 }

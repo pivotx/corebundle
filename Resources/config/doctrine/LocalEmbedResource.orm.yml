@@ -9,6 +9,9 @@ PivotX\CoreBundle\Entity\LocalEmbedResource:
       scale: 0
       nullable: true
       unique: true
+      auto_entity:
+        pivotx_ignore:
+          ~
     fileid:
       type: string
       length: 40
@@ -16,6 +19,9 @@ PivotX\CoreBundle\Entity\LocalEmbedResource:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        pivotx_ignore:
+          ~
     filename:
       type: string
       length: 100
@@ -23,6 +29,9 @@ PivotX\CoreBundle\Entity\LocalEmbedResource:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        pivotx_backendfile:
+          ~
     filesize:
       type: integer
       length: null
@@ -30,3 +39,6 @@ PivotX\CoreBundle\Entity\LocalEmbedResource:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        pivotx_ignore:
+          ~

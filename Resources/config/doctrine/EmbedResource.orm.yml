@@ -9,6 +9,9 @@ PivotX\CoreBundle\Entity\EmbedResource:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        pivotx_ignore:
+          ~
     height:
       type: integer
       length: null
@@ -16,3 +19,6 @@ PivotX\CoreBundle\Entity\EmbedResource:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        pivotx_ignore:
+          ~

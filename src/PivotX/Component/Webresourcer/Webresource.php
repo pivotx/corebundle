@@ -8,9 +8,6 @@
 
 namespace PivotX\Component\Webresourcer;
 
-use Assetic\Asset\AssetCollection;
-use Assetic\Asset\FileAsset;
-use Assetic\Asset\GlobAsset;
 use PivotX\Component\Outputter\Service as OutputterService;
 use PivotX\Component\Outputter\Output as Output;
 
@@ -123,14 +120,10 @@ class Webresource
     {
         foreach($this->output_groups as $group => $outputs) {
             if (count($outputs) > 0) {
-                if ($this->debuggable) {
-                    $_outputs = $outputterservice->concatOutputs($outputs);
-                }
-                else {
-                    $_outputs = $outputs;
-                }
-
-                foreach($_outputs as $output) {
+                foreach($outputs as $output) {
+                    if ($this->debuggable) {
+                        $output->allowDebugging();
+                    }
                     $outputterservice->addOutput($group, $output);
                 }
             }

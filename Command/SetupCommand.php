@@ -20,7 +20,7 @@ class SetupCommand extends ContainerAwareCommand
     /*
 // add this to the top of your class
 
-public function addEmailAction($email)
+protected function addEmailAction($email)
 {
     $emailConstraint = new Email();
     // all constraint "options" can be set this way
@@ -42,7 +42,7 @@ public function addEmailAction($email)
 }
      */
 
-    public function addUser($output, $repository)
+    protected function addUser($output, $repository)
     {
         $existingUser = null;
         $email        = null;

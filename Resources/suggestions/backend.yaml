@@ -1,0 +1,29 @@
+
+pagination:
+    page-variable:  { eng: 'page', nld: 'pagina' }
+    first-page:     { eng: 'first page', nld: 'eerste pagina' }
+    previous-page:  { eng: 'previous page', nld: 'vorige pagina' }
+    next-page:      { eng: 'next page', nld: 'volgende pagina' }
+    last-page:      { eng: 'last page', nld: 'laatste pagina' }
+
+entity:
+    button.edit:    { eng: 'edit', nld: 'bewerk' }
+    button.delete:  { eng: 'delete', nld: 'verwijder' }
+
+modal:
+    default-title:  { eng: 'Title', nld: 'Titel' }
+    button.ok:      { eng: 'Ok', nld: 'Ok' }
+    button.cancel:      { eng: 'Cancel', nld: 'Negeer' }
+    button.confirm:      { eng: 'Confirm', nld: 'Bevestig' }
+    button.save:      { eng: 'Save', nld: 'Bewaar' }
+    button.delete:      { eng: 'Delete', nld: 'Verwijder' }
+
+header:
+    button.pivotx:          { eng: 'PivotX', nld: 'PivotX' }
+    button.dashboard:       { eng: 'Dashboard', nld: 'Dashboard' }
+    button.login:           { eng: 'Log in', nld: 'Inloggen' }
+    button.logout:          { eng: 'Log out', nld: 'Uitloggen' }
+    button.content-group:   { eng: 'Content', nld: 'Inhoud' }
+
+footer:
+    button.configuration:   { eng: 'Configuration', nld: 'Configuratie' }

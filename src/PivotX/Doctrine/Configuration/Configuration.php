@@ -16,14 +16,12 @@ namespace PivotX\Doctrine\Configuration;
 class Configuration
 {
     protected $features;
-    protected $fields;
 
     /**
      */
     protected function clearConfiguration()
     {
         $this->features = array();
-        $this->fields   = array();
     }
 
     /**
@@ -33,7 +31,12 @@ class Configuration
      */
     protected function getFeatureClass($name)
     {
-        $class = '\\PivotX\\Doctrine\\Feature\\'.ucfirst($name).'\\EntityConfiguration';
+        $classpath = ucfirst($name);
+        if (substr($name, 0, 7) == 'pivotx_') {
+            $classpath = 'PivotX\\'.ucfirst(substr($name, 7));
+        }
+
+        $class = '\\PivotX\\Doctrine\\Feature\\'.$classpath.'\\EntityConfiguration';
         if (class_exists($class)) {
             return new $class;
         }
@@ -46,20 +49,5 @@ class Configuration
     public function getFeatures()
     {
         return $this->features;
-    }
-
-    /**
-     * Return all the features for a particular field
-     *
-     * @param string $name
-     * @return array       features supported
-     */
-    public function getFieldFeaturesByName($name)
-    {
-        if (isset($this->fields[$name])) {
-            return $this->fields[$name];
-        }
-
-        return array();
     }
 }

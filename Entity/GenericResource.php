@@ -160,14 +160,6 @@ class GenericResource
      */
 
     /**
-     * Ignore media_type
-     */
-    public function getCrudFormIgnore_media_type()
-    {
-        return true;
-    }
-
-    /**
      */
     public function initNewCrudRecord()
     {
@@ -181,4 +173,290 @@ class GenericResource
     {
         return 'GenericResource';
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:05
+     */
+    public function getCrudConfiguration_date_created()
+    {
+        return array(
+            'name' => 'date_created',
+            'type' => false
+        );
+    }
+
+    /**
+     * PrePersist the update timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:05
+     */
+    public function setPrePersist_date_created()
+    {
+        $this->date_created = new \DateTime;
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:05
+     */
+    public function getCrudConfiguration_date_modified()
+    {
+        return array(
+            'name' => 'date_modified',
+            'type' => false
+        );
+    }
+
+    /**
+     * PrePersist the update timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:05
+     */
+    public function setPrePersist_date_modified()
+    {
+        $this->date_modified = new \DateTime;
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:05
+     */
+    public function getCrudConfiguration_media_type()
+    {
+        return array(
+            'name' => 'media_type',
+            'type' => false
+        );
+    }
+
 }

@@ -24,6 +24,7 @@ class Output
 {
     protected $content = false;
     protected $type;
+    protected $debuggable = false;
 
     private static $last_source_directory = false;
     private static $active_temp_directory = false;
@@ -47,6 +48,21 @@ class Output
     }
 
     /**
+     * Don't compress or concat this output
+     */
+    public function allowDebugging()
+    {
+        $this->debuggable = true;
+    }
+
+    /**
+     */
+    public function shouldBeDebuggable()
+    {
+        return $this->debuggable;
+    }
+
+    /**
      * Set the content for this output
      *
      * @param string $content  Content to output later
@@ -66,27 +82,6 @@ class Output
     public function getContent()
     {
         return $this->content;
-    }
-
-    /**
-     * @todo remove this?
-     * Get a suggested cache filename (without extension)
-     */
-    public function getFilename()
-    {
-        $content = $this->content;
-        if (is_array($this->content)) {
-            $content = $this->content[0];
-        }
-
-        $dirname = pathinfo($content, PATHINFO_DIRNAME);
-        if (preg_match('#(.+)(/src|app|web/)(.+)#', $dirname, $match)) {
-            $dirname = $match[3];
-        }
-
-        $dirname = preg_replace('|[^a-zA-Z0-9]|', '_', $dirname);
-
-        return $dirname . '_' . pathinfo($content, PATHINFO_FILENAME);
     }
 
     /**
@@ -197,6 +192,37 @@ class Output
     }
 
     /**
+     * Possible merge various text/javascript hrefs
+     */
+    private function mergeTextJavascriptSrc($temp_directory, $srcs, $merge_filter = 'concat')
+    {
+        $content = '';
+
+        switch ($merge_filter) {
+            case 'concat':
+                $data = '';
+                $first_src = $srcs[0];
+                foreach($srcs as $src) {
+                    $src  = preg_replace('|(.*)/cwr/(.+)|', '\\2', $src);
+                    $file = $temp_directory . '/' . $src;
+
+                    $data .= file_get_contents($file) . "\n";
+                }
+                $src = $this->prepareCacheFile($data, 'js', $temp_directory, '/merged/'.basename($first_src));
+                $content = '<script type="text/javascript" src="'.$src.'"></script>'."\n";
+                break;
+
+            default:
+                foreach($srcs as $src) {
+                    $content .= '<script type="text/javascript" src="'.$src.'"></script>'."\n";
+                }
+                break;
+        }
+
+        return $content;
+    }
+
+    /**
      * Our text/x-javascript-src filter
      */
     private function filterTextJavascriptSrc($sources, $temp_directory)
@@ -205,13 +231,14 @@ class Output
             $sources = array($sources);
         }
 
-        $content = '';
-
+        $srcs = array();
         foreach($sources as $source) {
             $src = $this->copyFileToCache($source, $temp_directory);
 
-            $content .= '<script type="text/javascript" src="'.$src.'"></script>'."\n";
+            $srcs[] = $src;
         }
+
+        $content = $this->mergeTextJavascriptSrc($temp_directory, $srcs);
 
         return $content;
     }
@@ -229,6 +256,37 @@ class Output
     }
 
     /**
+     * Possible merge various text/css hrefs
+     */
+    private function mergeTextCssHref($temp_directory, $hrefs, $merge_filter = 'concat')
+    {
+        $content = '';
+
+        switch ($merge_filter) {
+            case 'concat':
+                $data = '';
+                $first_href = $hrefs[0];
+                foreach($hrefs as $href) {
+                    $href  = preg_replace('|(.*)/cwr/(.+)|', '\\2', $href);
+                    $file = $temp_directory . '/' . $href;
+
+                    $data .= file_get_contents($file) . "\n";
+                }
+                $href = $this->prepareCacheFile($data, 'css', $temp_directory, '/merged/'.basename($first_href));
+                $content = '<link rel="stylesheet" type="text/css" href="'.$href.'" />'."\n";
+                break;
+
+            default:
+                foreach($hrefs as $href) {
+                    $content .= '<link rel="stylesheet" type="text/css" href="'.$href.'" />'."\n";
+                }
+                break;
+        }
+
+        return $content;
+    }
+
+    /**
      * Our text/x-css-href filter
      */
     private function filterTextCssHref($sources, $temp_directory)
@@ -237,8 +295,7 @@ class Output
             $sources = array($sources);
         }
 
-        $content = '';
-
+        $hrefs = array();
         foreach($sources as $source) {
             self::$last_source_directory = dirname($source);
 
@@ -248,8 +305,10 @@ class Output
 
             $href = $this->prepareCacheFile($data, 'css', $temp_directory, $source);
 
-            $content .= '<link rel="stylesheet" type="text/css" href="'.$href.'" />'."\n";
+            $hrefs[] = $href;
         }
+
+        $content = $this->mergeTextCssHref($temp_directory, $hrefs);
 
         return $content;
     }
@@ -262,8 +321,6 @@ class Output
         if (!is_array($sources)) {
             $sources = array($sources);
         }
-
-        $content = '';
 
         foreach($sources as $source) {
             self::$last_source_directory = dirname($source);
@@ -281,8 +338,10 @@ class Output
 
             $href = $this->prepareCacheFile($data, 'css', $temp_directory, $source);
 
-            $content .= '<link rel="stylesheet" type="text/css" href="'.$href.'" />'."\n";
+            $hrefs[] = $href;
         }
+
+        $content = $this->mergeTextCssHref($temp_directory, $hrefs);
 
         return $content;
     }

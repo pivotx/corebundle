@@ -30,6 +30,9 @@ PivotX\CoreBundle\Entity\GenericResource:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        timestampable:
+          on: update
     date_modified:
       type: datetime
       length: null
@@ -37,6 +40,9 @@ PivotX\CoreBundle\Entity\GenericResource:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        timestampable:
+          on: update
     title:
       type: string
       length: 250
@@ -58,3 +64,9 @@ PivotX\CoreBundle\Entity\GenericResource:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        pivotx_ignore:
+          ~
+  lifecycleCallbacks:
+    prePersist: [ setPrePersist_date_created, setPrePersist_date_modified ]
+    preUpdate: [ setPrePersist_date_modified ]

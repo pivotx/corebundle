@@ -5,43 +5,81 @@ namespace PivotX\Doctrine\Feature\Timestampable;
 
 class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
 {
-    private $field_created_date = 'date_created';
-    private $field_modified_date = 'date_modified';
+    private $fields = null;
 
-    public function __construct()
+    public function __construct(array $fields)
     {
+        $this->fields = $fields;
     }
 
-    public function getPropertyMethods()
+    public function getPropertyMethodsForField($field)
     {
-        return array(
-            'getCrudIgnore_'.$this->field_created_date => 'generateGetCrudIgnoreCreatedDate',
-            'getCrudIgnore_'.$this->field_modified_date => 'generateGetCrudIgnoreModifiedDate',
-        );
+        $methods = array();
+
+        $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfiguration';
+
+        foreach($this->fields as $lfield) {
+            if ($lfield[0] == $field) {
+                switch ($lfield[1]['on']) {
+                    case 'create':
+                        $methods['setPrePersist_'.$field] = 'generateSetPrePersistOnCreate';
+                        break;
+                    case 'update':
+                        $methods['setPrePersist_'.$field] = 'generateSetPrePersistOnUpdate';
+                        break;
+                }
+            }
+        }
+
+        return $methods;
     }
 
-    public function generateGetCrudIgnoreCreatedDate()
+    public function generateGetCrudConfiguration($classname, $field, $config)
     {
-        $field = $this->field_created_date;
         return <<<THEEND
     /**
+     * Return the CRUD field configuration
+     * 
+%comment%
      */
-    public function getCrudIgnore_$field()
+    public function getCrudConfiguration_$field()
     {
-        return true;
+        return array(
+            'name' => '$field',
+            'type' => false
+        );
     }
 THEEND;
     }
 
-    public function generateGetCrudIgnoreModifiedDate()
+    public function generateSetPrePersistOnCreate($classname, $field, $config)
     {
-        $field = $this->field_modified_date;
         return <<<THEEND
     /**
+     * PrePersist the creation timestamp
+     * 
+%comment%
      */
-    public function getCrudIgnore_$field()
+    public function setPrePersist_$field()
     {
-        return true;
+        if (is_null(\$this->$field)) {
+            \$this->$field = new \\DateTime;
+        }
+    }
+THEEND;
+    }
+
+    public function generateSetPrePersistOnUpdate($classname, $field, $config)
+    {
+        return <<<THEEND
+    /**
+     * PrePersist the update timestamp
+     * 
+%comment%
+     */
+    public function setPrePersist_$field()
+    {
+        \$this->$field = new \\DateTime;
     }
 THEEND;
     }

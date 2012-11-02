@@ -75,6 +75,9 @@ PivotX\CoreBundle\Entity\SiteOption:
       scale: 0
       nullable: false
       unique: false
+      auto_entity:
+        pivotx_mediatype:
+          ~
     value:
       type: text
       length: null
@@ -82,4 +85,6 @@ PivotX\CoreBundle\Entity\SiteOption:
       scale: 0
       nullable: false
       unique: false
-  lifecycleCallbacks: {  }
+  lifecycleCallbacks:
+    prePersist: [ setPrePersist_date_created, setPrePersist_date_modified ]
+    preUpdate: [ setPrePersist_date_modified ]

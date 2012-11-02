@@ -186,7 +186,10 @@ class User implements UserInterface
      */
     public function setPasswd($passwd)
     {
-        $this->passwd = $passwd;
+        if ($passwd != '') {
+            $encoder = $this->encoder_factory_passwd->getEncoder(get_class($this));
+            $this->passwd = $encoder->encodePassword($passwd, $this->getSalt());
+        }
     }
 
     /**
@@ -327,34 +330,463 @@ class User implements UserInterface
      * Crud methods
      */
 
-    /**
-     * Return fields which are not editable in the crud
-     * 
-     * @return array
-     */
-    public function getCrudFormIgnores()
-    {
-        return array(
-            'date_last_login',
-            'passwd_salt',
-        );
-    }
-
-    public function getCrudFormChoices_level()
-    {
-        return array(
-            '100' => 'Site access (no PivotX access)',
-            '200' => 'Editorial access',
-            '500' => 'Administrative access',
-            '800' => 'Developer access',
-            '900' => 'Superadmin access',
-        );
-    }
-
     public function initNewCrudRecord()
     {
         $this->date_created    = new \DateTime();
         $this->date_modified   = new \DateTime();
         $this->date_last_login = null;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_date_created()
+    {
+        return array(
+            'name' => 'date_created',
+            'type' => false
+        );
+    }
+
+    /**
+     * PrePersist the creation timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function setPrePersist_date_created()
+    {
+        if (is_null($this->date_created)) {
+            $this->date_created = new \DateTime;
+        }
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_date_modified()
+    {
+        return array(
+            'name' => 'date_modified',
+            'type' => false
+        );
+    }
+
+    /**
+     * PrePersist the update timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function setPrePersist_date_modified()
+    {
+        $this->date_modified = new \DateTime;
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_date_last_login()
+    {
+        return array(
+            'name' => 'date_last_login',
+            'type' => false
+        );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_level()
+    {
+        return array(
+            'name' => 'level',
+            'type' => 'choice',
+           'choices' => array(
+               '100' => 'Site access (no PivotX access)',
+               '200' => 'Editorial access',
+               '500' => 'Administrative access',
+               '800' => 'Developer access',
+               '900' => 'Superadmin access'
+           )
+        );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_passwd_salt()
+    {
+        return array(
+            'name' => 'passwd_salt',
+            'type' => false
+        );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_passwd()
+    {
+        return array(
+            'name' => 'passwd',
+            'type' => 'repeated',
+            'arguments' => array(
+                'type' => 'password',
+                'first_name' => 'passwd',
+                'second_name' => 'passwd_repeat'
+            ),
+            'setencoderfactory' => 'setEncoderFactory_passwd'
+        );
+    }
+
+    /**
+     * Set the encoder factory
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function setEncoderFactory_passwd($encoder_factory)
+    {
+        $this->encoder_factory_passwd = $encoder_factory;
+    }
+
 }

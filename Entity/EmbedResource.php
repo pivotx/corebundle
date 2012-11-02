@@ -127,4 +127,135 @@ class EmbedResource extends GenericResource
     {
         return '';
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_width()
+    {
+        return array(
+            'name' => 'width',
+            'type' => false
+        );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_height()
+    {
+        return array(
+            'name' => 'height',
+            'type' => false
+        );
+    }
+
 }

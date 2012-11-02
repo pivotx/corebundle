@@ -8,6 +8,23 @@ namespace PivotX\CoreBundle\Entity;
 class TranslationText 
 {
     /**
+     *  0 - key/text is valid
+     * 10 - key/text has a suggested value
+     * 20 - key/text is auto-filled (usually with a key name variant)
+     * 21 - key/text is auto-filled with lorem ipsum
+     * 29 - key/text was no longer used, but is used again (see 90)
+     * 90 - key/text is no longer used, allow it to be re-added (see 29)
+     * 91 - key/text is no longer used, don't allow it to be re-added
+     */
+    const STATE_VALID = 0;
+    const STATE_SUGGESTED = 10;
+    const STATE_AUTO_TECHNICAL = 20;
+    const STATE_AUTO_LOREM = 21;
+    const STATE_AUTO_REUSED = 29;
+    const STATE_OLD = 90;
+    const STATE_OLD_LOCKED = 91;
+
+    /**
      * @var integer $id
      */
     protected $id;
@@ -38,19 +55,24 @@ class TranslationText
     private $date_modified;
 
     /**
+     * @var integer $state
+     */
+    private $state;
+
+    /**
      * @var string $encoding
      */
     private $encoding;
 
     /**
-     * @var string $text_nl
+     * @var string $text_nld
      */
-    private $text_nl;
+    private $text_nld;
 
     /**
-     * @var string $text_en
+     * @var string $text_eng
      */
-    private $text_en;
+    private $text_eng;
 
     /**
      * Get id
@@ -163,6 +185,26 @@ class TranslationText
     }
 
     /**
+     * Set state
+     *
+     * @param integer $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * Get state
+     *
+     * @return integer 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
      * Set encoding
      *
      * @param string $encoding
@@ -183,43 +225,43 @@ class TranslationText
     }
 
     /**
-     * Set text_nl
+     * Set text_nld
      *
-     * @param text $textNl
+     * @param text $textnld
      */
-    public function setTextNl($textNl)
+    public function setTextNld($textnld)
     {
-        $this->text_nl = $textNl;
+        $this->text_nld = $textnld;
     }
 
     /**
-     * Get text_nl
+     * Get text_nld
      *
      * @return text 
      */
-    public function getTextNl()
+    public function getTextNld()
     {
-        return $this->text_nl;
+        return $this->text_nld;
     }
 
     /**
-     * Set text_en
+     * Set text_eng
      *
-     * @param text $textEn
+     * @param text $texteng
      */
-    public function setTextEn($textEn)
+    public function setTextEng($texteng)
     {
-        $this->text_en = $textEn;
+        $this->text_eng = $texteng;
     }
 
     /**
-     * Get text_en
+     * Get text_eng
      *
      * @return text 
      */
-    public function getTextEn()
+    public function getTextEng()
     {
-        return $this->text_en;
+        return $this->text_eng;
     }
 
 
@@ -228,9 +270,9 @@ class TranslationText
      */
 
     /**
-     * Crud field specific
+     * Crud text focus specific
      */
-    public function getCrudFormArguments_text_nl()
+    public function getCrudFormArguments_text_nld()
     {
         return array(
             'attr' => array(
@@ -238,4 +280,370 @@ class TranslationText
             )
         );
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_date_created()
+    {
+        return array(
+            'name' => 'date_created',
+            'type' => false
+        );
+    }
+
+    /**
+     * PrePersist the creation timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function setPrePersist_date_created()
+    {
+        if (is_null($this->date_created)) {
+            $this->date_created = new \DateTime;
+        }
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_date_modified()
+    {
+        return array(
+            'name' => 'date_modified',
+            'type' => false
+        );
+    }
+
+    /**
+     * PrePersist the update timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function setPrePersist_date_modified()
+    {
+        $this->date_modified = new \DateTime;
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_state()
+    {
+        return array(
+            'name' => 'state',
+            'type' => 'choice',
+            'choices' => array(
+                self::STATE_VALID => 'valid',
+                self::STATE_SUGGESTED => 'suggested value',
+                self::STATE_AUTO_TECHNICAL => 'auto-filled with key name logic',
+                self::STATE_AUTO_LOREM => 'auto-filled with lorem ipsum',
+                self::STATE_AUTO_REUSED => 'old value is reused',
+                self::STATE_OLD => 'old value, allow reuse',
+                self::STATE_OLD_LOCKED => 'old value, don\'t allow reuse'
+            )
+        );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_encoding()
+    {
+        return array(
+            'name' => 'encoding',
+            'type' => 'choice',
+            'choices' => array(
+                'utf-8' => 'text/UTF-8',
+                'utf-8/html' => 'html/UTF-8'
+            )
+        );
+    }
+
 }

@@ -72,8 +72,12 @@ class Service
             // @todo only works when included in HTML (and in the html part)
             $html .= "\n\t\t".'<!-- output group: ['.$group.'] -->'."\n";
 
+            $outputs = $this->groups[$group];
+
+            $outputs = $this->concatOutputs($outputs);
+
             $groupoutput = '';
-            foreach($this->groups[$group] as $output) {
+            foreach($outputs as $output) {
                 $groupoutput .= $output->getHtml($temp_directory);
             }
 
@@ -107,21 +111,43 @@ class Service
     {
         $out_outputs = array();
 
-        $previous_type = false;
-        $type_contents = array();
+        //echo "in#".count($in_outputs)."<br/>\n";
+
+        $previous_type  = false;
+        $previous_debug = false;
+        $type_contents  = array();
         foreach($in_outputs as $output) {
-            if (($previous_type !== false) && ($previous_type != $output->getType())) {
-                $out_outputs[] = new Output($type_contents, $previous_type);
-                $type_contents = array();
+            if (($previous_type !== false) && (($previous_type != $output->getType()) || ($previous_debug != $output->shouldBeDebuggable()))) {
+                if (count($type_contents) > 0) {
+                    $new_output = new Output($type_contents, $previous_type);
+                    if ($previous_debug) {
+                        $new_output->allowDebugging();
+                    }
+                    $out_outputs[] = $new_output;
+                    $type_contents = array();
+                }
             }
 
             $previous_type   = $output->getType();
-            $type_contents[] = $output->getContent();
+            $previous_debug  = $output->shouldBeDebuggable();
+
+            if ($output->shouldBeDebuggable()) {
+                $out_outputs[] = $output;
+            }
+            else {
+                $type_contents[] = $output->getContent();
+            }
         }
 
         if (count($type_contents) > 0) {
-            $out_outputs[] = new Output($type_contents, $previous_type);
+            $new_output    = new Output($type_contents, $previous_type);
+            if ($previous_debug) {
+                $new_output->allowDebugging();
+            }
+            $out_outputs[] = $new_output;
         }
+
+        //echo "out#".count($out_outputs)."<br/><br/>\n";
 
         return $out_outputs;
     }

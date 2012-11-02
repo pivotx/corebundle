@@ -54,6 +54,16 @@ PivotX\CoreBundle\Entity\TranslationText:
       auto_entity:
         timestampable:
           on: update
+    state:
+      type: integer
+      length: null
+      precision: 0
+      scale: 0
+      nullable: false
+      unique: false
+      auto_entity:
+        pivotx_translationstate:
+          ~
     encoding:
       type: string
       length: 32
@@ -61,18 +71,23 @@ PivotX\CoreBundle\Entity\TranslationText:
       scale: 0
       nullable: false
       unique: false
-    text_nl:
+      auto_entity:
+        pivotx_translationencoding:
+          ~
+    text_nld:
       type: text
       length: null
       precision: 0
       scale: 0
       nullable: false
       unique: false
-    text_en:
+    text_eng:
       type: text
       length: null
       precision: 0
       scale: 0
       nullable: false
       unique: false
-  lifecycleCallbacks: {  }
+  lifecycleCallbacks:
+    prePersist: [ setPrePersist_date_created, setPrePersist_date_modified ]
+    preUpdate: [ setPrePersist_date_modified ]

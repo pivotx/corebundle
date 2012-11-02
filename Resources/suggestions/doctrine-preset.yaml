@@ -1,0 +1,55 @@
+
+any:
+    # Generic Fields
+    title:          { eng: 'title', nld: 'titel' }
+    subtitle:       { eng: 'subtitle', nld: 'subtitel' }
+    name:           { eng: 'name', nld: 'naam' }
+    author:         { eng: 'author', nld: 'auteur' }
+    email:          { eng: 'email', nld: 'e-mailadres' }
+
+    # PivotX stuff
+    sitename:       { eng: 'site', nld: 'site' }
+    groupname:      { eng: 'group', nld: 'group' }
+    text_nld:       { eng: 'text (dutch)', nld: 'tekst (nederlands)' }
+    text_eng:       { eng: 'text (english)', nld: 'tekst (engels)' }
+
+    # Generic technical stuff
+    id:                 { eng: 'id', nld: 'id' }
+    publicid:           { eng: 'public id', nld: 'publieke id' }
+    level:              { eng: 'level', nld: 'niveau' }
+    date_creation:      { eng: 'creation date', nld: 'aanmaakdatum' }
+    date_created:       'date_creation'
+    date_create:        'date_creation'
+    create_date:        'date_creation'
+    creation_date:      'date_creation'
+    date_modification:  { eng: 'modification date', nld: 'aanpasdatum' }
+    date_modified:      'date_modification'
+    date_modify:        'date_modification'
+    modification_date:  'date_modification'
+    modified_date:      'date_modification'
+    date_logged:        { eng: 'logdate', nld: 'logdatum' }
+    date_last_login:    { eng: 'last login date', nld: 'laatste logindatum' }
+    password:           { eng: 'password', nld: 'wachtwoord' }
+    passwd:             'password'
+    filename:           { eng: 'filename', nld: 'bestandsnaam' }
+    filesize:           { eng: 'filesize', nld: 'bestandsgrootte' }
+    fileid:             { eng: 'file identification', nld: 'bestandsidentificatie' }
+    width:              { eng: 'width', nld: 'breedte' }
+    height:             { eng: 'height', nld: 'hoogte' }
+    media_type:         { eng: 'media type', nld: 'media formaat' }
+    mediatype:          'media_type'
+    uri:                { eng: 'uri', nld: 'uri' }
+    state:              { eng: 'state', nld: 'staat' }
+    autoload:           { eng: 'autoload', nld: 'automatisch laden' }
+    rawhtml:            { eng: 'raw html', nld: 'rauwe html' }
+    value:              { eng: 'value', nld: 'waarde' }
+    human_editable:     { eng: 'user editable', nld: 'gebruikersaanpasbar' }
+    enabled:            { eng: 'enabled', nld: 'geactiveerd' }
+    importance:         { eng: 'importance', nld: 'belangrijkheid' }
+    friendly_language:  { eng: 'message language', nld: 'berichttaal' }
+    friendly_message:   { eng: 'message', nld: 'bericht' }
+    friendly_arguments: { eng: 'message arguments', nld: 'berichtargumenten' }
+    password_salt:      { eng: 'password salt', nld: 'cryptografische code' }
+    passwd_salt:        'password_salt'
+    encoding:           { eng: 'encoding', nld: 'versleuteling' }
+    technical_context:  { eng: 'technical context', nld: 'technische context' }

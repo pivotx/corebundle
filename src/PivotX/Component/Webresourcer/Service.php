@@ -14,12 +14,12 @@ use PivotX\Component\Outputter\Service as OutputterService;
 /**
  * A Webresourcer Service
  * 
- * A service on top of assetic to easily manage various webresources.
+ * A service on top of (or besides)  assetic to easily manage various webresources.
  * Activating a `webresource' automatically includes all necessary 
  * resources: images, stylesheets, scripts and later possibly other stuff. 
  * 
  * @todo make it work at all ;)
- * @todo added dependency management
+ * @todo add dependency management
  *
  * @author Marcel Wouters <marcel@twokings.nl>
  *

@@ -132,6 +132,11 @@ class DirectoryWebresource extends Webresource
     {
         $data = json_decode(file_get_contents($filename), true);
 
+        if (is_null($data)) {
+            // @todo throw error
+            die('Cannot JSON-decode "'.$filename.'"!');
+        }
+
         if (isset($data['identifier'])) {
             $this->setIdentifier($data['identifier']);
             $this->setProvides($data['identifier']);
@@ -152,10 +157,18 @@ class DirectoryWebresource extends Webresource
             foreach($files as $file) {
                 list($group, $type, $ext) = $this->getFileInfo($file);
 
-                $full = $directory . '/' . $file;
-                if (is_file($full)) {
-                    $output = new Output($full, $type);
-                    $this->addOutput($group, $output);
+                if (strstr($file, '*') === false) {
+                    $full = $directory . '/' . $file;
+                    if (is_file($full)) {
+                        $output = new Output($full, $type);
+                        $this->addOutput($group, $output);
+                    }
+                }
+                else {
+                    foreach(glob($directory.'/'.$file) as $gfile) {
+                        $output = new Output($gfile, $type);
+                        $this->addOutput($group, $output);
+                    }
                 }
             }
         }

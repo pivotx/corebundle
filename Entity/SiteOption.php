@@ -251,26 +251,299 @@ class SiteOption
      * Crud defaults
      */
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
-     * Get mediatype type
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
      */
-    public function getCrudFormType_mediatype()
+    public function getCrudConfiguration_date_created()
     {
-        return 'choice';
+        return array(
+            'name' => 'date_created',
+            'type' => false
+        );
     }
 
     /**
-     * Get mediatype choices
+     * PrePersist the creation timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
      */
-    public function getCrudFormChoices_mediatype()
+    public function setPrePersist_date_created()
+    {
+        if (is_null($this->date_created)) {
+            $this->date_created = new \DateTime;
+        }
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_date_modified()
     {
         return array(
-            'text/x-line' => 'Single line',
-            'text/plain' => 'Multiple lines',
-            'text/html' => 'HTML',
-            'text/xml' => 'XML',
-            'text/x-yaml' => 'YAML',
-            'application/json' => 'JSON',
+            'name' => 'date_modified',
+            'type' => false
         );
     }
+
+    /**
+     * PrePersist the update timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function setPrePersist_date_modified()
+    {
+        $this->date_modified = new \DateTime;
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-02, 10:31:06
+     */
+    public function getCrudConfiguration_mediatype()
+    {
+        return array(
+            'name' => 'mediatype',
+            'type' => 'choice',
+            'choices' => array(
+                'text/x-line' => 'Single line',
+                'text/plain' => 'Multiple lines',
+                'text/html' => 'HTML',
+                'text/xml' => 'XML',
+                'text/x-yaml' => 'YAML',
+                'application/json' => 'JSON',
+            )
+        );
+    }
+
 }
