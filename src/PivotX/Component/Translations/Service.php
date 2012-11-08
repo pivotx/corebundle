@@ -150,8 +150,8 @@ class Service
                 $groupname, $name, $site,
                 'utf-8',
                 array(
-                    'nld' => $key,
-                    'eng' => $key
+                    'nl' => $key,
+                    'en' => $key
                 ),
                 TranslationText::STATE_AUTO_TECHNICAL
             );
@@ -195,8 +195,8 @@ class Service
         $translationtext->setState($state);
 
         // @todo should auto-detect languages here
-        $translationtext->setTextNld($texts['nld']);
-        $translationtext->setTextEng($texts['eng']);
+        $translationtext->setTextNl($texts['nl']);
+        $translationtext->setTextEn($texts['en']);
 
         $this->entity_manager->persist($translationtext);
         $this->entity_manager->flush();
@@ -214,8 +214,8 @@ class Service
         }
         else if ($translationtext->getState() > TranslationText::STATE_SUGGESTED) {
             $translationtext->setState(TranslationText::STATE_SUGGESTED);
-            $translationtext->setTextNld($texts['nld']);
-            $translationtext->setTextEng($texts['eng']);
+            $translationtext->setTextNl($texts['nl']);
+            $translationtext->setTextEn($texts['en']);
 
             $this->entity_manager->persist($translationtext);
             $this->entity_manager->flush();

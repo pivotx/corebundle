@@ -195,7 +195,7 @@ class Entities
     public function updateAllTranslations()
     {
         $added_translations = true;
-        $languages          = array('nld', 'eng');
+        $languages          = array('nl', 'en');
 
         $filename = $this->getTranslationSuggestionsFilename('doctrine-preset');
         $translations = \Symfony\Component\Yaml\Yaml::parse($filename);

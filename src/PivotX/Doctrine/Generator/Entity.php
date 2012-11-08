@@ -157,7 +157,7 @@ THEEND;
             $generator_class = $this->getFeatureGeneratorClass($feature);
 
             if (!is_null($generator_class)) {
-                echo 'update for feature '.$feature.", generator $generator_class\n";
+                //echo 'update for feature '.$feature.", generator $generator_class\n";
                 $generators[] = array(new $generator_class($fields), $fields);
             }
             else {
@@ -180,7 +180,7 @@ THEEND;
             $fields = $generator->getPropertyMethodsPerField();
             foreach($fields as $field => $methods) {
                 foreach($methods as $name => $method) {
-                    echo "field $field, name $name, methodcall $method\n";
+                    //echo "field $field, name $name, methodcall $method\n";
 
                     $args = array($classname);
 
