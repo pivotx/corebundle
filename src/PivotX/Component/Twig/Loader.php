@@ -20,6 +20,10 @@ class FilesystemLoader extends \Symfony\Bundle\TwigBundle\Loader
 {
     protected function findTemplate($template)
     {
+        if (strpos($template, '#') !== false) {
+            die('My kind of include');
+        }
+
         return parent::findTemplate($template);
     }
 }

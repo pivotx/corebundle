@@ -1,39 +1,42 @@
 
 pagination:
-    page-variable:  { eng: 'page', nld: 'pagina' }
-    first-page:     { eng: 'first page', nld: 'eerste pagina' }
-    previous-page:  { eng: 'previous page', nld: 'vorige pagina' }
-    next-page:      { eng: 'next page', nld: 'volgende pagina' }
-    last-page:      { eng: 'last page', nld: 'laatste pagina' }
+    page-variable:  { en: 'page', nl: 'pagina' }
+    first-page:     { en: 'first page', nl: 'eerste pagina' }
+    previous-page:  { en: 'previous page', nl: 'vorige pagina' }
+    next-page:      { en: 'next page', nl: 'volgende pagina' }
+    last-page:      { en: 'last page', nl: 'laatste pagina' }
 
 entity:
-    button.edit:    { eng: 'edit', nld: 'bewerk' }
-    button.delete:  { eng: 'delete', nld: 'verwijder' }
+    button.edit:    { en: 'edit', nl: 'bewerk' }
+    button.delete:  { en: 'delete', nl: 'verwijder' }
 
 modal:
-    default-title:  { eng: 'Title', nld: 'Titel' }
-    button.ok:      { eng: 'Ok', nld: 'Ok' }
-    button.cancel:      { eng: 'Cancel', nld: 'Negeer' }
-    button.confirm:      { eng: 'Confirm', nld: 'Bevestig' }
-    button.save:      { eng: 'Save', nld: 'Bewaar' }
-    button.delete:      { eng: 'Delete', nld: 'Verwijder' }
+    default-title:  { en: 'Title', nl: 'Titel' }
+    button.ok:      { en: 'Ok', nl: 'Ok' }
+    button.cancel:      { en: 'Cancel', nl: 'Negeer' }
+    button.confirm:      { en: 'Confirm', nl: 'Bevestig' }
+    button.save:      { en: 'Save', nl: 'Bewaar' }
+    button.delete:      { en: 'Delete', nl: 'Verwijder' }
 
 header:
-    button.pivotx:          { eng: 'PivotX', nld: 'PivotX' }
-    button.dashboard:       { eng: 'Dashboard', nld: 'Dashboard' }
-    button.login:           { eng: 'Log in', nld: 'Inloggen' }
-    button.logout:          { eng: 'Log out', nld: 'Uitloggen' }
-    button.content-group:   { eng: 'Content', nld: 'Inhoud' }
+    button.pivotx:          { en: 'PivotX', nl: 'PivotX' }
+    button.dashboard:       { en: 'Dashboard', nl: 'Dashboard' }
+    button.login:           { en: 'Log in', nl: 'Inloggen' }
+    button.logout:          { en: 'Log out', nl: 'Uitloggen' }
+    button.content-group:   { en: 'Content', nl: 'Inhoud' }
 
 footer:
-    button.configuration:   { eng: 'Configuration', nld: 'Configuratie' }
+    button.configuration:   { en: 'Configuration', nl: 'Configuratie' }
 
 translationtext:
-    state-0:                { eng: 'Valid', nld: 'Valide' }
-    state-10:               { eng: 'Suggested', nld: 'Voorgesteld' }
-    state-20:               { eng: 'Auto-filled', nld: 'Automatisch gevuld' }
-    state-21:               { eng: 'Auto-filled with lorem ipsum', nld: 'Automatisch gevuld met lorem ipsum' }
-    state-29:               { eng: 'Auto-filled with old value', nld: 'Automatisch gevuld met oude waarde' }
-    state-90:               { eng: 'Old value', nld: 'Oude waarde' }
-    state-91:               { eng: 'Old value (locked)', nld: 'Oude waarde (vastgezet)' }
-    crud-heading.key:       { eng: 'key', nld: 'sleuteltekst' }
+    state-0:                { en: 'Valid', nl: 'Valide' }
+    state-10:               { en: 'Suggested', nl: 'Voorgesteld' }
+    state-20:               { en: 'Auto-filled', nl: 'Automatisch gevuld' }
+    state-21:               { en: 'Auto-filled with lorem ipsum', nl: 'Automatisch gevuld met lorem ipsum' }
+    state-29:               { en: 'Auto-filled with old value', nl: 'Automatisch gevuld met oude waarde' }
+    state-90:               { en: 'Old value', nl: 'Oude waarde' }
+    state-91:               { en: 'Old value (locked)', nl: 'Oude waarde (vastgezet)' }
+    crud-heading.key:       { en: 'key', nl: 'sleuteltekst' }
+
+user:
+    crud-heading.last_login:   { en: 'last login', nl: 'laatste login' }

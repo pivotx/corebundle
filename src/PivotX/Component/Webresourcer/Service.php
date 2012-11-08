@@ -31,6 +31,7 @@ class Service
     private $webresources;
     private $kernelservice;
     private $outputterservice;
+    private $collection;
 
 
     public function __construct(LoggerInterface $logger = null, \AppKernel $kernelservice, OutputterService $outputterservice)
@@ -40,6 +41,8 @@ class Service
         $this->outputterservice = $outputterservice;
 
         DirectoryWebresource::setKernelService($this->kernelservice);
+
+        $this->collection = new Collection();
     }
 
     /**
@@ -47,9 +50,15 @@ class Service
      */
     public function addWebresource(Webresource $webresource)
     {
-        $this->webresources[] = $webresource;
+        return $this->collection->add($webresource);
+    }
 
-        return true;
+    /**
+     * Activate a webresource and enable all dependencies
+     */
+    public function activateWebresource($identifier)
+    {
+        return $this->collection->activate($identifier);
     }
 
     /**
@@ -57,11 +66,6 @@ class Service
      */
     public function finalizeWebresources()
     {
-        // @todo sort resources
-
-        // output them
-        foreach($this->webresources as $webresource) {
-            $webresource->finalizeOutput($this->outputterservice);
-        }
+        return $this->collection->finalize($this->outputterservice);
     }
 }

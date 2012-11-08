@@ -9,6 +9,7 @@
 namespace PivotX\Component\Webresourcer;
 
 use PivotX\Component\Outputter\Service as OutputterService;
+use PivotX\Component\Outputter\Collection as OutputterCollection;
 use PivotX\Component\Outputter\Output as Output;
 
 /**
@@ -58,17 +59,17 @@ class DirectoryWebresource extends Webresource
         $ext   = false;
         switch ($extension) {
             case 'js':
-                $group = OutputterService::BODY_END;
+                $group = OutputterCollection::BODY_END;
                 $type  = Output::TYPE_SCRIPT_SRC;
                 $ext   = 'js';
                 break;
             case 'css':
-                $group = OutputterService::HEAD_END;
+                $group = OutputterCollection::HEAD_END;
                 $type  = Output::TYPE_LINK_HREF;
                 $ext   = 'css';
                 break;
             case 'less':
-                $group = OutputterService::HEAD_END;
+                $group = OutputterCollection::HEAD_END;
                 $type  = Output::TYPE_LINK_LESS_HREF;
                 $ext   = 'less';
                 break;
@@ -83,10 +84,12 @@ class DirectoryWebresource extends Webresource
         $version      = false;
         $dependencies = array();
         $provides     = false;
+        $variant      = 'regular';
 
         $basename = basename($directory);
 
         $files = scandir($directory);
+        $this->addVariant($variant);
         foreach($files as $file) {
             $full = $directory . '/' . $file;
 
@@ -103,7 +106,7 @@ class DirectoryWebresource extends Webresource
                     $subfull = $full . '/' . $subfile;
                     if (is_file($subfull)) {
                         $output = new Output($subfull, $type);
-                        $this->addOutput($group, $output);
+                        $this->addOutput($variant, $group, $output);
                     }
 
                     if (($version === false) && (preg_match('|^'.$basename.'[-.](.+?)([.]min)?[.]'.$ext.'|', $subfile, $match))) {
@@ -120,9 +123,34 @@ class DirectoryWebresource extends Webresource
         }
 
         $this->setIdentifier($identifier);
+        $this->setDescription($identifier);
         $this->setVersion($version);
         $this->setDependencies($dependencies);
         $this->setProvides($identifier);
+    }
+
+    /**
+     */
+    private function addJsonFilesVariant($variant, $directory, $files)
+    {
+        $this->addVariant($variant);
+        foreach($files as $file) {
+            list($group, $type, $ext) = $this->getFileInfo($file);
+
+            if (strstr($file, '*') === false) {
+                $full = $directory . '/' . $file;
+                if (is_file($full)) {
+                    $output = new Output($full, $type);
+                    $this->addOutput($variant, $group, $output);
+                }
+            }
+            else {
+                foreach(glob($directory.'/'.$file) as $gfile) {
+                    $output = new Output($gfile, $type);
+                    $this->addOutput($variant, $group, $output);
+                }
+            }
+        }
     }
 
     /**
@@ -139,7 +167,11 @@ class DirectoryWebresource extends Webresource
 
         if (isset($data['identifier'])) {
             $this->setIdentifier($data['identifier']);
+            $this->setDescription($data['identifier']);
             $this->setProvides($data['identifier']);
+        }
+        if (isset($data['description'])) {
+            $this->setDescription($data['description']);
         }
         if (isset($data['version'])) {
             $this->setVersion($data['version']);
@@ -152,23 +184,12 @@ class DirectoryWebresource extends Webresource
         }
 
         if (isset($data['files'])) {
-            $files = $data['files'];
-
-            foreach($files as $file) {
-                list($group, $type, $ext) = $this->getFileInfo($file);
-
-                if (strstr($file, '*') === false) {
-                    $full = $directory . '/' . $file;
-                    if (is_file($full)) {
-                        $output = new Output($full, $type);
-                        $this->addOutput($group, $output);
-                    }
-                }
-                else {
-                    foreach(glob($directory.'/'.$file) as $gfile) {
-                        $output = new Output($gfile, $type);
-                        $this->addOutput($group, $output);
-                    }
+            $this->addJsonFilesVariant('regular', $directory, $data['files']);
+        }
+        if (isset($data['variants'])) {
+            foreach($data['variants'] as $variant => $subdata) {
+                if (isset($subdata['files'])) {
+                    $this->addJsonFilesVariant($variant, $directory, $subdata['files']);
                 }
             }
         }

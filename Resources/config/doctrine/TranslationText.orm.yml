@@ -74,14 +74,14 @@ PivotX\CoreBundle\Entity\TranslationText:
       auto_entity:
         pivotx_translationencoding:
           ~
-    text_nld:
+    text_nl:
       type: text
       length: null
       precision: 0
       scale: 0
       nullable: false
       unique: false
-    text_eng:
+    text_en:
       type: text
       length: null
       precision: 0

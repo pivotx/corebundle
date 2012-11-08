@@ -608,12 +608,16 @@ class LocalEmbedResource extends EmbedResource
 
 
 
+
+
+
+
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function getCrudConfiguration_publicid()
     {
@@ -628,7 +632,7 @@ class LocalEmbedResource extends EmbedResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function getCrudConfiguration_fileid()
     {
@@ -643,7 +647,7 @@ class LocalEmbedResource extends EmbedResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function getCrudConfiguration_filesize()
     {
@@ -658,7 +662,7 @@ class LocalEmbedResource extends EmbedResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function getCrudConfiguration_filename()
     {

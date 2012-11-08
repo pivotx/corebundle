@@ -65,14 +65,14 @@ class TranslationText
     private $encoding;
 
     /**
-     * @var string $text_nld
+     * @var string $text_nl
      */
-    private $text_nld;
+    private $text_nl;
 
     /**
-     * @var string $text_eng
+     * @var string $text_en
      */
-    private $text_eng;
+    private $text_en;
 
     /**
      * Get id
@@ -225,43 +225,43 @@ class TranslationText
     }
 
     /**
-     * Set text_nld
+     * Set text_nl
      *
-     * @param text $textnld
+     * @param text $textnl
      */
-    public function setTextNld($textnld)
+    public function setTextNl($textnl)
     {
-        $this->text_nld = $textnld;
+        $this->text_nl = $textnl;
     }
 
     /**
-     * Get text_nld
+     * Get text_nl
      *
      * @return text 
      */
-    public function getTextNld()
+    public function getTextNl()
     {
-        return $this->text_nld;
+        return $this->text_nl;
     }
 
     /**
-     * Set text_eng
+     * Set text_en
      *
-     * @param text $texteng
+     * @param text $texten
      */
-    public function setTextEng($texteng)
+    public function setTextEn($texten)
     {
-        $this->text_eng = $texteng;
+        $this->text_en = $texten;
     }
 
     /**
-     * Get text_eng
+     * Get text_en
      *
      * @return text 
      */
-    public function getTextEng()
+    public function getTextEn()
     {
-        return $this->text_eng;
+        return $this->text_en;
     }
 
 
@@ -272,7 +272,7 @@ class TranslationText
     /**
      * Crud text focus specific
      */
-    public function getCrudFormArguments_text_nld()
+    public function getCrudFormArguments_text_nl()
     {
         return array(
             'attr' => array(
@@ -667,12 +667,18 @@ class TranslationText
 
 
 
+
+
+
+
+
+
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function getCrudConfiguration_date_created()
     {
@@ -687,7 +693,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function setPrePersist_date_created()
     {
@@ -701,7 +707,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -716,7 +722,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function setPrePersist_date_modified()
     {
@@ -728,7 +734,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function getCrudConfiguration_state()
     {
@@ -752,7 +758,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-02, 17:12:44
+     * Generated on 2012-11-05, 14:02:11
      */
     public function getCrudConfiguration_encoding()
     {

@@ -37,6 +37,11 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $parameters['frontend']['security']['logged'] = false;
         }
 
+        // @todo should not be here
+        $webresourcer = $this->container->get('webresourcer');
+        $outputter    = $this->container->get('outputter');
+        $webresourcer->finalizeOutput($outputter);
+
         if (is_array($view)) {
             foreach($view as $_view) {
                 try {
@@ -47,11 +52,6 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             }
             throw new \InvalidArgumentException('Cannot find any of the given templates.');
         }
-
-        // @todo should not be here
-        $webresourcer = $this->container->get('webresourcer');
-        $outputter    = $this->container->get('outputter');
-        $webresourcer->finalizeOutput($outputter);
 
         return parent::render($view, $parameters, $response);
     }
