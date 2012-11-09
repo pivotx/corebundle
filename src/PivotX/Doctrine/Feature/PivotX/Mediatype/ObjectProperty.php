@@ -12,11 +12,18 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
         $this->fields = $fields;
     }
 
-    public function getPropertyMethodsForField($field)
+    public function getPropertyMethodsForField($field, $config)
     {
         $methods = array();
 
-        $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfigurationMedia';
+        switch ($config['type']) {
+            case 'mediatype':
+                $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfigurationMedia';
+                break;
+            case 'value':
+                $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfigurationValue';
+                break;
+        }
 
         return $methods;
     }
@@ -41,8 +48,52 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
                 'text/xml' => 'XML',
                 'text/x-yaml' => 'YAML',
                 'application/json' => 'JSON',
+
+                'x-value/boolean' => 'Boolean value',
             )
         );
+    }
+THEEND;
+    }
+
+    public function generateGetCrudConfigurationValue($classname, $field, $config)
+    {
+        $mediatype_field = null;
+        foreach($this->fields as $lfield) {
+            if ($lfield[1]['type'] == 'mediatype') {
+                $mediatype_field = $lfield[0];
+            }
+        }
+
+        // @todo throw an exception?
+        if (is_null($mediatype_field)) {
+            return '';
+        }
+
+        return <<<THEEND
+    /**
+     * Return the CRUD field configuration
+     * 
+%comment%
+     */
+    public function getCrudConfiguration_$field()
+    {
+        \$config = array(
+            'name' => '$field',
+            'type' => 'text'
+        );
+
+        switch (\$this->$mediatype_field) {
+            case 'x-value/boolean':
+                \$config['type'] = 'choice';
+                \$config['choices'] = array(
+                    '0' => 'no',
+                    '1' => 'yes'
+                );
+                break;
+        }
+
+        return \$config;
     }
 THEEND;
     }

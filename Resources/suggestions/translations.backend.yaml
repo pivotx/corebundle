@@ -9,6 +9,7 @@ pagination:
 entity:
     button.edit:    { en: 'edit', nl: 'bewerk' }
     button.delete:  { en: 'delete', nl: 'verwijder' }
+    button.dump:    { en: 'dump', nl: 'dump' }
 
 modal:
     default-title:  { en: 'Title', nl: 'Titel' }

@@ -54,6 +54,28 @@ class Service
     }
 
     /**
+     * Add all webresources (inactivated) from a directory
+     */
+    public function addWebresourcesFromDirectory($directory_reference)
+    {
+        if (preg_match('|^@([^/]+)(.+)$|', $directory_reference, $match)) {
+            $directory = $this->kernelservice->locateResource($directory_reference);
+        }
+        else {
+            $directory = $directory_reference;
+        }
+
+        $files = scandir($directory);
+        foreach($files as $file) {
+            $full = $directory . '/' . $file;
+
+            if (substr($file, 0, 1) != '.') {
+                $this->collection->add(new DirectoryWebresource($full));
+            }
+        }
+    }
+
+    /**
      * Activate a webresource and enable all dependencies
      */
     public function activateWebresource($identifier)

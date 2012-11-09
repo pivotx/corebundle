@@ -592,12 +592,205 @@ class SiteOption
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-08, 14:19:17
+     * Generated on 2012-11-09, 16:30:23
      */
     public function getCrudConfiguration_date_created()
     {
@@ -612,7 +805,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-08, 14:19:17
+     * Generated on 2012-11-09, 16:30:23
      */
     public function setPrePersist_date_created()
     {
@@ -626,7 +819,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-08, 14:19:17
+     * Generated on 2012-11-09, 16:30:23
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -641,7 +834,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-08, 14:19:17
+     * Generated on 2012-11-09, 16:30:23
      */
     public function setPrePersist_date_modified()
     {
@@ -653,7 +846,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-08, 14:19:17
+     * Generated on 2012-11-09, 16:30:23
      */
     public function getCrudConfiguration_mediatype()
     {
@@ -667,8 +860,37 @@ class SiteOption
                 'text/xml' => 'XML',
                 'text/x-yaml' => 'YAML',
                 'application/json' => 'JSON',
+
+                'x-value/boolean' => 'Boolean value',
             )
         );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-09, 16:30:23
+     */
+    public function getCrudConfiguration_value()
+    {
+        $config = array(
+            'name' => 'value',
+            'type' => 'text'
+        );
+
+        switch ($this->mediatype) {
+            case 'x-value/boolean':
+                $config['type'] = 'choice';
+                $config['choices'] = array(
+                    '0' => 'no',
+                    '1' => 'yes'
+                );
+                break;
+        }
+
+        return $config;
     }
 
 }

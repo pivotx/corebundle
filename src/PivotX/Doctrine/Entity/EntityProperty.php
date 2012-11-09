@@ -4,5 +4,5 @@ namespace PivotX\Doctrine\Entity;
 
 interface EntityProperty
 {
-    public function getPropertyMethodsForField($field);
+    public function getPropertyMethodsForField($field, $config);
 }

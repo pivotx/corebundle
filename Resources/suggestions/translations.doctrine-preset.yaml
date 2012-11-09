@@ -43,7 +43,7 @@ any:
     autoload:           { en: 'autoload', nl: 'automatisch laden' }
     rawhtml:            { en: 'raw html', nl: 'rauwe html' }
     value:              { en: 'value', nl: 'waarde' }
-    human_editable:     { en: 'user editable', nl: 'gebruikersaanpasbar' }
+    human_editable:     { en: 'user editable', nl: 'gebruikersaanpasbaar' }
     enabled:            { en: 'enabled', nl: 'geactiveerd' }
     importance:         { en: 'importance', nl: 'belangrijkheid' }
     friendly_language:  { en: 'message language', nl: 'berichttaal' }

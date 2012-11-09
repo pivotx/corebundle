@@ -278,12 +278,84 @@ class EmbedResource extends GenericResource
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-08, 14:19:17
+     * Generated on 2012-11-09, 16:30:23
      */
     public function getCrudConfiguration_width()
     {
@@ -298,7 +370,7 @@ class EmbedResource extends GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-08, 14:19:17
+     * Generated on 2012-11-09, 16:30:23
      */
     public function getCrudConfiguration_height()
     {

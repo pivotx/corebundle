@@ -12,7 +12,7 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
         $this->fields = $fields;
     }
 
-    public function getPropertyMethodsForField($field)
+    public function getPropertyMethodsForField($field, $config)
     {
         $methods = array();
 

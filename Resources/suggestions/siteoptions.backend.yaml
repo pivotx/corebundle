@@ -1,0 +1,7 @@
+
+webresources:
+    directory:      { value: [ '@BackendBundle/Resources/lib' ], autoload: true, human_editable: true, mediatype: 'application/json' }
+
+themes:
+    active:         { value: '@BackendBundle/Resources/themes/backend/theme.json', autoload: true, human_editable: true }
+    debug:          { value: true, mediatype: 'x-value/boolean', autoload: true, human_editable: true }

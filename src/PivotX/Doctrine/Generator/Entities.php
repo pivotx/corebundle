@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 
 
 /**
- * This is our cache warmer for pre-defined entities.
+ * This is our entity-generator for pre-defined entities.
  *
  * @author Marcel Wouters <marcel@twokings.nl>
  */
@@ -184,7 +184,7 @@ class Entities
      */
     private function getTranslationSuggestionsFilename($name)
     {
-        return 'src/PivotX/CoreBundle/Resources/suggestions/'.$name.'.yaml';
+        return 'src/PivotX/CoreBundle/Resources/suggestions/translations.'.$name.'.yaml';
     }
 
     /**

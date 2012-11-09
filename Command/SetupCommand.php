@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Validator\Constraints\Email;
+use PivotX\Doctrine\Generator\Entities;
 
 class SetupCommand extends ContainerAwareCommand
 {
@@ -17,31 +18,29 @@ class SetupCommand extends ContainerAwareCommand
             ->setDescription('Setup PivotX')
         ;
     }
-    /*
-// add this to the top of your class
 
-protected function addEmailAction($email)
-{
-    $emailConstraint = new Email();
-    // all constraint "options" can be set this way
-    $emailConstraint->message = 'Invalid email address';
+    /**
+     *
+     * @return boolean  true, if update successful
+     */
+    protected function updateSiteoptions($output)
+    {
+        $doctrine = $this->getContainer()->get('doctrine');
+        $siteoptions_service = $this->getContainer()->get('pivotx.siteoptions');
 
-    // use the validator to validate the value
-    $errorList = $this->get('validator')->validateValue($email, $emailConstraint);
+        $siteoptions_service->beginTrans();
 
-    if (count($errorList) == 0) {
-        // this IS a valid email address, do something
-    } else {
-        // this is *not* a valid email address
-        $errorMessage = $errorList[0]->getMessage()
+        $setup = new \PivotX\Component\Siteoptions\Setup($doctrine, $siteoptions_service);
+        $setup->updateBackendOptions();
 
-        // ... do something with the error
+        $siteoptions_service->commitTrans();
+
+        return true;
     }
 
-    // ...
-}
+    /**
+     * Handle the dialog to add a new SUPER_ADMIN user
      */
-
     protected function addUser($output, $repository)
     {
         $existingUser = null;
@@ -184,6 +183,43 @@ protected function addEmailAction($email)
         return true;
     }
 
+    /**
+     * Read all the defined entities (YAML-only currently) and update
+     * the source entity files to have all the correct methods.
+     *
+     * @return boolean  true, if update successful
+     */
+    protected function updateEntities()
+    {
+        $doctrine = $this->getContainer()->get('doctrine');
+        $translation_service = $this->getContainer()->get('pivotx.translations');
+
+        $translation_service->beginTrans();
+
+        $generator = new Entities($doctrine, $translation_service);
+
+        $generator->updateAllCode();
+        $generator->updateAllTranslations();
+
+        $translation_service->commitTrans();
+
+        return true;
+    }
+
+    /**
+     * Execute PivotX Setup
+     *
+     * @todo
+     * 
+     * fill options
+     * verify security (ROLES, see security.yml)
+     * check if parameters.ini secret has been changed?
+     *
+     * run: pivotx:entities
+     *      - implicitily add translations
+     * run: doctrine:schema:update (--force)
+     * run: generate:doctrine:entities if necessary
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $doctrine = $this->getContainer()->get('doctrine');
@@ -191,12 +227,18 @@ protected function addEmailAction($email)
         $output->writeln('PivotX Setup');
         $output->writeln('');
 
-        // fill translations
-        // fill options
-        // verify security (ROLES, see security.yml)
-        // check if parameters.ini secret has been changed?
+        if (!$this->updateSiteoptions($output)) {
+            $output->writeln('Setup aborted. Options could not be updated.');
+            return;
+        }
 
         if (!$this->setupUsers($input, $output, $doctrine)) {
+            $output->writeln('Setup aborted. Users could not be verified.');
+            return;
+        }
+
+        if (!$this->updateEntities()) {
+            $output->writeln('Setup aborted. Entities could not be updated.');
             return;
         }
 

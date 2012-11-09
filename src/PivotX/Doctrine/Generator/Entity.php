@@ -67,7 +67,7 @@ THEEND;
             $field     = $field_generator[1];
             $config    = $field_generator[2];
 
-            $methods = $generator->getPropertyMethodsForField($field);
+            $methods = $generator->getPropertyMethodsForField($field, $config);
             foreach($methods as $name => $method) {
                 $args = array($classname, $field, $config);
 

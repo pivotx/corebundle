@@ -26,6 +26,16 @@ class Service
     private $entity_manager = false;
     private $entity_class = false;
 
+    /**
+     * Local code cache
+     */
+    private $cache = false;
+
+    /**
+     * If true, we don't flush after every ->persist()
+     */
+    private $in_transaction = false;
+
     public function __construct(RoutingService $pivotx_routing, Registry $doctrine_registry)
     {
         $this->pivotx_routing    = $pivotx_routing;
@@ -34,6 +44,33 @@ class Service
         $this->entity_manager = $this->doctrine_registry->getEntityManager();
 
         $this->determineEntityClass();
+
+        $this->cache = array();
+    }
+
+    /**
+     * Begin 'transaction'
+     *
+     * Beware!
+     * This is not a real transaction, but just a way to
+     * to not flush everytime after a TranslationText update.
+     * Normally only used when in a setup-call.
+     */
+    public function beginTrans()
+    {
+        $this->in_transaction = true;
+    }
+
+    /**
+     * Commit 'transaction'
+     *
+     * This actually just disabled our 'transaction' and
+     * flushes Doctrine
+     */
+    public function commitTrans()
+    {
+        $this->in_transaction = false;
+        $this->entity_manager->flush();
     }
 
     /**
@@ -53,6 +90,36 @@ class Service
                 }
             }
         }
+    }
+
+    /**
+     * Initialize translation cache
+     */
+    private function initializeCache($site, $language)
+    {
+        if (isset($this->cache[$site])) {
+            if (isset($this->cache[$site][$language])) {
+                return;
+            }
+            $this->cache[$site] = array($language => array());
+        }
+        else {
+            $this->cache = array($site => array($language => array()));
+        }
+
+        // @todo this could be a very efficient query
+        $translations = $this->doctrine_registry->getRepository($this->entity_class)->findBy(array(
+            'sitename' => $site
+        ));
+
+        $method = 'getText'.ucfirst($language);
+
+        $tr = array();
+        foreach($translations as $translation) {
+            $tr[$translation->getGroupname().'.'.$translation->getName()] = $translation->$method();
+        }
+
+        $this->cache[$site][$language] = $tr;
     }
 
     /**
@@ -143,6 +210,16 @@ class Service
 
         list($groupname, $name, $site, $language) = $this->decodeKeyFilter($key, $filter);
 
+
+
+        $this->initializeCache($site, $language);
+        if (isset($this->cache[$site]) && isset($this->cache[$site][$language])) {
+            if (isset($this->cache[$site][$language][$key])) {
+                return $this->cache[$site][$language][$key];
+            }
+        }
+
+
         $translationtext = $this->findEntity($groupname, $name, $site);
 
         if (is_null($translationtext)) {
@@ -199,7 +276,10 @@ class Service
         $translationtext->setTextEn($texts['en']);
 
         $this->entity_manager->persist($translationtext);
-        $this->entity_manager->flush();
+
+        if (!$this->in_transaction) {
+            $this->entity_manager->flush();
+        }
     }
 
     /**
@@ -218,7 +298,10 @@ class Service
             $translationtext->setTextEn($texts['en']);
 
             $this->entity_manager->persist($translationtext);
-            $this->entity_manager->flush();
+
+            if (!$this->in_transaction) {
+                $this->entity_manager->flush();
+            }
         }
     }
 }
