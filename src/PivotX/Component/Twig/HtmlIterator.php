@@ -106,6 +106,7 @@ class HtmlIterator implements \Iterator, \Countable
      */
     protected function _setup_groupingby_numeric($data, $groupingby)
     {
+        echo 'setup grouping<br/>'."\n";
         if ($groupingby < 1) {
             $groupingby = count($data);
         }
@@ -375,6 +376,7 @@ class HtmlIterator implements \Iterator, \Countable
         if ($this->groupingby_active) {
             return new HtmlIteratorVariable($this, $this->data[$this->pointer]['value']);
         }
+        // @todo should we create a htmliteratorvariable, right??
         return new HtmlIteratorVariable($this, $this->data[$this->pointer]);
     }
 

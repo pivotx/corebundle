@@ -74,7 +74,8 @@ class Service extends \Twig_Extension
     public function getTokenParsers()
     {
         return array(
-            new Loadview()
+            new Loadview(),
+            new Loadlist()
         );
     }
 

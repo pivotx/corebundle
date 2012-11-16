@@ -239,7 +239,7 @@ class Service
             $readable_text = $translationtext->$method();
         }
         else {
-            $readable_text = '--'.$key.'--';
+            $readable_text = $key;
         }
 
         if (is_array($macros) && (count($macros) > 0)) {

@@ -26,9 +26,7 @@ class Service
     private $entity_manager = false;
     private $entity_class = false;
 
-    /**
-     * If true, we don't flush after every ->persist()
-     */
+    // If true, we don't flush after every ->persist()
     private $in_transaction = false;
 
     public function __construct(RoutingService $pivotx_routing, Registry $doctrine_registry)

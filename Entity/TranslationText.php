@@ -913,12 +913,24 @@ class TranslationText
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 16:30:23
+     * Generated on 2012-11-09, 17:37:51
      */
     public function getCrudConfiguration_date_created()
     {
@@ -933,7 +945,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 16:30:23
+     * Generated on 2012-11-09, 17:37:51
      */
     public function setPrePersist_date_created()
     {
@@ -947,7 +959,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 16:30:23
+     * Generated on 2012-11-09, 17:37:51
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -962,7 +974,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 16:30:23
+     * Generated on 2012-11-09, 17:37:51
      */
     public function setPrePersist_date_modified()
     {
@@ -974,7 +986,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 16:30:23
+     * Generated on 2012-11-09, 17:37:51
      */
     public function getCrudConfiguration_state()
     {
@@ -998,7 +1010,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 16:30:23
+     * Generated on 2012-11-09, 17:37:51
      */
     public function getCrudConfiguration_encoding()
     {

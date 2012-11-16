@@ -24,9 +24,7 @@ class Service
 {
     private $logger;
 
-    /**
-     * Registered formats
-     */
+    // Registered formats
     private $formats;
 
     public function __construct(LoggerInterface $logger = null)
@@ -48,10 +46,10 @@ class Service
     }
 
     /**
-     * Find a specific view
+     * Find a specific format
      *
-     * @param string $name   name of the view
-     * @return ViewInterface view if found, otherwise null
+     * @param string $name   name of the format
+     * @return ViewInterface format if found, otherwise null
      */
     public function findFormat($name)
     {

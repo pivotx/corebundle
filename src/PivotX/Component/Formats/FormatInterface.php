@@ -16,23 +16,23 @@ interface FormatInterface
     public function format($in, $arguments = array());
 
     /**
-     * Get the name of the view
+     * Get the name of the format
      *
-     * @return string view name
+     * @return string format name
      */
     public function getName();
 
     /**
-     * Get the group of the view
+     * Get the group of the format
      *
      * @return string group name
      */
     public function getGroup();
 
     /**
-     * Get a developer description of the view
+     * Get a developer description of the format
      *
-     * @return string view description
+     * @return string format description
      */
     public function getDescription();
 

@@ -38,6 +38,9 @@
 
         <!-- webresourcer -->
         <parameter key="pivotx.webresourcer.class">PivotX\Component\Webresourcer\Service</parameter>
+
+        <!-- lists -->
+        <parameter key="pivotx.lists.class">PivotX\Component\Lists\Service</parameter>
     </parameters>
 
     <services>
@@ -104,6 +107,13 @@
             <argument type="service" id="logger" on-invalid="ignore" />
             <argument type="service" id="kernel" />
             <argument type="service" id="pivotx.outputter" />
+        </service>
+
+        <service id="pivotx.lists" class="%pivotx.lists.class%" public="true">
+            <argument type="service" id="logger" on-invalid="ignore" />
+            <argument type="service" id="pivotx.siteoptions" />
+            <argument type="service" id="pivotx.routing" />
+            <argument type="service" id="pivotx.translations" />
         </service>
 
         <service id="twig.extension.pivotx.doctrine" class="%pivotx.doctrine.twig.class%" public="false">
