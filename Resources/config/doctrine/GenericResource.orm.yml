@@ -67,6 +67,3 @@ PivotX\CoreBundle\Entity\GenericResource:
       auto_entity:
         pivotx_ignore:
           ~
-  lifecycleCallbacks:
-    prePersist: [ setPrePersist_date_created, setPrePersist_date_modified ]
-    preUpdate: [ setPrePersist_date_modified ]

@@ -6,10 +6,12 @@ namespace PivotX\Doctrine\Feature\PivotX\Backendfile;
 class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
 {
     private $fields = null;
+    private $metaclassdata = null;
 
-    public function __construct(array $fields)
+    public function __construct(array $fields, $metaclassdata)
     {
-        $this->fields = $fields;
+        $this->fields        = $fields;
+        $this->metaclassdata = $metaclassdata;
     }
 
     public function getPropertyMethodsForField($field, $config)

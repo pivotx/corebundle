@@ -85,13 +85,15 @@ class Output
     }
 
     /**
-     * Prepare a cache-file
+     * Return a sort-of descriptive cache filename
      *
-     * @param string $content    the cached contents
-     * @param string $extension  of the cached file
-     * @return string            the cache url to use
+     * The developer should be able to determine what the original file was.
+     *
+     * @param string $extension        of the cached file
+     * @param string $name_suggestion  name suggestion
+     * @return string                  cache filename
      */
-    public function prepareCacheFile($content, $extension, $temp_directory, $name_suggestion)
+    public function determineCacheFilename($extension, $name_suggestion)
     {
         $dirname  = dirname($name_suggestion);
         $basename = pathinfo($name_suggestion, PATHINFO_FILENAME);
@@ -106,12 +108,37 @@ class Output
         $dirname = trim(preg_replace('|[^a-zA-Z0-9+]|', ' ', $dirname));
         $dirname = str_replace(' ', '_', $dirname);
 
-        $fname = $dirname.'_'.$basename.'.'.$extension;
+        return $dirname.'_'.$basename.'.'.$extension;
+    }
+
+    /**
+     * Get the url for a cache filename
+     *
+     * @param string $filename    cached filename
+     * @return string             cache url to use
+     */
+    public function getCacheUrl($filename)
+    {
+        // @todo error, error, wrong, error, wrong
+        return '/app_dev.php/cwr/'.$filename;
+    }
+
+    /**
+     * Prepare a cache-file
+     *
+     * @param string $content          the cached contents
+     * @param string $extension        of the cached file
+     * @param string $temp_directory   location where we place the file
+     * @param string $name_suggestion  name suggestion
+     * @return string                  the cache url to use
+     */
+    public function prepareCacheFile($content, $extension, $temp_directory, $name_suggestion)
+    {
+        $fname = $this->determineCacheFilename($extension, $name_suggestion);
 
         file_put_contents($temp_directory.'/'.$fname, $content);
 
-        // @todo error, error, wrong, error, wrong
-        $src = '/app_dev.php/cwr/'.$fname;
+        $src = $this->getCacheUrl($fname);
 
         return $src;
     }
@@ -125,12 +152,19 @@ class Output
      */
     public function copyFileToCache($source, $temp_directory)
     {
-        $content = file_get_contents($source);
-
         $extension = 'dat';
         if (preg_match('|[.]([^.\\/]+)$|', $source, $match)) {
             $extension = $match[1];
         }
+
+        //* don't cache this yet
+        $fname = $this->determineCacheFilename($extension, $source);
+        if (file_exists($temp_directory.'/'.$source)) {
+            return $this->getCacheUrl($fname);
+        }
+        //*/
+
+        $content = file_get_contents($source);
 
         return $this->prepareCacheFile($content, $extension, $temp_directory, $source);
     }

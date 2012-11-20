@@ -6,10 +6,12 @@ namespace PivotX\Doctrine\Feature\Timestampable;
 class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
 {
     private $fields = null;
+    private $metaclassdata = null;
 
-    public function __construct(array $fields)
+    public function __construct(array $fields, $metaclassdata)
     {
-        $this->fields = $fields;
+        $this->fields        = $fields;
+        $this->metaclassdata = $metaclassdata;
     }
 
     public function getPropertyMethodsForField($field, $config)
@@ -22,10 +24,11 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
             if ($lfield[0] == $field) {
                 switch ($lfield[1]['on']) {
                     case 'create':
-                        $methods['setPrePersist_'.$field] = 'generateSetPrePersistOnCreate';
+                        $methods['prePersist_'.$field] = 'generatePrePersistOnCreate';
                         break;
                     case 'update':
-                        $methods['setPrePersist_'.$field] = 'generateSetPrePersistOnUpdate';
+                        $methods['prePersist_'.$field] = 'generatePrePersistOnUpdate';
+                        $methods['preUpdate_'.$field] = 'generatePreUpdateOnUpdate';
                         break;
                 }
             }
@@ -52,7 +55,7 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
 THEEND;
     }
 
-    public function generateSetPrePersistOnCreate($classname, $field, $config)
+    public function generatePrePersistOnCreate($classname, $field, $config)
     {
         return <<<THEEND
     /**
@@ -60,7 +63,7 @@ THEEND;
      * 
 %comment%
      */
-    public function setPrePersist_$field()
+    public function prePersist_$field()
     {
         if (is_null(\$this->$field)) {
             \$this->$field = new \\DateTime;
@@ -69,7 +72,7 @@ THEEND;
 THEEND;
     }
 
-    public function generateSetPrePersistOnUpdate($classname, $field, $config)
+    public function generatePrePersistOnUpdate($classname, $field, $config)
     {
         return <<<THEEND
     /**
@@ -77,7 +80,22 @@ THEEND;
      * 
 %comment%
      */
-    public function setPrePersist_$field()
+    public function prePersist_$field()
+    {
+        \$this->$field = new \\DateTime;
+    }
+THEEND;
+    }
+
+    public function generatePreUpdateOnUpdate($classname, $field, $config)
+    {
+        return <<<THEEND
+    /**
+     * PrePersist the update timestamp
+     * 
+%comment%
+     */
+    public function preUpdate_$field()
     {
         \$this->$field = new \\DateTime;
     }

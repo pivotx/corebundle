@@ -41,6 +41,9 @@
 
         <!-- lists -->
         <parameter key="pivotx.lists.class">PivotX\Component\Lists\Service</parameter>
+
+        <!-- doctrine subscriber -->
+        <parameter key="pivotx.doctrine.subscriber.class">PivotX\Doctrine\Subscriber\Subscriber</parameter>
     </parameters>
 
     <services>
@@ -101,6 +104,7 @@
         <service id="pivotx.outputter" class="%pivotx.outputter.class%" public="true">
             <argument type="service" id="logger" on-invalid="ignore" />
             <argument type="service" id="kernel" />
+            <argument type="service" id="debug.stopwatch" />
         </service>
 
         <service id="pivotx.webresourcer" class="%pivotx.webresourcer.class%" public="true">
@@ -121,8 +125,15 @@
         </service>
 
         <!-- @todo not very practicable to list all pivotx doctrine features, but ok for now -->
+        <!--
         <service id="twig.extension.pivotx.doctrine.publishable" class="PivotX\Doctrine\Feature\Publishable\Twig" public="false">
             <tag name="twig.extension" />
+        </service>
+        -->
+
+
+        <service id="pivotx.subscriber" class="%pivotx.doctrine.subscriber.class%">
+            <tag name="doctrine.event_subscriber" />
         </service>
     </services>
 

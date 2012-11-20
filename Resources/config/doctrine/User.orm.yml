@@ -98,6 +98,9 @@ PivotX\CoreBundle\Entity\User:
       targetEntity: User
       mappedBy: user
       fetch: EXTRA_LAZY
-  lifecycleCallbacks:
-    prePersist: [ setPrePersist_date_created, setPrePersist_date_modified ]
-    preUpdate: [ setPrePersist_date_modified ]
+  auto_entity:
+    loggable:
+      limits:
+        days:        365
+        records:     100
+      remove-fields: [ 'passwd', 'passwd_salt' ]

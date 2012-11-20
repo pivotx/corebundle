@@ -29,8 +29,6 @@ class YamlConfiguration extends Configuration
     {
         $this->clearConfiguration();
 
-        //var_dump($array);
-
         // read auto_entity definitions and parse them into ->fields
         $instance = null;
         foreach($array as $entity) {
@@ -45,6 +43,24 @@ class YamlConfiguration extends Configuration
                     }
                 }
             }
+
+            if (isset($entity['auto_entity'])) {
+                foreach($entity['auto_entity'] as $feature => $config) {
+                    if (!isset($this->features[$feature])) {
+                        $this->features[$feature] = array();
+                    }
+
+                    $this->features[$feature][] = array(null, $config);
+                }
+            }
         }
+
+        //*
+        echo 'Source:'."\n";
+        var_dump($array);
+        echo "\n".'Features'."\n";
+        var_dump($this->features);
+        echo "\n\n";
+        //*/
     }
 }

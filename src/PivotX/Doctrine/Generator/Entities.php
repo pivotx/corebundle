@@ -102,7 +102,7 @@ class Entities
         foreach ($this->doctrine->getEntityManagers() as $em) {
             $classes = $em->getMetadataFactory()->getAllMetadata();
             foreach($classes as $class) {
-                //echo "Class: ".$class->name."\n";
+                echo "Class: ".$class->name."\n";
                 //var_dump($class);
 
                 $_p = explode('\\',$class->name);

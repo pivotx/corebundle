@@ -69,6 +69,13 @@ PivotX\CoreBundle\Entity\ActivityLog:
       scale: 0
       nullable: true
       unique: false
+    primary_tag:
+      type: string
+      length: 64
+      precision: 0
+      scale: 0
+      nullable: true
+      unique: false
   manyToOne:
     user:
       targetEntity: User

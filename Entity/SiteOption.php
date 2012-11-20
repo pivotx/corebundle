@@ -7,6 +7,11 @@ namespace PivotX\CoreBundle\Entity;
 class SiteOption 
 {
     /**
+     * Required for PivotX/Doctrine loggable
+     */
+    private static $activity_service = null;
+
+    /**
      * @var integer $id
      */
     protected $id;
@@ -251,558 +256,64 @@ class SiteOption
      * Crud defaults
      */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * Store a version
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 11:07:28
+     */
+    public function preUpdate_Loggable()
+    {
+        $fields = array( "sitename","groupname","name","date_created","date_modified","autoload","human_editable","mediatype","value" );
+
+        $data   = array();
+        foreach($fields as $field) {
+            $data[$field] = $this->$field;
+        }
+
+        if ((property_exists('PivotX\CoreBundle\Entity\SiteOption', 'activity_service')) && (!is_null(self::$activity_service))) {
+            $log = self::$activity_service->createLoggableMessage(
+                'en',
+                'Stored a version of %classname% with id %id%',
+                array( '%classname%' => "SiteOption", '%id%' => $this->getId() ),
+                $data
+            );
+        }
+    }
+
+    /**
+     * Store a version
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 11:13:58
+     */
+    public function onFlush_Loggable()
+    {
+        $fields = array( "sitename","groupname","name","date_created","date_modified","autoload","human_editable","mediatype","value" );
+
+        $data   = array();
+        foreach($fields as $field) {
+            $data[$field] = $this->$field;
+        }
+
+        if ((property_exists('PivotX\CoreBundle\Entity\SiteOption', 'activity_service')) && (!is_null(self::$activity_service))) {
+            $log = self::$activity_service->createLoggableMessage(
+                'en',
+                'Stored a version of %classname% with id %id%',
+                array( '%classname%' => "SiteOption", '%id%' => $this->getId() ),
+                $data
+            );
+        }
+    }
 
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:06
      */
     public function getCrudConfiguration_date_created()
     {
@@ -817,9 +328,9 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:06
      */
-    public function setPrePersist_date_created()
+    public function prePersist_date_created()
     {
         if (is_null($this->date_created)) {
             $this->date_created = new \DateTime;
@@ -831,7 +342,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:06
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -846,9 +357,21 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:06
      */
-    public function setPrePersist_date_modified()
+    public function prePersist_date_modified()
+    {
+        $this->date_modified = new \DateTime;
+    }
+
+    /**
+     * PrePersist the update timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 16:53:06
+     */
+    public function preUpdate_date_modified()
     {
         $this->date_modified = new \DateTime;
     }
@@ -858,7 +381,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:06
      */
     public function getCrudConfiguration_mediatype()
     {
@@ -883,13 +406,13 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:06
      */
     public function getCrudConfiguration_value()
     {
         $config = array(
             'name' => 'value',
-            'type' => 'text'
+            'type' => 'textarea'
         );
 
         switch ($this->mediatype) {
@@ -900,9 +423,71 @@ class SiteOption
                     '1' => 'yes'
                 );
                 break;
+
+            case 'text/x-line':
+                break;
+
+            case 'text/plain':
+            case 'text/html':
+            case 'text/xml':
+            case 'text/x-yaml':
+            case 'application/json':
+                $config['type'] = 'textarea';
+                break;
         }
 
         return $config;
+    }
+
+    /**
+     * Set the activityservice
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 16:53:06
+     */
+    public static function setActivityService($service)
+    {
+        if (property_exists('PivotX\CoreBundle\Entity\SiteOption', 'activity_service')) {
+            self::$activity_service = $service;
+        }
+    }
+
+    /**
+     * Store a version
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 16:53:06
+     */
+    public function onPxPreUpdate_Loggable($changeset)
+    {
+        $fields = array( "sitename","groupname","name","date_created","date_modified","autoload","human_editable","mediatype","value" );
+
+        $data    = array();
+        $changes = false;
+        foreach($fields as $field) {
+            $data[$field] = $this->$field;
+
+            if (isset($changeset[$field])) {
+                $data[$field] = $changeset[$field][0];
+                $changes      = true;
+            }
+        }
+
+        // @todo not the nicest way, but works for now
+        if (isset($this->loggable_already_logged)) {
+            $changes = false;
+        }
+        $this->loggable_already_logged = true;
+
+        if ($changes && (property_exists('PivotX\CoreBundle\Entity\SiteOption', 'activity_service')) && (!is_null(self::$activity_service))) {
+            $log = self::$activity_service->createLoggableMessage('SiteOption', $this->getId(), $data);
+
+            return $log;
+        }
+
+        return null;
     }
 
 }

@@ -8,6 +8,11 @@ namespace PivotX\CoreBundle\Entity;
 class TranslationText 
 {
     /**
+     * Required for PivotX/Doctrine loggable
+     */
+    private static $activity_service = null;
+
+    /**
      *  0 - key/text is valid
      * 10 - key/text has a suggested value
      * 20 - key/text is auto-filled (usually with a key name variant)
@@ -281,656 +286,12 @@ class TranslationText
         );
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_date_created()
     {
@@ -945,9 +306,9 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
-    public function setPrePersist_date_created()
+    public function prePersist_date_created()
     {
         if (is_null($this->date_created)) {
             $this->date_created = new \DateTime;
@@ -959,7 +320,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -974,9 +335,21 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
-    public function setPrePersist_date_modified()
+    public function prePersist_date_modified()
+    {
+        $this->date_modified = new \DateTime;
+    }
+
+    /**
+     * PrePersist the update timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 16:53:07
+     */
+    public function preUpdate_date_modified()
     {
         $this->date_modified = new \DateTime;
     }
@@ -986,7 +359,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_state()
     {
@@ -1010,7 +383,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_encoding()
     {
@@ -1022,6 +395,57 @@ class TranslationText
                 'utf-8/html' => 'html/UTF-8'
             )
         );
+    }
+
+    /**
+     * Set the activityservice
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 16:53:07
+     */
+    public static function setActivityService($service)
+    {
+        if (property_exists('PivotX\CoreBundle\Entity\TranslationText', 'activity_service')) {
+            self::$activity_service = $service;
+        }
+    }
+
+    /**
+     * Store a version
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 16:53:07
+     */
+    public function onPxPreUpdate_Loggable($changeset)
+    {
+        $fields = array( "sitename","groupname","name","date_created","date_modified","state","encoding","text_nl","text_en" );
+
+        $data    = array();
+        $changes = false;
+        foreach($fields as $field) {
+            $data[$field] = $this->$field;
+
+            if (isset($changeset[$field])) {
+                $data[$field] = $changeset[$field][0];
+                $changes      = true;
+            }
+        }
+
+        // @todo not the nicest way, but works for now
+        if (isset($this->loggable_already_logged)) {
+            $changes = false;
+        }
+        $this->loggable_already_logged = true;
+
+        if ($changes && (property_exists('PivotX\CoreBundle\Entity\TranslationText', 'activity_service')) && (!is_null(self::$activity_service))) {
+            $log = self::$activity_service->createLoggableMessage('TranslationText', $this->getId(), $data);
+
+            return $log;
+        }
+
+        return null;
     }
 
 }

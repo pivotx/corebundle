@@ -9,6 +9,7 @@
 namespace PivotX\Component\Outputter;
 
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * An Outputter Service
@@ -21,12 +22,15 @@ class Service
 {
     private $logger;
     private $kernel;
+    private $stopwatch;
+
     private $collection;
 
-    public function __construct(LoggerInterface $logger = null, \AppKernel $kernel)
+    public function __construct(LoggerInterface $logger = null, \AppKernel $kernel, Stopwatch $stopwatch)
     {
         $this->logger = $logger;
         $this->kernel = $kernel;
+        $this->stopwatch = $stopwatch;
 
         $this->collection = new Collection($this->getOutputterDirectory());
     }
@@ -51,7 +55,11 @@ class Service
      */
     public function getOutputs($group)
     {
+        $sw = $this->stopwatch->start(sprintf('get output (%s)', $group), 'outputter');
+
         $html = $this->collection->getGroup($group);
+
+        $sw->stop();
 
         return new \Twig_Markup($html, 'utf-8');
     }

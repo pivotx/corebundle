@@ -17,7 +17,7 @@ class CoreBundle extends Bundle
             //$service->load($fname);
 
 
-            $this->loadEntities();
+            //$this->loadEntities();
 
             // loop all entities
 
@@ -27,8 +27,8 @@ class CoreBundle extends Bundle
                 foreach($classes as $class) {
                     //echo "Class: ".$class->name."<br/>\n";
 
-                    $parts = explode('\\',$class->name);
-                    $name  = $parts[count($parts)-1];
+                    $parts = explode('\\', $class->name);
+                    $name  = end($parts);
 
                     $repository = $doctrine_service->getRepository($class->name);
                     if (is_object($repository)) {
@@ -37,6 +37,11 @@ class CoreBundle extends Bundle
                             //echo "Adding defaults<br/>\n";
                             $repository->addDefaultViews($views_service,$name);
                         }
+                    }
+
+                    if (method_exists($class->name, 'setActivityService')) {
+                        $cl = $class->name;
+                        $cl::setActivityService($this->container->get('pivotx.activity'));
                     }
                 }
             }

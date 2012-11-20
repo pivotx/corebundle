@@ -8,6 +8,11 @@ use \Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    /**
+     * Required for PivotX/Doctrine loggable
+     */
+    private static $activity_service = null;
+
     private $id;
     private $date_created;
     private $date_modified;
@@ -337,881 +342,64 @@ class User implements UserInterface
         $this->date_last_login = null;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * Store a version
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 11:07:28
+     */
+    public function preUpdate_Loggable()
+    {
+        $fields = array( "date_created","date_modified","date_last_login","enabled","level","email" );
+
+        $data   = array();
+        foreach($fields as $field) {
+            $data[$field] = $this->$field;
+        }
+
+        if ((property_exists('PivotX\CoreBundle\Entity\User', 'activity_service')) && (!is_null(self::$activity_service))) {
+            $log = self::$activity_service->createLoggableMessage(
+                'en',
+                'Stored a version of %classname% with id %id%',
+                array( '%classname%' => "User", '%id%' => $this->getId() ),
+                $data
+            );
+        }
+    }
+
+    /**
+     * Store a version
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 11:13:58
+     */
+    public function onFlush_Loggable()
+    {
+        $fields = array( "date_created","date_modified","date_last_login","enabled","level","email" );
+
+        $data   = array();
+        foreach($fields as $field) {
+            $data[$field] = $this->$field;
+        }
+
+        if ((property_exists('PivotX\CoreBundle\Entity\User', 'activity_service')) && (!is_null(self::$activity_service))) {
+            $log = self::$activity_service->createLoggableMessage(
+                'en',
+                'Stored a version of %classname% with id %id%',
+                array( '%classname%' => "User", '%id%' => $this->getId() ),
+                $data
+            );
+        }
+    }
 
     /**
      * Return the CRUD field configuration
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_date_created()
     {
@@ -1226,9 +414,9 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
-    public function setPrePersist_date_created()
+    public function prePersist_date_created()
     {
         if (is_null($this->date_created)) {
             $this->date_created = new \DateTime;
@@ -1240,7 +428,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -1255,9 +443,21 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
-    public function setPrePersist_date_modified()
+    public function prePersist_date_modified()
+    {
+        $this->date_modified = new \DateTime;
+    }
+
+    /**
+     * PrePersist the update timestamp
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 16:53:07
+     */
+    public function preUpdate_date_modified()
     {
         $this->date_modified = new \DateTime;
     }
@@ -1267,7 +467,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_date_last_login()
     {
@@ -1282,7 +482,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_level()
     {
@@ -1304,7 +504,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_passwd_salt()
     {
@@ -1319,7 +519,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function getCrudConfiguration_passwd()
     {
@@ -1340,11 +540,62 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-09, 17:37:51
+     * Generated on 2012-11-20, 16:53:07
      */
     public function setEncoderFactory_passwd($encoder_factory)
     {
         $this->encoder_factory_passwd = $encoder_factory;
+    }
+
+    /**
+     * Set the activityservice
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 16:53:07
+     */
+    public static function setActivityService($service)
+    {
+        if (property_exists('PivotX\CoreBundle\Entity\User', 'activity_service')) {
+            self::$activity_service = $service;
+        }
+    }
+
+    /**
+     * Store a version
+     * 
+     * @author PivotX Generator
+     *
+     * Generated on 2012-11-20, 16:53:07
+     */
+    public function onPxPreUpdate_Loggable($changeset)
+    {
+        $fields = array( "date_created","date_modified","date_last_login","enabled","level","email" );
+
+        $data    = array();
+        $changes = false;
+        foreach($fields as $field) {
+            $data[$field] = $this->$field;
+
+            if (isset($changeset[$field])) {
+                $data[$field] = $changeset[$field][0];
+                $changes      = true;
+            }
+        }
+
+        // @todo not the nicest way, but works for now
+        if (isset($this->loggable_already_logged)) {
+            $changes = false;
+        }
+        $this->loggable_already_logged = true;
+
+        if ($changes && (property_exists('PivotX\CoreBundle\Entity\User', 'activity_service')) && (!is_null(self::$activity_service))) {
+            $log = self::$activity_service->createLoggableMessage('User', $this->getId(), $data);
+
+            return $log;
+        }
+
+        return null;
     }
 
 }

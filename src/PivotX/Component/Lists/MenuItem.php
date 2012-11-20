@@ -48,10 +48,25 @@ class MenuItem
         }
 
         if (!$this->item->isItemsHolder() && ($this->item->countItems() > 0)) {
-            return true;
+            // we still need to check if the items are actually available for in a menu
+            foreach($this->item->getItems() as $item) {
+                if ($item->isEnabled() && $item->isInMenu()) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         return false;
+    }
+
+    /**
+     * Return true if this menu items should not be in the sitemap
+     */
+    public function isInSitemap()
+    {
+        return $this->item->isInSitemap();
     }
 
     public function getMenu()
@@ -61,6 +76,9 @@ class MenuItem
 
     public function getLabel()
     {
+        if (method_exists($this->item, 'getLabel')) {
+            return $this->item->getLabel();
+        }
         return $this->item->getName();
     }
 
@@ -80,6 +98,10 @@ class MenuItem
     public function getClasses()
     {
         $classes = array();
+
+        if (method_exists($this->item, 'getMenuClasses')) {
+            $classes = array_merge($classes, $this->item->getMenuClasses());
+        }
 
         if ($this->forced_item && (!$this->item->isActive() && $this->item->isActiveByProxy())) {
             // no active class

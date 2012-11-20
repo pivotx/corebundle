@@ -111,10 +111,9 @@ class Service
     }
 
     /**
-     *
-     * This method implements a fluent interface.
+     * Create a new log entity
      */
-    public function anyMessage($level, $language, $message, $arguments = null)
+    private function createLogEntity($level, $language, $message, $arguments = null)
     {
         $session = $this->session;
         if (!is_null($session) && ($session->has('security.logged') && ($session->get('security.logged') === true))) {
@@ -141,6 +140,18 @@ class Service
         $log->setImportance(self::IMPORTANCE_AVERAGE);
 
         $log->setTechnicalContext($this->technical_context);
+
+        return $log;
+    }
+
+    /**
+     * Create a new message
+     *
+     * This method implements a fluent interface.
+     */
+    public function anyMessage($level, $language, $message, $arguments = null)
+    {
+        $log = $this->createLogEntity($level, $language, $message, $arguments);
 
         if (!is_null($this->last_log)) {
             $this->log();
@@ -210,6 +221,27 @@ class Service
     public function technicalMessage($language, $message, $arguments = null)
     {
         return $this->anyMessage(self::LEVEL_TECHNICAL, $language, $message, $arguments);
+    }
+
+    /**
+     * Creates a loggable message
+     *
+     * Important!
+     */
+    public function createLoggableMessage($classname, $id, $entity = null)
+    {
+        $language  = null;
+        $message   = 'Stored a version of :classname with id :id';
+        $arguments = array( 'classname' => $classname, 'id' => $id );
+
+        $context = array( 'entity' => $entity );
+
+        $log = $this->createLogEntity(self::LEVEL_TECHNICAL, $language, $message, $arguments);
+        $log->addTechnicalContext($context);
+        $log->setImportance(self::IMPORTANCE_MOST);
+        $log->setPrimaryTag('entity_'.$classname.'_'.$id);
+
+        return $log;
     }
 
     /**

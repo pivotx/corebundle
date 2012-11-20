@@ -19,6 +19,7 @@ class Item implements ItemInterface
 
     protected $inmenu;
     protected $breadcrumb;
+    protected $insitemap;
     protected $active;
     protected $activebyproxy;
 
@@ -33,6 +34,7 @@ class Item implements ItemInterface
 
         $this->inmenu        = true;
         $this->breadcrumb    = true;
+        $this->insitemap     = true;
         $this->active        = false;
         $this->activebyproxy = false;
     }
@@ -103,6 +105,15 @@ class Item implements ItemInterface
     }
 
     /**
+     * Set the items as a submenu and not as a itemsholder
+     */
+    public function setAsItemsholder()
+    {
+        $this->itemsholder = true;
+        return $this;
+    }
+
+    /**
      * If this item contains other items and itself isn't an actual item
      */
     public function isItemsHolder()
@@ -140,6 +151,22 @@ class Item implements ItemInterface
     public function isBreadcrumb()
     {
         return $this->breadcrumb;
+    }
+
+    /**
+     * This item is not in the sitemap
+     */
+    public function resetInSitemap()
+    {
+        $this->insitemap = false;
+    }
+
+    /**
+     * Return true if this item should be in the sitemap
+     */
+    public function isInSitemap()
+    {
+        return $this->insitemap;
     }
 
     /**

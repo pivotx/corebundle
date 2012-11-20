@@ -6,10 +6,12 @@ namespace PivotX\Doctrine\Feature\PivotX\Mediatype;
 class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
 {
     private $fields = null;
+    private $metaclassdata = null;
 
-    public function __construct(array $fields)
+    public function __construct(array $fields, $metaclassdata)
     {
-        $this->fields = $fields;
+        $this->fields        = $fields;
+        $this->metaclassdata = $metaclassdata;
     }
 
     public function getPropertyMethodsForField($field, $config)
@@ -80,7 +82,7 @@ THEEND;
     {
         \$config = array(
             'name' => '$field',
-            'type' => 'text'
+            'type' => 'textarea'
         );
 
         switch (\$this->$mediatype_field) {
@@ -90,6 +92,17 @@ THEEND;
                     '0' => 'no',
                     '1' => 'yes'
                 );
+                break;
+
+            case 'text/x-line':
+                break;
+
+            case 'text/plain':
+            case 'text/html':
+            case 'text/xml':
+            case 'text/x-yaml':
+            case 'application/json':
+                \$config['type'] = 'textarea';
                 break;
         }
 

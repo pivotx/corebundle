@@ -16,6 +16,7 @@ class ActivityLog
     private $friendly_language;
     private $friendly_message;
     private $friendly_arguments;
+    private $primary_tag;
 
     /**
      * Get id
@@ -222,6 +223,26 @@ class ActivityLog
     }
 
     /**
+     * Set primary_tag
+     *
+     * @param string $primary_tag
+     */
+    public function setPrimaryTag($primary_tag)
+    {
+        $this->primary_tag = $primary_tag;
+    }
+
+    /**
+     * Get primary_tag
+     *
+     * @return string 
+     */
+    public function getPrimaryTag()
+    {
+        return $this->primary_tag;
+    }
+
+    /**
      */
     public function getCompiledFriendlyMessage()
     {
@@ -254,117 +275,5 @@ class ActivityLog
     {
         return $this->user;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -88,6 +88,8 @@ PivotX\CoreBundle\Entity\SiteOption:
       auto_entity:
         pivotx_mediatype:
           type: value
-  lifecycleCallbacks:
-    prePersist: [ setPrePersist_date_created, setPrePersist_date_modified ]
-    preUpdate: [ setPrePersist_date_modified ]
+  auto_entity:
+    loggable:
+      limits:
+        age:     365
+        records: 100
