@@ -6,6 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use PivotX\Doctrine\Generator\Entities;
+use PivotX\Doctrine\Generator\SoftEntity;
 
 class SetupCommand extends ContainerAwareCommand
 {
@@ -96,8 +97,10 @@ class SetupCommand extends ContainerAwareCommand
      *
      * @return boolean  true, if setup successful
      */
-    protected function setupUsers($input, $output, $doctrine)
+    protected function setupUsers($input, $output)
     {
+        $doctrine = $this->getContainer()->get('doctrine');
+
         $repository = $doctrine->getRepository('PivotX\CoreBundle\Entity\User');
         $em         = $doctrine->getEntityManager();
 
@@ -184,19 +187,41 @@ class SetupCommand extends ContainerAwareCommand
     }
 
     /**
+     */
+    protected function updateSoftEntities()
+    {
+        $doctrine = $this->getContainer()->get('doctrine');
+        $siteoption_service = $this->getContainer()->get('pivotx.siteoptions');
+
+        $siteoptions = $siteoption_service->findSiteOptions(null, 'entities.entity');
+        foreach($siteoptions as $siteoption) {
+            $config = $siteoption->getUnpackedValue();
+
+            $entity = new SoftEntity($config, $this->getApplication()->getKernel());
+
+            $entity->writeYaml();
+            $entity->writeEntityPhp();
+            $entity->writeRepositoryPhp();
+        }
+
+        return true;
+    }
+
+    /**
      * Read all the defined entities (YAML-only currently) and update
      * the source entity files to have all the correct methods.
      *
      * @return boolean  true, if update successful
      */
-    protected function updateEntities()
+    protected function updateHardEntities()
     {
+        $kernel   = $this->getApplication()->getKernel();
         $doctrine = $this->getContainer()->get('doctrine');
         $translation_service = $this->getContainer()->get('pivotx.translations');
 
         $translation_service->beginTrans();
 
-        $generator = new Entities($doctrine, $translation_service);
+        $generator = new Entities($kernel, $doctrine, $translation_service);
 
         $generator->updateAllCode();
         $generator->updateAllTranslations();
@@ -222,8 +247,6 @@ class SetupCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $doctrine = $this->getContainer()->get('doctrine');
-
         $output->writeln('PivotX Setup');
         $output->writeln('');
 
@@ -232,13 +255,18 @@ class SetupCommand extends ContainerAwareCommand
             return;
         }
 
-        if (!$this->setupUsers($input, $output, $doctrine)) {
+        if (!$this->setupUsers($input, $output)) {
             $output->writeln('Setup aborted. Users could not be verified.');
             return;
         }
 
-        if (!$this->updateEntities()) {
-            $output->writeln('Setup aborted. Entities could not be updated.');
+        if (!$this->updateSoftEntities()) {
+            $output->writeln('Setup aborted. Soft-entities could not be updated.');
+            return;
+        }
+
+        if (!$this->updateHardEntities()) {
+            $output->writeln('Setup aborted. Hard-entities could not be updated.');
             return;
         }
 

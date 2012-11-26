@@ -133,7 +133,7 @@ class EmbedResource extends GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_width()
     {
@@ -148,7 +148,7 @@ class EmbedResource extends GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_height()
     {

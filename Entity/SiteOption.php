@@ -2,6 +2,8 @@
 
 namespace PivotX\CoreBundle\Entity;
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  */
 class SiteOption 
@@ -251,6 +253,26 @@ class SiteOption
         return $this->value;
     }
 
+    /**
+     * Get unpacked value
+     *
+     * @return mixed
+     */
+    public function getUnpackedValue()
+    {
+        switch ($this->mediatype) {
+            case 'application/json':
+                return json_decode($this->value, true);
+                break;
+
+            case 'text/x-yaml':
+                return Yaml::parse($this->value);
+                breal;
+        }
+
+        return $this->value;
+    }
+
 
     /**
      * Crud defaults
@@ -313,7 +335,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_date_created()
     {
@@ -328,7 +350,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function prePersist_date_created()
     {
@@ -342,7 +364,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -357,7 +379,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function prePersist_date_modified()
     {
@@ -369,7 +391,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function preUpdate_date_modified()
     {
@@ -381,7 +403,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_mediatype()
     {
@@ -406,7 +428,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_value()
     {
@@ -444,7 +466,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public static function setActivityService($service)
     {
@@ -458,7 +480,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function onPxPreUpdate_Loggable($changeset)
     {

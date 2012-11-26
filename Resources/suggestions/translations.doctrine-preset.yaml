@@ -10,8 +10,9 @@ any:
     # PivotX stuff
     sitename:       { en: 'site', nl: 'site' }
     groupname:      { en: 'group', nl: 'group' }
-    text_nl:       { en: 'text (dutch)', nl: 'tekst (nederlands)' }
-    text_en:       { en: 'text (english)', nl: 'tekst (engels)' }
+    text_nl:        { en: 'text (dutch)', nl: 'tekst (nederlands)' }
+    text_en:        { en: 'text (english)', nl: 'tekst (engels)' }
+    primary_tag:    { en: 'primary tag', nl: 'primaire tag' }
 
     # Generic technical stuff
     id:                 { en: 'id', nl: 'id' }

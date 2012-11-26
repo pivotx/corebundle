@@ -179,7 +179,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_date_created()
     {
@@ -194,7 +194,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function prePersist_date_created()
     {
@@ -206,7 +206,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function preUpdate_date_created()
     {
@@ -218,7 +218,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -233,7 +233,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function prePersist_date_modified()
     {
@@ -245,7 +245,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function preUpdate_date_modified()
     {
@@ -257,7 +257,7 @@ class GenericResource
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:06
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_media_type()
     {

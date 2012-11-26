@@ -12,12 +12,13 @@ use Symfony\Component\Yaml\Yaml;
 
 
 /**
- * This is our entity-generator for pre-defined entities.
+ * This is our entity-generator for YAML defined entities.
  *
  * @author Marcel Wouters <marcel@twokings.nl>
  */
 class Entities
 {
+    private $kernel;
     private $doctrine;
     private $translation_service;
 
@@ -26,11 +27,10 @@ class Entities
      *
      * @param RegistryInterface $registry A RegistryInterface instance
      */
-    public function __construct(Registry $doctrine, $translation_service)
+    public function __construct($kernel, Registry $doctrine, $translation_service)
     {
-        //echo 'PivotX Doctrine Warmer'."\n";
-
-        $this->doctrine = $doctrine;
+        $this->kernel              = $kernel;
+        $this->doctrine            = $doctrine;
         $this->translation_service = $translation_service;
     }
 
@@ -72,22 +72,58 @@ class Entities
 
     /**
      * Get the original ORM YAML file
-     * 
-     * @todo make this actually work
      */
-    protected function getOrmYamlFilename($base_class)
+    protected function getOrmYamlFilename($class_name)
     {
-        return 'src/PivotX/CoreBundle/Resources/config/doctrine/'.$base_class.'.orm.yml';
+        $parts = explode('\\',$class_name);
+        $base_class = end($parts);
+        $bundles = $this->kernel->getContainer()->getParameter('kernel.bundles');
+
+        $path = false;
+        foreach($bundles as $bundle) {
+            $parts    = explode('\\', $bundle);
+            $basename = end($parts);
+
+            try {
+                $path = $this->kernel->locateResource('@'.$basename.'/Resources/config/doctrine/'.$base_class.'.orm.yml');
+            }
+            catch (\InvalidArgumentException $e) {
+            }
+
+            if ($path !== false) {
+                break;
+            }
+        }
+
+        return $path;
     }
 
     /**
      * Get the entity filename
-     * 
-     * @todo make this actually work
      */
-    protected function getEntityFilename($base_class)
+    protected function getEntityFilename($class_name)
     {
-        return 'src/PivotX/CoreBundle/Entity/'.$base_class.'.php';
+        $parts = explode('\\',$class_name);
+        $base_class = end($parts);
+        $bundles = $this->kernel->getContainer()->getParameter('kernel.bundles');
+
+        $path = false;
+        foreach($bundles as $bundle) {
+            $parts    = explode('\\', $bundle);
+            $basename = end($parts);
+
+            try {
+                $path = $this->kernel->locateResource('@'.$basename.'/Entity/'.$base_class.'.php');
+            }
+            catch (\InvalidArgumentException $e) {
+            }
+
+            if ($path !== false) {
+                break;
+            }
+        }
+
+        return $path;
     }
 
     /**
@@ -102,15 +138,11 @@ class Entities
         foreach ($this->doctrine->getEntityManagers() as $em) {
             $classes = $em->getMetadataFactory()->getAllMetadata();
             foreach($classes as $class) {
-                echo "Class: ".$class->name."\n";
+                //echo "Class: ".$class->name."\n";
                 //var_dump($class);
 
-                $_p = explode('\\',$class->name);
-                $base_class = $_p[count($_p)-1];
-                //echo 'Base-class: '.$base_class."\n";
-
-                $orm_filename    = $this->getOrmYamlFilename($base_class);
-                $entity_filename = $this->getEntityFilename($base_class);
+                $orm_filename    = $this->getOrmYamlFilename($class->name);
+                $entity_filename = $this->getEntityFilename($class->name);
 
                 //echo 'orm: '.$orm_filename."\n";
                 //echo 'php: '.$entity_filename."\n";
@@ -198,7 +230,7 @@ class Entities
         $languages          = array('nl', 'en');
 
         $filename = $this->getTranslationSuggestionsFilename('doctrine-preset');
-        $translations = \Symfony\Component\Yaml\Yaml::parse($filename);
+        $translations = Yaml::parse($filename);
         foreach ($this->doctrine->getEntityManagers() as $em) {
             $classes = $em->getMetadataFactory()->getAllMetadata();
             foreach($classes as $class) {

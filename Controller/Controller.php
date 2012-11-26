@@ -72,6 +72,8 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 
     public function render($view, array $parameters = array(), Response $response = null)
     {
+        static $run_once = false;
+
         if (is_null($view)) {
             $request = $this->getRequest();
             $view    = $request->get('_view');
@@ -80,8 +82,13 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $view = 'CoreBundle:Default:unconfigured.html.twig';
         }
 
-        $webresourcer = $this->container->get('pivotx.webresourcer');
-        $webresourcer->finalizeWebresources();
+        // @todo ahum, not the way it's supposed to be
+        if ($run_once === false) {
+            $webresourcer = $this->container->get('pivotx.webresourcer');
+            $webresourcer->finalizeWebresources();
+
+            $run_once = true;
+        }
 
         if (true) {
             // @todo array_merge or variant?

@@ -2,6 +2,9 @@
 namespace PivotX\Doctrine\Generator;
 
 
+/**
+ * This is an entity-generator for a YAML defined entity.
+ */
 class Entity
 {
     private $metaclassdata = null;

@@ -87,7 +87,7 @@ class Service
      * Convert key/filter to individual items
      * 
      * @param string $key      key
-     * @param array $filter    PivotXRouting Filter, if null use latest RouteMatch
+     * @param mixed $filter    PivotXRouting Filter, if null use latest RouteMatch
      * @return array           array of strings (groupname, name, site, language)
      */
     private function decodeKeyFilter($key, $filter = null)
@@ -96,7 +96,10 @@ class Service
         $language = null;
 
         if (!is_null($filter)) {
-            if (preg_match('/&(site|s)=([^&]+)/', '&'.$filter, $match)) {
+            if (is_scalar($filter)) {
+                $site = $filter;
+            }
+            else if (preg_match('/&(site|s)=([^&]+)/', '&'.$filter, $match)) {
                 $site = $match[1];
             }
         }
@@ -111,7 +114,7 @@ class Service
             }
         }
 
-        $pos = strpos($key, '.');
+        $pos = strrpos($key, '.');
         if ($pos !== false) {
             $groupname = substr($key, 0, $pos);
             $name      = substr($key, $pos+1);
@@ -149,10 +152,37 @@ class Service
     }
 
     /**
+     * Get a particular group of siteoptions
+     *
+     * @param string $sitename      sitename to search for, if null then don't search
+     * @param string $groupname     groupname to search for, if null then don't search
+     * @param string $name          name to search for, if null then don't search
+     * @return array of SiteOption  siteoption objects
+     */
+    public function findSiteOptions($sitename, $groupname, $name = null)
+    {
+        $arguments = array();
+
+        if (!is_null($sitename)) {
+            $arguments['sitename'] = $sitename;
+        }
+        if (!is_null($groupname)) {
+            $arguments['groupname'] = $groupname;
+        }
+        if (!is_null($name)) {
+            $arguments['name'] = $name;
+        }
+
+        $siteoptions = $this->doctrine_registry->getRepository($this->entity_class)->findBy($arguments);
+
+        return $siteoptions;
+    }
+
+    /**
      * Get a particular siteoption
      *
      * @param string $key       key to search for
-     * @param array $filter     pivotxrouting filter, if null use latest routematch
+     * @param mixed $filter     pivotxrouting filter, if null use latest routematch
      * @return SiteOption       siteoption object
      */
     public function getSiteOption($key, $filter = null)
@@ -167,7 +197,7 @@ class Service
      *
      * @param string $key       key to search for
      * @param mixed $default    default to return when no such option exists
-     * @param array $filter     pivotxrouting filter, if null use latest routematch
+     * @param mixed $filter     pivotxrouting filter, if null use latest routematch
      * @return mixed            value, decoded if encoded
      */
     public function getValue($key, $default = null, $filter = null)
@@ -180,13 +210,7 @@ class Service
             return $default;
         }
 
-        switch ($siteoption->getMediatype()) {
-            case 'application/json':
-                return json_decode($siteoption->getValue());
-                break;
-        }
-
-        return $siteoption->getValue();
+        return $siteoption->getUnpackedValue();
     }
 
     /**

@@ -291,7 +291,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_date_created()
     {
@@ -306,7 +306,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function prePersist_date_created()
     {
@@ -320,7 +320,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -335,7 +335,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function prePersist_date_modified()
     {
@@ -347,7 +347,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function preUpdate_date_modified()
     {
@@ -359,7 +359,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_state()
     {
@@ -383,7 +383,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function getCrudConfiguration_encoding()
     {
@@ -402,7 +402,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public static function setActivityService($service)
     {
@@ -416,7 +416,7 @@ class TranslationText
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-20, 16:53:07
+     * Generated on 2012-11-26, 17:46:08
      */
     public function onPxPreUpdate_Loggable($changeset)
     {

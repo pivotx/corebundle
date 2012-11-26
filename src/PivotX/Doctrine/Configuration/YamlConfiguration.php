@@ -55,7 +55,7 @@ class YamlConfiguration extends Configuration
             }
         }
 
-        //*
+        /*
         echo 'Source:'."\n";
         var_dump($array);
         echo "\n".'Features'."\n";

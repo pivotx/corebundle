@@ -276,4 +276,5 @@ class ActivityLog
         return $this->user;
     }
 
+
 }
