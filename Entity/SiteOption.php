@@ -273,6 +273,30 @@ class SiteOption
         return $this->value;
     }
 
+    /**
+     * Set unpacked value
+     *
+     * Pack the value and set it
+     *
+     * @param mixed $value
+     */
+    public function setUnpackedValue($value)
+    {
+        switch ($this->mediatype) {
+            case 'application/json':
+                $this->value = json_encode($value);
+                return true;
+                break;
+
+            case 'text/x-yaml':
+                $this->value = Yaml::dump($value);
+                return true;
+                break;
+        }
+
+        return false;
+    }
+
 
     /**
      * Crud defaults
@@ -335,7 +359,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-26, 17:46:08
+     * Generated on 2012-11-27, 16:20:00
      */
     public function getCrudConfiguration_date_created()
     {
@@ -350,7 +374,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-26, 17:46:08
+     * Generated on 2012-11-27, 16:20:00
      */
     public function prePersist_date_created()
     {
@@ -364,7 +388,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-26, 17:46:08
+     * Generated on 2012-11-27, 16:20:00
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -379,7 +403,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-26, 17:46:08
+     * Generated on 2012-11-27, 16:20:00
      */
     public function prePersist_date_modified()
     {
@@ -391,7 +415,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-26, 17:46:08
+     * Generated on 2012-11-27, 16:20:00
      */
     public function preUpdate_date_modified()
     {
@@ -403,7 +427,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-26, 17:46:08
+     * Generated on 2012-11-27, 16:20:00
      */
     public function getCrudConfiguration_mediatype()
     {
@@ -428,7 +452,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-26, 17:46:08
+     * Generated on 2012-11-27, 16:20:00
      */
     public function getCrudConfiguration_value()
     {
@@ -466,7 +490,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-26, 17:46:08
+     * Generated on 2012-11-27, 16:20:00
      */
     public static function setActivityService($service)
     {
@@ -480,7 +504,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-26, 17:46:08
+     * Generated on 2012-11-27, 16:20:00
      */
     public function onPxPreUpdate_Loggable($changeset)
     {

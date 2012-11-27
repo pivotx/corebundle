@@ -7,6 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use PivotX\Doctrine\Generator\Entities;
 use PivotX\Doctrine\Generator\SoftEntity;
+use Doctrine\ORM\Tools\DisconnectedClassMetadataFactory;
 
 class SetupCommand extends ContainerAwareCommand
 {
@@ -187,6 +188,8 @@ class SetupCommand extends ContainerAwareCommand
     }
 
     /**
+     * Read the defined entities from the PivotX configuration and
+     * generate YAML entities and entity/repository code.
      */
     protected function updateSoftEntities()
     {
@@ -194,18 +197,30 @@ class SetupCommand extends ContainerAwareCommand
         $siteoption_service = $this->getContainer()->get('pivotx.siteoptions');
 
         $siteoptions = $siteoption_service->findSiteOptions(null, 'entities.entity');
+        $config_ents = array();
         foreach($siteoptions as $siteoption) {
             $config = $siteoption->getUnpackedValue();
+
+            $config_ents[] = $config['name'];
 
             $entity = new SoftEntity($config, $this->getApplication()->getKernel());
 
             $entity->writeYaml();
-            $entity->writeEntityPhp();
-            $entity->writeRepositoryPhp();
+            $entity->writeEntityPhp(false);
+            $entity->writeRepositoryPhp(false);
+
+            $entity->markChanges();
+
+            $siteoption->setUnpackedValue($entity->getConfig());
 
             // @todo the entity/repository php code has not been updated for the PivotX/Doctrine features
             //       for now, just run the setup again
         }
+
+        $siteoption = $siteoption_service->getSiteOption('config.entities', 'all');
+        $siteoption->setUnpackedValue($config_ents);
+
+        $siteoption_service->set('config.check.entities', 1, 'x-value/boolean', false, false, 'all');
 
         return true;
     }

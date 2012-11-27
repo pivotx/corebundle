@@ -26,7 +26,8 @@ class Suggestions
                 'description' => 'Single line text field',
                 'orm' => array(
                     'type' => 'string',
-                    'length' => 200
+                    'length' => 200,
+                    'nullable' => true,
                 )
             ),
             'html.textarea' => array(
@@ -34,6 +35,7 @@ class Suggestions
                 'description' => 'Multi-line text field',
                 'orm' => array(
                     'type' => 'text',
+                    'nullable' => true,
                 )
             ),
             'html.decimal' => array(
@@ -48,6 +50,7 @@ class Suggestions
                 'description' => 'Floatingpoint number field.',
                 'orm' => array(
                     'type' => 'float',
+                    'nullable' => true,
                 )
             ),
             'html.datetime' => array(
@@ -55,6 +58,7 @@ class Suggestions
                 'description' => 'Date and time field.',
                 'orm' => array(
                     'type' => 'datetime',
+                    'nullable' => true,
                 )
             ),
             'html.date' => array(
@@ -62,6 +66,7 @@ class Suggestions
                 'description' => 'Date field.',
                 'orm' => array(
                     'type' => 'date',
+                    'nullable' => true,
                 )
             ),
             'html.time' => array(
@@ -69,6 +74,7 @@ class Suggestions
                 'description' => 'Time field.',
                 'orm' => array(
                     'type' => 'time',
+                    'nullable' => true,
                 )
             ),
             'html.boolean' => array(
@@ -79,7 +85,7 @@ class Suggestions
                 )
             ),
 
-            'pivotx.timestampable.create' => array(
+            'feature.timestampable.create' => array(
                 'type_description' => 'datetime',
                 'description' => 'Creation date/time for the record',
                 'orm' => array(
@@ -91,7 +97,7 @@ class Suggestions
                     )
                 )
             ),
-            'pivotx.timestampable.update' => array(
+            'feature.timestampable.update' => array(
                 'type_description' => 'datetime',
                 'description' => 'Last update date/time for the record',
                 'orm' => array(
@@ -103,16 +109,22 @@ class Suggestions
                     )
                 )
             ),
-            'pivotx.sluggable.slug' => array(
+            'feature.sluggable.slug' => array(
                 'type_description' => 'slug',
                 'description' => 'Record slug',
                 'needs' => 'arguments',
                 'orm' => array(
                     'type' => 'string',
-                    'length' => 64
+                    'length' => 64,
+                    'nullable' => true,
+                    'auto_entity' => array(
+                        'sluggable' => array(
+                            'format' => '%title%'
+                        )
+                    )
                 )
             ),
-            'pivotx.publishable.state' => array(
+            'feature.publishable.state' => array(
                 'type_description' => 'choices',
                 'description' => 'Publish state (publish, hold, publish_on)',
             ),

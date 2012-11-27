@@ -130,6 +130,26 @@ class SoftEntity
     }
 
     /**
+     * Get the feature generator class
+     * 
+     * @todo should do a proper lookup
+     */
+    public function getFeatureSoftClass($feature)
+    {
+        $classpath = ucfirst($feature);
+        if (substr($feature, 0, 7) == 'pivotx_') {
+            $classpath = 'PivotX\\'.ucfirst(substr($feature, 7));
+        }
+
+        $class = '\\PivotX\\Doctrine\\Feature\\'.$classpath.'\\SoftProperty';
+        if (class_exists($class)) {
+            return $class;
+        }
+
+        return null;
+    }
+
+    /**
      * Internal call the build the YAML array
      */
     private function getYamlArray()
@@ -153,6 +173,17 @@ class SoftEntity
             $orm = $suggestions->getOrmFieldFromType($definition['type']);
             if (is_array($orm)) {
                 $field = array_merge($field, $orm);
+            }
+
+            if (isset($orm['auto_entity'])) {
+                list($name,$_value) = each($orm['auto_entity']);
+                $soft_class = $this->getFeatureSoftClass($name);
+
+                if (!is_null($soft_class)) {
+                    $soft = new $soft_class($this->config);
+
+                    $field = $soft->modifyOrmField($field, $definition);
+                }
             }
 
             $yaml_fields[$id] = $field;
@@ -290,13 +321,15 @@ THEEND;
     /**
      * Write the entity php
      */
-    public function writeEntityPhp()
+    public function writeEntityPhp($overwrite = false)
     {
         $filename = $this->getEntityPhpFilename();
         $code     = $this->getEntityPhp();
 
-        file_put_contents($filename, $code);
-        chmod($filename, 0644);
+        if ((!file_exists($filename)) || $overwrite) {
+            file_put_contents($filename, $code);
+            chmod($filename, 0644);
+        }
 
         return true;
     }
@@ -304,14 +337,36 @@ THEEND;
     /**
      * Write the repository php
      */
-    public function writeRepositoryPhp()
+    public function writeRepositoryPhp($overwrite = false)
     {
         $filename = $this->getRepositoryPhpFilename();
         $code     = $this->getRepositoryPhp();
 
-        file_put_contents($filename, $code);
-        chmod($filename, 0644);
+        if ((!file_exists($filename)) || $overwrite) {
+            file_put_contents($filename, $code);
+            chmod($filename, 0644);
+        }
 
         return true;
+    }
+
+    /**
+     * Mark changes
+     */
+    public function markChanges()
+    {
+        foreach($this->config['fields'] as &$field) {
+            $field['created'] = true;
+        }
+
+        return true;
+    }
+
+    /**
+     * Return the updated configuration
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 }

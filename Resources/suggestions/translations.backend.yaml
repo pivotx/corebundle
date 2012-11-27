@@ -41,3 +41,10 @@ translationtext:
 
 user:
     crud-heading.last_login:   { en: 'last login', nl: 'laatste login' }
+
+form:
+    backend_file.droparea-singular:     { en: 'Drop file here', nl: 'Sleep bestand hierheen' }
+    backend_file.status-done:           { en: 'Success', nl: 'Succes' }
+    backend_file.status-fail:           { en: 'Failed', nl: 'Mislukt' }
+    backend_file.uploadbutton-singular: { en: 'Choose file', nl: 'Kies bestand' }
+    backend_unique.empty-value:         { en: '(no value)', nl: '(geen waarde)' }

@@ -5,7 +5,14 @@ any:
     subtitle:       { en: 'subtitle', nl: 'subtitel' }
     name:           { en: 'name', nl: 'naam' }
     author:         { en: 'author', nl: 'auteur' }
+    user:           { en: 'user', nl: 'gebruiker' }
+    introduction:   { en: 'introduction text', nl: 'introductietekst' }
+    body:           { en: 'body text', nl: 'broodtekst' }
+    symmary:        { en: 'summary text', nl: 'samenvatting' }
+    image:          { en: 'image', nl: 'afbeelding' }
+    photo:          { en: 'photo', nl: 'foto' }
     email:          { en: 'email', nl: 'e-mailadres' }
+    slug:           { en: 'slug', nl: 'slug' }
 
     # PivotX stuff
     sitename:       { en: 'site', nl: 'site' }
