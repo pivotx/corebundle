@@ -202,6 +202,9 @@ class SetupCommand extends ContainerAwareCommand
             $entity->writeYaml();
             $entity->writeEntityPhp();
             $entity->writeRepositoryPhp();
+
+            // @todo the entity/repository php code has not been updated for the PivotX/Doctrine features
+            //       for now, just run the setup again
         }
 
         return true;
