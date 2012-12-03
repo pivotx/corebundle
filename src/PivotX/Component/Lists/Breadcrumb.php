@@ -39,6 +39,12 @@ class Breadcrumb
 
     public function getLabel()
     {
+        if (method_exists($this->item, 'getLabel')) {
+            $label = $this->item->getLabel();
+            if (!is_null($label)) {
+                return $label;
+            }
+        }
         return $this->item->getName();
     }
 

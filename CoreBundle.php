@@ -17,8 +17,6 @@ class CoreBundle extends Bundle
             //$service->load($fname);
 
 
-            //$this->loadEntities();
-
             // loop all entities
 
             $doctrine_service = $this->container->get('doctrine');
@@ -53,24 +51,5 @@ class CoreBundle extends Bundle
     public function shutdown()
     {
         //echo "Shutdown bundle..\n";
-    }
-
-    protected function loadEntities()
-    {
-        // @todo chicken and egg thing here.
-        // @todo reading from the cache whilst it's not warm yet
-        $entityDir = $this->container->getParameter('kernel.cache_dir').'/PivotX';
-        if (is_dir($entityDir)) {
-            $files = scandir($entityDir);
-            foreach($files as $file) {
-                $fname = $entityDir . '/' . $file;
-                if (is_file($fname) && (substr($file,-4) == '.php')) {
-                    $name = '\\PivotX\\Doctrine\\AutoEntity\\'.substr($file,0,-4);
-                    if (!class_exists($name)) {
-                        include_once $fname;
-                    }
-                }
-            }
-        }
     }
 }

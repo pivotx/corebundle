@@ -24,15 +24,10 @@ class Views
 
     public static function loadView($name, $arguments = null)
     {
-        if (self::$logger === false) {
-            // @todo should never be here, and should do something else if here anyway
-            return false;
-        }
-
         $view = self::$views_service->findView($name);
 
         if (is_null($view)) {
-            // @todo throw an exception?
+            // @todo should this be just a warning?
             self::$logger->warn('Call for loadView "'.$name.'"  - view not found');
             return new EmptyView();
         }

@@ -22,6 +22,7 @@ class User implements UserInterface
     private $email;
     private $passwd_salt;
     private $passwd;
+    private $theme_name;
     private $activitylogs;
 
     /**
@@ -239,6 +240,26 @@ class User implements UserInterface
     }
 
     /**
+     * Set theme_name
+     *
+     * @param string $theme_name
+     */
+    public function setThemeName($theme_name)
+    {
+        $this->theme_name = $theme_name;
+    }
+
+    /**
+     * Get theme_name
+     *
+     * @return string 
+     */
+    public function getThemeName()
+    {
+        return $this->theme_name;
+    }
+
+    /**
      * Add activitylog
      *
      * @param PivotX\CoreBundle\Entity\ActivityLog $activitylogs
@@ -275,7 +296,7 @@ class User implements UserInterface
                 break;
 
             case 900:
-                return array('ROLE_SUPER_ADMIN');
+                return array('ROLE_SUPER_ADMIN', 'ROLE_ALLOWED_TO_SWITCH');
                 break;
 
             default:

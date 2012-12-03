@@ -118,6 +118,7 @@
             <argument type="service" id="pivotx.siteoptions" />
             <argument type="service" id="pivotx.routing" />
             <argument type="service" id="pivotx.translations" />
+            <argument type="service" id="security.context" />
         </service>
 
         <service id="twig.extension.pivotx.doctrine" class="%pivotx.doctrine.twig.class%" public="false">

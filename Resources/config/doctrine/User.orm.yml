@@ -93,6 +93,13 @@ PivotX\CoreBundle\Entity\User:
       auto_entity:
         passwordable:
           type: password
+    theme_name:
+      type: string
+      length: 64
+      precision: 0
+      scale: 0
+      nullable: true
+      unique: false
   oneToMany:
     activitylogs:
       targetEntity: User

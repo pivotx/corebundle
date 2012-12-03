@@ -11,7 +11,9 @@ namespace PivotX\Component\Lists;
 class Item implements ItemInterface
 {
     protected $name;
+    protected $label;
     protected $enabled;
+    protected $role;
 
     protected $parent_item;
     protected $items;
@@ -26,7 +28,9 @@ class Item implements ItemInterface
     public function __construct($name)
     {
         $this->name        = $name;
+        $this->label       = null;
         $this->enabled     = true;
+        $this->role        = null;;
 
         $this->parent_item = null;
         $this->items       = array();
@@ -48,10 +52,63 @@ class Item implements ItemInterface
 
     /**
      */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     */
+    public function setLabel($label = null)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     */
     public function isEnabled()
     {
         return $this->enabled;
     }
+
+    /**
+     */
+    public function setEnabled($enabled = true)
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+
+    /**
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     */
+    public function isGrantedByContext($security_context)
+    {
+        $role = $this->getRole();
+        if (is_null($role)) {
+            return true;
+        }
+        if (is_null($security_context)) {
+            return false;
+        }
+        return $security_context->isGranted($role);
+    }
+
+    /**
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
 
     /**
      * Get the parent item

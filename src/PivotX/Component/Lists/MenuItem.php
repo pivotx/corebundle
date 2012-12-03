@@ -19,6 +19,7 @@ class MenuItem
 {
     private $item;
     private $depth;
+    private $security_context;
 
 
     /**
@@ -27,10 +28,11 @@ class MenuItem
      */
     private $forced_item = false;
 
-    public function __construct(ItemInterface $item, $depth = 0)
+    public function __construct(ItemInterface $item, $depth = 0, $security_context = null)
     {
-        $this->item  = $item;
-        $this->depth = $depth;
+        $this->item             = $item;
+        $this->depth            = $depth;
+        $this->security_context = $security_context;
     }
 
     /**
@@ -71,13 +73,16 @@ class MenuItem
 
     public function getMenu()
     {
-        return new Menu($this->item, $this->depth+1);
+        return new Menu($this->item, $this->depth+1, $this->security_context);
     }
 
     public function getLabel()
     {
         if (method_exists($this->item, 'getLabel')) {
-            return $this->item->getLabel();
+            $label = $this->item->getLabel();
+            if (!is_null($label)) {
+                return $label;
+            }
         }
         return $this->item->getName();
     }

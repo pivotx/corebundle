@@ -11,8 +11,6 @@ namespace PivotX\Component\Twig;
 /**
  * Twig Iterator
  *
- * @todo this is just the oops iterator, should be improved/stripped/etc/etc
- *
  * @author Marcel Wouters <marcel@twokings.nl>
  *
  * @api
@@ -242,7 +240,6 @@ class HtmlIterator implements \Iterator, \Countable
             $outdata = $this->_enhance_groupingby($outdata);
         }
         else {
-            // @todo uhm..
             $outdata = $this->data;
         }
 

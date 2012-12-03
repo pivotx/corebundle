@@ -69,7 +69,7 @@ class Collection
             }
         }
 
-        // @todo in the future we could make a better choice than 'the first option'
+        // @later in the future we could make a better choice than 'the first option'
         if (count($options) > 0) {
             $options[0]->setEnabled();
             $options[0]->setVariant($variant);
@@ -93,8 +93,7 @@ class Collection
 
             $webresource = $this->find($dependency);
             if ($webresource === false) {
-                // @todo can't find dependency
-                echo 'Can\'t find['.$dependency.']<br/>';
+                // @later throw exception?
                 return false;
             }
 
@@ -119,7 +118,7 @@ class Collection
         }
 
         if ($loop_break_counter == 0) {
-            // @todo we have a missing dependency
+            // @later we have a missing dependency, throw exception?
             return false;
         }
 

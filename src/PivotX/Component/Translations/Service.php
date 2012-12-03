@@ -107,7 +107,7 @@ class Service
             $this->cache = array($site => array($language => array()));
         }
 
-        // @todo this could be a very efficient query
+        // @todo this could be an even very efficient query
         $translations = $this->doctrine_registry->getRepository($this->entity_class)->findBy(array(
             'sitename' => $site
         ));

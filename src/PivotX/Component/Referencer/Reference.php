@@ -12,8 +12,6 @@ namespace PivotX\Component\Referencer;
  * A Reference is an internal link
  *
  * @todo should this be in Routing?
- * @todo setTextReference is a bit of a mess
- * @todo rewrite to new style reference?
  *
  * Complete Reference
  * value(site=.&target=.&language=.)@entity/filter?query#entity/filter?query

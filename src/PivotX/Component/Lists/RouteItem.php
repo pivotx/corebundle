@@ -7,6 +7,8 @@
 
 namespace PivotX\Component\Lists;
 
+use PivotX\Component\Referencer\Reference;
+
 
 class RouteItem extends Item
 {
@@ -58,14 +60,35 @@ class RouteItem extends Item
             // @todo maybe this should be better?
             // sketchy implementation
             $text = strtr($this->reference_text, self::$routing_latest_reference_attrs);
-            //echo 'latest = "'.self::$routing_latest_reference_text.'"<br/>'."\n";
-            //echo 'text = "'.$text.'"<br/>'."\n";
             if ($text == self::$routing_latest_reference_text) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public function getRole()
+    {
+        $routesetup = self::$routing_service->getRouteSetup();
+
+        $reference = null;
+        if (is_string($this->item_reference)) {
+            $reference = new Reference(null, $this->item_reference);
+        }
+        else if ($this->item_reference instanceof Reference) {
+            $reference = $this->item_reference;
+        }
+
+        $routematch = $routesetup->matchReference($reference, true);
+        if (!is_null($routematch)) {
+            $attributes = $routematch->getAttributes();
+            if (isset($attributes['_role'])) {
+                return $attributes['_role'];
+            }
+        }
+
+        return null;
     }
 
     public function getLink()

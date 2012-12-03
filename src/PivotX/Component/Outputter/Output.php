@@ -36,6 +36,7 @@ class Output
     const TYPE_LINK_HREF = 'text/x-css-href';
     const TYPE_LINK_LESS_HREF = 'text/x-less-href';
 
+
     /**
      * Constructor
      *
@@ -357,6 +358,19 @@ class Output
         }
 
         foreach($sources as $source) {
+            $cache_fname = $this->determineCacheFilename('css', $source);
+
+            if (file_exists($temp_directory.'/'.$cache_fname)) {
+                $source_time = filemtime($source);
+                $cache_time  = filemtime($temp_directory.'/'.$cache_fname);
+
+                $diff = $cache_time - $source_time;
+                if ($diff >= 1) {
+                    $hrefs[]= $this->getCacheUrl($cache_fname);
+                    continue;
+                }
+            }
+
             self::$last_source_directory = dirname($source);
 
             $cmd = '/usr/local/bin/lessc '.$source;

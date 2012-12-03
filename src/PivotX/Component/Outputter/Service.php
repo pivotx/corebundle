@@ -9,7 +9,7 @@
 namespace PivotX\Component\Outputter;
 
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Component\HttpKernel\Debug\Stopwatch;
 
 /**
  * An Outputter Service

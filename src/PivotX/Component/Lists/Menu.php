@@ -20,11 +20,13 @@ class Menu
     private $item;
     private $depth;
     private $merge_self_with_items;
+    private $security_context;
 
-    public function __construct(ItemInterface $item, $depth = 0)
+    public function __construct(ItemInterface $item, $depth = 0, $security_context = null)
     {
         $this->item  = $item;
         $this->depth = $depth;
+        $this->security_context = $security_context;
 
         $this->merge_self_with_items = false;
         if ($depth == 0) {
@@ -65,12 +67,19 @@ class Menu
                 continue;
             }
 
+            if (is_null($this->security_context)) {
+                echo 'HELP MY SECURITY HAS LEFT ME';
+            }
+            if (!$item->isGrantedByContext($this->security_context)) {
+                continue;
+            }
+
             if ($item->isItemsHolder()) {
                 $items = array_merge($items, $this->getActualItems($item, $purpose));
             }
             else {
                 if ($purpose == 'menu') {
-                    $items[] = new MenuItem($item, $this->depth);
+                    $items[] = new MenuItem($item, $this->depth, $this->security_context);
                 }
                 else {
                     $items[] = $item;
@@ -85,7 +94,8 @@ class Menu
      */
     public function getItem()
     {
-        return new MenuItem($this->item, 0);
+        // @todo no security context role check
+        return new MenuItem($this->item, 0, $this->security_context);
     }
 
     /**
@@ -98,7 +108,8 @@ class Menu
         if ($this->merge_self_with_items) {
             // on this level we automatically merge the parent with it's children
 
-            $items[] = new MenuItem($this->item, $this->depth);
+            // @todo no security context role check
+            $items[] = new MenuItem($this->item, $this->depth, $this->security_context);
             $items[0]->setForcedItem();
         }
 
@@ -120,6 +131,10 @@ class Menu
 
         $items = $this->getActualItems($root_item, 'breadcrumb');
         foreach($items as $item) {
+            if (!$item->isGrantedByContext($this->security_context)) {
+                continue;
+            }
+
             if ($item->isActiveByProxy()) {
                 if ($item->countItems() > 0) {
                     $crumbs = array_merge($crumbs, $this->getActualBreadcrumbs($item));

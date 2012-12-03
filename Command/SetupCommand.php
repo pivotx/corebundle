@@ -84,7 +84,7 @@ class SetupCommand extends ContainerAwareCommand
                         $email = false;
                     }
 
-                    // @todo maybe ask for new password? (that way we can fix hacked sites?)
+                    // @later maybe ask for new password? (that way we can fix hacked sites?)
                 }
             }
         }
@@ -169,8 +169,6 @@ class SetupCommand extends ContainerAwareCommand
                 $em->persist($user);
 
                 $output->writeln('New password for user is: ' . $new_password);
-
-                // @todo mail this?
             }
             else {
                 $existingUser->addRole('ROLE_SUPER_ADMIN');
@@ -252,8 +250,6 @@ class SetupCommand extends ContainerAwareCommand
     /**
      * Execute PivotX Setup
      *
-     * @todo
-     * 
      * fill options
      * verify security (ROLES, see security.yml)
      * check if parameters.ini secret has been changed?
