@@ -560,6 +560,33 @@ class Reference
     }
 
     /**
+     */
+    public function buildLocalTextReference($add_queries = true)
+    {
+        $text = $this->getEntity() . '/' . $this->getFilter();
+
+        if ($this->getQuery() !== false) {
+            if ($add_queries) {
+                $text .= '?' . $this->getQuery();
+            }
+        }
+
+        if (($this->getAnchorEntity() !== false) && ($this->getAnchorQuery() !== false)) {
+            $text .= '#' . $this->getAnchorEntity() . '/' . $this->getAnchorFilter() . '?' . $this->getAnchorQuery();
+        }
+        else if ($this->getAnchorEntity() !== false) {
+            $text .= '#' . $this->getAnchorEntity() . '/' . $this->getAnchorFilter();
+        }
+        else if ($this->getAnchorQuery() !== false) {
+            if ($add_queries) {
+                $text .= '#?' . $this->getAnchorQuery();
+            }
+        }
+
+        return $text;
+    }
+
+    /**
      *
      */
     public function buildTextReference($add_queries = true)
@@ -591,25 +618,7 @@ class Reference
             $text .= '@';
         }
         
-        $text .= $this->getEntity() . '/' . $this->getFilter();
-
-        if ($this->getQuery() !== false) {
-            if ($add_queries) {
-                $text .= '?' . $this->getQuery();
-            }
-        }
-
-        if (($this->getAnchorEntity() !== false) && ($this->getAnchorQuery() !== false)) {
-            $text .= '#' . $this->getAnchorEntity() . '/' . $this->getAnchorFilter() . '?' . $this->getAnchorQuery();
-        }
-        else if ($this->getAnchorEntity() !== false) {
-            $text .= '#' . $this->getAnchorEntity() . '/' . $this->getAnchorFilter();
-        }
-        else if ($this->getAnchorQuery() !== false) {
-            if ($add_queries) {
-                $text .= '#?' . $this->getAnchorQuery();
-            }
-        }
+        $text .= $this->buildLocalTextReference($add_queries);
 
         return $text;
     }

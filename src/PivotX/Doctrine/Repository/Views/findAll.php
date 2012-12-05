@@ -18,19 +18,37 @@ class findAll extends AbstractView
         $this->repository = $repository;
     }
 
+    private function splitArguments()
+    {
+        $criteria = array();
+        $order_by = null;
+        foreach($this->arguments as $k => $v) {
+            if (in_array($k, array('orderBy'))) {
+                $order_by = $v;
+            }
+            else {
+                $criteria[$k] = $v;
+            }
+        }
+        return array($criteria, $order_by);
+    }
+
     public function getResult()
     {
-        $data = $this->repository->findBy($this->arguments, null, $this->range_limit, $this->range_offset);
+        list($criteria, $order_by) = $this->splitArguments();
+
+        $data = $this->repository->findBy($criteria, $order_by, $this->range_limit, $this->range_offset);
 
         return $data;
     }
 
     public function getLength()
     {
-        $data = $this->repository->findBy($this->arguments);
+        list($criteria, $order_by) = $this->splitArguments();
+
+        $data = $this->repository->findBy($criteria);
 
         return count($data);
     }
 }
-
 

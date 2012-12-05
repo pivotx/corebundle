@@ -291,6 +291,10 @@ class User implements UserInterface
                 return array('ROLE_EDITOR');
                 break;
 
+            case 500:
+                return array('ROLE_ADMIN');
+                break;
+
             case 800:
                 return array('ROLE_DEVELOPER');
                 break;
@@ -420,7 +424,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_date_created()
     {
@@ -435,7 +439,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function prePersist_date_created()
     {
@@ -449,7 +453,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -464,7 +468,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function prePersist_date_modified()
     {
@@ -476,7 +480,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function preUpdate_date_modified()
     {
@@ -488,7 +492,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_date_last_login()
     {
@@ -503,7 +507,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_level()
     {
@@ -525,7 +529,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_passwd_salt()
     {
@@ -540,7 +544,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_passwd()
     {
@@ -561,7 +565,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function setEncoderFactory_passwd($encoder_factory)
     {
@@ -573,7 +577,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public static function setActivityService($service)
     {
@@ -587,11 +591,11 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function onPxPreUpdate_Loggable($changeset)
     {
-        $fields = array( "date_created","date_modified","date_last_login","enabled","level","email" );
+        $fields = array( "date_created","date_modified","date_last_login","enabled","level","email","theme_name" );
 
         $data    = array();
         $changes = false;

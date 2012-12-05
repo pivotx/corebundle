@@ -156,7 +156,8 @@ class SoftEntity
     {
         $suggestions = new Suggestions();
 
-        $yaml_fields = array();
+        $yaml_fields   = array();
+        $yaml_features = array();
 
         foreach($this->config['fields'] as $definition) {
             $id = $definition['name'];
@@ -189,11 +190,22 @@ class SoftEntity
             $yaml_fields[$id] = $field;
         }
 
+        if (isset($this->config['features'])) {
+            foreach($this->config['features'] as $definition) {
+                $id = $definition['type'];
+
+                $feature = $definition['orm']['auto_entity'][$id];
+
+                $yaml_features[$id] = $feature;
+            }
+        }
+
         $yaml_entity = array(
             'type' => 'entity',
             'table' => strtolower($this->config['name']),
             'repositoryClass' => $this->getRepositoryClass(),
-            'fields' => $yaml_fields
+            'fields' => $yaml_fields,
+            'auto_entity' => $yaml_features
         );
 
         $entity_class = $this->getEntityClass();

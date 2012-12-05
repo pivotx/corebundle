@@ -179,6 +179,26 @@ class Service
     }
 
     /**
+     * Clear a particular group of siteoptions
+     *
+     * Note: a Doctrine flush will be called
+     *
+     * @param string $sitename      sitename to search for, if null then don't search
+     * @param string $groupname     groupname to search for, if null then don't search
+     * @param string $name          name to search for, if null then don't search
+     */
+    public function clearSiteOptions($sitename, $groupname, $name = null)
+    {
+        $siteoptions = $this->findSiteOptions($sitename, $groupname, $name);
+
+        $em = $this->doctrine_registry->getEntityManager();
+        foreach($siteoptions as $siteoption) {
+            $em->remove($siteoption);
+        }
+        $em->flush();
+    }
+
+    /**
      * Get a particular siteoption
      *
      * @param string $key       key to search for

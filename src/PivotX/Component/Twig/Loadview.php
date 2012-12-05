@@ -17,22 +17,6 @@ namespace PivotX\Component\Twig;
  */
 class Loadview extends \Twig_TokenParser
 {
-    protected function convertToViewArguments(\Twig_Node_Expression_Array $array)
-    {
-        $arguments = array();
-
-        foreach(array_chunk($array->getIterator()->getArrayCopy(), 2) as $pair) {
-            if (count($pair) == 2) {
-                $key   = $pair[0]->getAttribute('value');
-                $value = $pair[1]->getAttribute('value');   // @todo support for multiple types
-
-                $arguments[$key] = $value;
-            }
-        }
-
-        return $arguments;
-    }
-
     public function parse(\Twig_Token $token)
     {
         $lineno = $token->getLine();
@@ -58,18 +42,16 @@ class Loadview extends \Twig_TokenParser
 
         //echo '<pre>'; var_dump($name); var_dump($view); echo '</pre>';
 
+        $withexpr = null;
         if ($this->parser->getStream()->test(\Twig_Token::NAME_TYPE, 'with')) {
             $this->parser->getStream()->next();
-            $withexpr = $this->parser->getExpressionParser()->parseHashExpression();
 
-            $arguments = $this->convertToViewArguments($withexpr);
-
-            //echo '<pre>With:<br/>'; var_dump($arguments); echo '</pre>';
+            $withexpr = $this->parser->getExpressionParser()->parseExpression();
         }
 
         $this->parser->getStream()->expect(\Twig_Token::BLOCK_END_TYPE);
 
-        return new Loadviewnode($name, $view, $arguments, $lineno, $this->getTag());
+        return new Loadviewnode($name, $view, $withexpr, $lineno, $this->getTag());
     }
 
     public function getTag()

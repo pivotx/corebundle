@@ -27,6 +27,10 @@ class AutoEntityRepository extends \Doctrine\ORM\EntityRepository
 
         $findBy = new Views\findBy($this, $prefix.'/findBy');
         $service->registerView($findBy);
+
+        if (method_exists($this, 'addGeneratedViews')) {
+            $this->addGeneratedViews($service, $prefix);
+        }
     }
 }
 

@@ -71,6 +71,47 @@ class Entities
     }
 
     /**
+     * Update a single repository
+     */
+    public function updateRepositoryCode($em, $metaclassdata, $feature_configuration, $filename)
+    {
+        $repository = new Repository($em, $metaclassdata, $feature_configuration);
+
+        $source_original = file_get_contents($filename);
+        $source_updated  = $source_original;
+
+        $source_updated = $repository->getUpdatedCode($source_original);
+
+        if ($source_original != $source_updated) {
+            echo 'new code for ['.$filename.']'."\n";
+            echo $source_updated;
+            echo "\n\n";
+            /*
+            $backup_filename = str_replace('.php', '.php~', $filename);
+
+            $ok = true;
+            if ($ok && file_exists($backup_filename)) {
+                if (!@unlink($backup_filename)) {
+                    $ok = false;
+                }
+            }
+            if ($ok) {
+                if (!rename($filename, $backup_filename)) {
+                    $ok = false;
+                }
+            }
+            if ($ok) {
+                file_put_contents($filename, $source_updated);
+            }
+*/
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get the original ORM YAML file
      */
     protected function getOrmYamlFilename($class_name)
@@ -127,6 +168,34 @@ class Entities
     }
 
     /**
+     * Get the repository filename
+     */
+    protected function getRepositoryFilename($class_name)
+    {
+        $parts = explode('\\',$class_name);
+        $base_class = end($parts);
+        $bundles = $this->kernel->getContainer()->getParameter('kernel.bundles');
+
+        $path = false;
+        foreach($bundles as $bundle) {
+            $parts    = explode('\\', $bundle);
+            $basename = end($parts);
+
+            try {
+                $path = $this->kernel->locateResource('@'.$basename.'/Model/'.$base_class.'.php');
+            }
+            catch (\InvalidArgumentException $e) {
+            }
+
+            if ($path !== false) {
+                break;
+            }
+        }
+
+        return $path;
+    }
+
+    /**
      * Verify all feature configurations for all entities
      *
      * @return boolean    true if some code changed
@@ -143,15 +212,26 @@ class Entities
 
                 $orm_filename    = $this->getOrmYamlFilename($class->name);
                 $entity_filename = $this->getEntityFilename($class->name);
+                $repos_filename  = $this->getRepositoryFilename($class->name.'Repository');
 
-                //echo 'orm: '.$orm_filename."\n";
-                //echo 'php: '.$entity_filename."\n";
+                /*
+                echo 'orm: '.$orm_filename."\n";
+                echo 'php: '.$entity_filename."\n";
+                echo 'php: '.$repos_filename."\n";
+                //*/
 
-                if (file_exists($orm_filename) && (file_exists($entity_filename))) {
+                if (file_exists($orm_filename)) {
                     $feature_configuration = new YamlConfiguration($orm_filename);
 
-                    if ($this->updateEntityCode($class, $feature_configuration, $entity_filename)) {
-                        $changed_code = true;
+                    if (file_exists($entity_filename)) {
+                        if ($this->updateEntityCode($class, $feature_configuration, $entity_filename)) {
+                            $changed_code = true;
+                        }
+                    }
+                    if (file_exists($repos_filename)) {
+                        if ($this->updateRepositoryCode($em, $class, $feature_configuration, $repos_filename)) {
+                            $changed_code = true;
+                        }
                     }
                 }
             }

@@ -2,7 +2,7 @@
 
 namespace PivotX\Doctrine\Entity;
 
-interface EntityProperty
+interface EntityRepository
 {
     /**
      * Get feature methods independent of field configuration

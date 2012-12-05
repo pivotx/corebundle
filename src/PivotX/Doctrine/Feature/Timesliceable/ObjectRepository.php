@@ -1,9 +1,9 @@
 <?php
 
-namespace PivotX\Doctrine\Feature\PivotX\Ignore;
+namespace PivotX\Doctrine\Feature\Timesliceable;
 
 
-class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
+class ObjectRepository implements \PivotX\Doctrine\Entity\EntityRepository
 {
     private $fields = null;
     private $metaclassdata = null;
@@ -19,7 +19,11 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
      */
     public function getPropertyMethodsForEntity($config)
     {
-        return array();
+        $methods = array();
+
+        $methods['addGeneratedViews'] = 'generateAddGeneratedViews';
+
+        return $methods;
     }
 
     /**
@@ -27,27 +31,20 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
      */
     public function getPropertyMethodsForField($field, $config)
     {
-        $methods = array();
-
-        $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfiguration';
-
-        return $methods;
+        return array();
     }
 
-    public function generateGetCrudConfiguration($classname, $field, $config)
+    public function generateAddGeneratedViews($classname, $config)
     {
         return <<<THEEND
     /**
-     * Return the CRUD field configuration
+     * Add generated views
      * 
 %comment%
      */
-    public function getCrudConfiguration_$field()
+    public function addGeneratedViews()
     {
-        return array(
-            'name' => '$field',
-            'type' => false
-        );
+        // do nothing yet
     }
 THEEND;
     }

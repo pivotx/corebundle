@@ -134,8 +134,24 @@ class DirectoryWebresource extends Webresource
     private function addJsonFilesVariant($variant, $directory, $files)
     {
         $this->addVariant($variant);
-        foreach($files as $file) {
-            list($group, $type, $ext) = $this->getFileInfo($file);
+        foreach($files as $_file) {
+            if (is_array($_file)) {
+                $file = $_file['file'];
+                list($group, $type, $ext) = $this->getFileInfo($file);
+                if (isset($_file['group'])) {
+                    $group = $_file['group'];
+                }
+                if (isset($_file['type'])) {
+                    $type = $_file['type'];
+                }
+                if (isset($_file['ext'])) {
+                    $ext = $_file['ext'];
+                }
+            }
+            else {
+                $file = $_file;
+                list($group, $type, $ext) = $this->getFileInfo($file);
+            }
 
             if (strstr($file, '*') === false) {
                 $full = $directory . '/' . $file;

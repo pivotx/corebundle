@@ -16,15 +16,53 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
                 'meta' => array(
                     'charset' => 'utf-8'
                 )
+            ),
+            'routing' => array(
+                'site' => false,
+                'target' => false,
+                'language' => false,
+                'arguments' => array()
             )
         );
 
+        $routing    = $this->container->get('pivotx.routing');
+        $routematch = $routing->getLatestRouteMatch();
+        if (!is_null($routematch)) {
+            $filter = $routematch->getRoutePrefix()->getFilter();
+            $context['routing'] = array(
+                'site' => $filter['site'],
+                'target' => $filter['target'],
+                'language' => $filter['language'],
+                'arguments' => $routematch->getArguments(),
+                'request' => array(
+                    'full_ref' => $routematch->buildReference()->buildTextReference(),
+                    'local_ref' => $routematch->buildReference()->buildLocalTextReference()
+                )
+            );
+        }
+
+        //echo '<pre>'; var_dump($context); echo '</pre>';
+
         return $context;
+    }
+
+    protected function runOnce()
+    {
+        $webresourcer = $this->container->get('pivotx.webresourcer');
+        $webresourcer->finalizeWebresources();
     }
 
     public function render($view, array $parameters = array(), Response $response = null)
     {
         static $run_once = false;
+
+        // @note could be better
+        if ($run_once === false) {
+            $run_once = true;
+
+            $this->runOnce();
+        }
+
 
         if (is_null($view)) {
             $request = $this->getRequest();
@@ -34,23 +72,13 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $view = 'CoreBundle:Default:unconfigured.html.twig';
         }
 
-        // @todo ahum, not the way it's supposed to be
-        if ($run_once === false) {
-            $webresourcer = $this->container->get('pivotx.webresourcer');
-            $webresourcer->finalizeWebresources();
-
-            $run_once = true;
+        if (count($parameters) == 0) {
+            $parameters = $this->getDefaultHtmlContext();
         }
 
-        if (true) {
-            // @todo array_merge or variant?
-            $context = $this->getDefaultHtmlContext();
-            foreach($context as $k => $v) {
-                if (!isset($parameters[$k])) {
-                    $parameters[$k] = $v;
-                }
-            }
-        }
+        //echo '<hr/><pre>'; var_dump($parameters); echo '</pre><hr/>';
+
+        //$parameters['html'] = $parameters;
 
         if (is_array($view)) {
             foreach($view as $_view) {

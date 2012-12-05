@@ -268,6 +268,10 @@ class SiteOption
             case 'text/x-yaml':
                 return Yaml::parse($this->value);
                 breal;
+
+            case 'x-value/boolean':
+                return $this->value == '1' ? true : false;
+                breal;
         }
 
         return $this->value;
@@ -359,7 +363,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_date_created()
     {
@@ -374,7 +378,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function prePersist_date_created()
     {
@@ -388,7 +392,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -403,7 +407,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function prePersist_date_modified()
     {
@@ -415,7 +419,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function preUpdate_date_modified()
     {
@@ -427,7 +431,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_mediatype()
     {
@@ -452,7 +456,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function getCrudConfiguration_value()
     {
@@ -490,7 +494,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public static function setActivityService($service)
     {
@@ -504,7 +508,7 @@ class SiteOption
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-11-27, 16:20:00
+     * Generated on 2012-12-05, 17:52:55
      */
     public function onPxPreUpdate_Loggable($changeset)
     {

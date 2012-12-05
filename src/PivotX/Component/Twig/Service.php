@@ -14,6 +14,8 @@ use PivotX\Component\Formats\Service as FormatsService;
 use PivotX\Component\Webresourcer\Service as WebresourcerService;
 use PivotX\Component\Outputter\Service as OutputterService;
 
+include_once dirname(__FILE__).'/util.php';
+
 /**
  * Twig Query interface
  *
@@ -59,7 +61,8 @@ class Service extends \Twig_Extension
             'ref' =>  new \Twig_Function_Method($this, 'getReference'),
             'translate' => new \Twig_Function_Method($this, 'getTranslate'),
             'pagination' => new \Twig_Function_Method($this, 'getPagination'),
-            'outputter' => new \Twig_Function_Method($this, 'getOutputter')
+            'outputter' => new \Twig_Function_Method($this, 'getOutputter'),
+            'pxdump' => new \Twig_Function_Method($this, 'getPxDump')
         );
     }
 
@@ -203,6 +206,14 @@ class Service extends \Twig_Extension
     public function getOutputter($group)
     {
         return $this->pivotx_outputter->getOutputs($group);
+    }
+
+    /**
+     * Nice dump
+     */
+    public function getPxDump($in)
+    {
+        return new \Twig_Markup(\util::var_dump($in, true), 'utf-8');
     }
 
     public function filterFormatAs($in, $name = '')

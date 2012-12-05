@@ -2,12 +2,19 @@
 namespace PivotX\Doctrine\Generator;
 
 
+/**
+ * Suggestions for new entity types and entity features
+ *
+ * This is too hardcoded at the moment.
+ */
 class Suggestions
 {
     private $types;
+    private $features;
 
     public function __construct()
     {
+        // @todo types should not be hardcoded
         $this->types = array(
             'entity.id' => array(
                 'type_description' => 'record identifier',
@@ -85,6 +92,26 @@ class Suggestions
                 )
             ),
 
+            'html.username' => array(
+                'type_description' => 'text',
+                'description' => 'Unique user name field.',
+                'orm' => array(
+                    'type' => 'string',
+                    'length' => 100,
+                    'unique' => true,
+                    'nullable' => true
+                )
+            ),
+            'html.email' => array(
+                'type_description' => 'text',
+                'description' => 'Email field.',
+                'orm' => array(
+                    'type' => 'string',
+                    'length' => 200,
+                    'nullable' => true
+                )
+            ),
+
             'feature.timestampable.create' => array(
                 'type_description' => 'datetime',
                 'description' => 'Creation date/time for the record',
@@ -148,14 +175,34 @@ class Suggestions
                 'needs' => 'relation'
             ),
         );
-    }
 
+        // @todo features should not be hardcoded
+        $this->features = array(
+            'timesliceable' => array(
+                'type' => 'timesliceable',
+                'description' => 'Select entities based on a date or date range',
+                'orm' => array(
+                    'auto_entity' => array(
+                        'timesliceable' => array(
+                            'fields' => ''
+                        )
+                    )
+                )
+            ),
+        );
+    }
 
     public function getFieldTypes()
     {
         $types = array_keys($this->types);
         array_shift($types);
         return $types;
+    }
+
+    public function getFeatures()
+    {
+        $features = array_keys($this->features);
+        return $features;
     }
 
     public function getOrmFieldFromType($type)
@@ -185,5 +232,27 @@ class Suggestions
         }
 
         return $field;
+    }
+
+    public function getFeature($name, $arguments)
+    {
+        $feature = $this->features[$name];
+
+        if ($name == 'timesliceable') {
+            $_fields = explode(',', trim($arguments));
+            $fields  = array();
+            foreach($_fields as $field) {
+                if (strpos($field, '-') > 0) {
+                    list($f1, $f2) = explode('-', trim($field));
+                    $fields[] = array('start_field'=>trim($f1), 'end_field'=>trim($f2));
+                }
+                else {
+                    $fields[] = array('field'=>trim($field));
+                }
+            }
+            $feature['orm']['auto_entity']['timesliceable']['fields'] = $fields;
+        }
+
+        return $feature;
     }
 }

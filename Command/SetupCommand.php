@@ -218,7 +218,7 @@ class SetupCommand extends ContainerAwareCommand
         $siteoption = $siteoption_service->getSiteOption('config.entities', 'all');
         $siteoption->setUnpackedValue($config_ents);
 
-        $siteoption_service->set('config.check.entities', 1, 'x-value/boolean', false, false, 'all');
+        $siteoption_service->set('config.check.entities', 0, 'x-value/boolean', false, false, 'all');
 
         return true;
     }
@@ -243,6 +243,9 @@ class SetupCommand extends ContainerAwareCommand
         $generator->updateAllTranslations();
 
         $translation_service->commitTrans();
+
+        $siteoption_service = $this->getContainer()->get('pivotx.siteoptions');
+        $siteoption_service->set('config.check.any', 0, 'x-value/boolean', false, false, 'all');
 
         return true;
     }
