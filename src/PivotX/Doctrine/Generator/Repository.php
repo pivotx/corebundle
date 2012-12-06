@@ -67,6 +67,23 @@ class Repository
         return $code_lines;
     }
 
+    private function generateAddGeneratedViews($comment, $code)
+    {
+        $method_code = <<<THEEND
+    /**
+     * Add generated views
+     * 
+$comment
+     */
+    public function addGeneratedViews(\\PivotX\\Component\\Views\\Service \$service, \$prefix)
+    {
+$code
+    }
+THEEND;
+
+        return $method_code;
+    }
+
     public function getUpdatedCode($code)
     {
         $features = $this->feature_configuration->getFeatures();
@@ -100,7 +117,11 @@ THEEND;
             return $code;
         }
 
-        $repository_class    = new $classname($this->entity_manager, $this->metaclassdata);
+
+        // add methods and code as returned by the feature configurations
+
+        $repository_class     = new $classname($this->entity_manager, $this->metaclassdata);
+        $generated_views_code = '';
         foreach($field_generators as $field_generator) {
             $generator = $field_generator[0];
             $field     = $field_generator[1];
@@ -112,12 +133,19 @@ THEEND;
             else {
                 $methods = $generator->getPropertyMethodsForField($field, $config);
             }
-            foreach($methods as $name => $method) {
+            foreach($methods as $name => $_method) {
                 if (is_null($field)) {
                     $args = array($classname, $config);
                 }
                 else {
                     $args = array($classname, $field, $config);
+                }
+                if (is_array($_method)) {
+                    $method = $_method[0];
+                    $args[] = $_method[1];
+                }
+                else {
+                    $method = $_method;
                 }
 
                 $generate_method = false;
@@ -138,7 +166,9 @@ THEEND;
                     $add_methods[$name] = $method_code;
                 }
             }
+            $generated_views_code .= $generator->getViewsForEntity($config);
         }
+        $add_methods['addGeneratedViews'] = $this->generateAddGeneratedViews($default_comment, $generated_views_code);
 
 
         /**

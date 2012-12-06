@@ -83,10 +83,6 @@ class Entities
         $source_updated = $repository->getUpdatedCode($source_original);
 
         if ($source_original != $source_updated) {
-            echo 'new code for ['.$filename.']'."\n";
-            echo $source_updated;
-            echo "\n\n";
-            /*
             $backup_filename = str_replace('.php', '.php~', $filename);
 
             $ok = true;
@@ -103,7 +99,6 @@ class Entities
             if ($ok) {
                 file_put_contents($filename, $source_updated);
             }
-*/
 
             return true;
         }

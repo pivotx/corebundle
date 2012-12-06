@@ -2,7 +2,8 @@
 /**
  * AutoEntityRepository
  *
- * @todo this class will be removed
+ * This class is a basic Doctrine repository with only an added
+ * call to add views.
  */
 
 namespace PivotX\Doctrine\Repository;
@@ -14,8 +15,6 @@ class AutoEntityRepository extends \Doctrine\ORM\EntityRepository
 {
     public function addDefaultViews(\PivotX\Component\Views\Service $service, $prefix)
     {
-        // @todo we don't want to add the repository here actually
-
         $findAll = new Views\findAll($this, $prefix.'/findAll');
         $service->registerView($findAll);
 

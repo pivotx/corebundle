@@ -424,7 +424,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function getCrudConfiguration_date_created()
     {
@@ -439,7 +439,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function prePersist_date_created()
     {
@@ -453,7 +453,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -468,7 +468,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function prePersist_date_modified()
     {
@@ -480,7 +480,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function preUpdate_date_modified()
     {
@@ -492,7 +492,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function getCrudConfiguration_date_last_login()
     {
@@ -507,7 +507,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function getCrudConfiguration_level()
     {
@@ -529,7 +529,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function getCrudConfiguration_passwd_salt()
     {
@@ -544,7 +544,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function getCrudConfiguration_passwd()
     {
@@ -565,7 +565,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function setEncoderFactory_passwd($encoder_factory)
     {
@@ -577,7 +577,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public static function setActivityService($service)
     {
@@ -591,7 +591,7 @@ class User implements UserInterface
      * 
      * @author PivotX Generator
      *
-     * Generated on 2012-12-05, 17:52:55
+     * Generated on 2012-12-06, 17:47:18
      */
     public function onPxPreUpdate_Loggable($changeset)
     {
