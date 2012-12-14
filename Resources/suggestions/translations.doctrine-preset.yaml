@@ -35,6 +35,16 @@ any:
     date_modify:        'date_modification'
     modification_date:  'date_modification'
     modified_date:      'date_modification'
+    date_publication:   { en: 'publication date', nl: 'publicatiedatum' }
+    publication_date:   'date_publication'
+    publish_date:       'date_publication'
+    date_publish:       'date_publication'
+    date_depublication: { en: 'depublication date', nl: 'depublicatiedatum' }
+    depublication_date: 'date_depublication'
+    depublish_date:     'date_depublication'
+    date_depublish:     'date_depublication'
+    publish_state:      { en: 'publication status', nl: 'publicatiestatus' }
+    order_number:       { en: 'sortorder number', nl: 'volgordenummer' }
     date_logged:        { en: 'logdate', nl: 'logdatum' }
     date_last_login:    { en: 'last login date', nl: 'laatste logindatum' }
     password:           { en: 'password', nl: 'wachtwoord' }
@@ -47,6 +57,7 @@ any:
     media_type:         { en: 'media type', nl: 'media formaat' }
     mediatype:          'media_type'
     uri:                { en: 'uri', nl: 'uri' }
+    state:              { en: 'state', nl: 'staat' }
     state:              { en: 'state', nl: 'staat' }
     autoload:           { en: 'autoload', nl: 'automatisch laden' }
     rawhtml:            { en: 'raw html', nl: 'rauwe html' }

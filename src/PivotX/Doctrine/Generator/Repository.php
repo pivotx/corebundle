@@ -38,35 +38,6 @@ class Repository
         return null;
     }
 
-
-    public function cleanEmptyLines($code_lines, $remove_line_code)
-    {
-        $removed  = 0;
-        $cleaning = false;
-        for($i=2; $i < count($code_lines); $i++) {
-            if ($cleaning) {
-                if ((trim($code_lines[$i]) == '') || ($code_lines[$i] == $remove_line_code)) {
-                    $code_lines[$i] = $remove_line_code;
-                    $removed++;
-                }
-                else {
-                    $cleaning = false;
-                }
-            }
-            else if (((trim($code_lines[$i-2]) == '') || ($code_lines[$i-2] == $remove_line_code)) && 
-                     ((trim($code_lines[$i-1]) == '') || ($code_lines[$i-1] == $remove_line_code)) &&
-                     ((trim($code_lines[$i  ]) == '') || ($code_lines[$i  ] == $remove_line_code))) {
-                $code_lines[$i-1] = $remove_line_code;
-                $code_lines[$i  ] = $remove_line_code;
-                $removed++;
-                $removed++;
-                $cleaning         = true;
-            }
-        }
-
-        return $code_lines;
-    }
-
     private function generateAddGeneratedViews($comment, $code)
     {
         $method_code = <<<THEEND
@@ -94,20 +65,19 @@ THEEND;
             $generator       = null;
 
             if (!is_null($generator_class)) {
+                echo 'Repository generator for feature "'.$feature.'"'."\n";
                 $generator = new $generator_class($fields, $this->metaclassdata);
+
+                $field_generators[] = array($generator, null, null);
 
                 foreach($fields as $field) {
                     $field_generators[] = array($generator, $field[0], $field[1]);
                 }
             }
+            else {
+                echo 'There is no Repository generator for feature "'.$feature.'"'."\n";
+            }
         }
-
-        $generated_on = date('Y-m-d, H:i:s');
-        $default_comment = <<<THEEND
-     * @author PivotX Generator
-     *
-     * Generated on $generated_on
-THEEND;
 
         $add_methods     = array();
         $remove_methods  = array();
@@ -142,7 +112,11 @@ THEEND;
                 }
                 if (is_array($_method)) {
                     $method = $_method[0];
-                    $args[] = $_method[1];
+                    $_args  = $_method;
+                    array_shift($_args);
+                    foreach($_args as $a) {
+                        $args[] = $a;
+                    }
                 }
                 else {
                     $method = $_method;
@@ -161,73 +135,19 @@ THEEND;
                     // method doesn't exist, add it
                     $method_code = call_user_func_array(array($generator, $method),$args)."\n";
 
-                    $method_code = str_replace('%comment%', $default_comment, $method_code);
-
                     $add_methods[$name] = $method_code;
                 }
             }
             $generated_views_code .= $generator->getViewsForEntity($config);
         }
+
+        $default_comment = Code::getDefaultComment();
+
         $add_methods['addGeneratedViews'] = $this->generateAddGeneratedViews($default_comment, $generated_views_code);
 
+        $new_code = Code::mangleClass($repository_class, $code, $add_methods, $remove_methods);
 
-        /**
-         * now we are actually going to update the code
-         *
-         * to remove lines we first replace them with a dummy comment.
-         */
-
-        $reflclass = new \reflectionclass($repository_class);
-
-        $code_lines = explode("\n", $code);
-        $remove_line_code = '// remove this line';
-
-        foreach($remove_methods as $method) {
-            // @todo do something here
-        }
-
-        $line = $reflclass->getendline() - 1;
-        while (($line > 0) && (trim($code_lines[$line]) == '')) {
-            $code_lines[$line] = $remove_line_code;
-            $line--;
-        }
-
-        $new_code = '';
-        foreach($add_methods as $method => $code) {
-            if (method_exists($repository_class, $method)) {
-                $reflmethod = new \reflectionmethod($repository_class, $method);
-
-                $start_line = $reflmethod->getstartline() - 1;
-                $end_line   = $reflmethod->getendline();
-
-                $doccomment = $reflmethod->getdoccomment();
-                if ($doccomment !== false) {
-                    $start_line -= count(explode("\n", $doccomment));
-                }
-
-                for($line=$start_line; $line < $end_line; $line++) {
-                    $code_lines[$line] = $remove_line_code;
-                }
-            }
-
-            if ($new_code != '') {
-                $new_code .= "\n";
-            }
-            $new_code .= $code;
-        }
-
-        array_splice($code_lines, $reflclass->getendline()-1, 0, array($new_code));
-
-        $code_lines = $this->cleanEmptyLines($code_lines, $remove_line_code);
-
-        $lines = array();
-        foreach($code_lines as $line) {
-            if ($line != $remove_line_code) {
-                $lines[] = $line;
-            }
-        }
-
-        return implode("\n", $lines);
+        return $new_code;
     }
 }
 ?>

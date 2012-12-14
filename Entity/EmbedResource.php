@@ -1,6 +1,7 @@
 <?php
 
 namespace PivotX\CoreBundle\Entity;
+use PivotX\Doctrine\Annotation as PivotX;
 
 /**
  */
@@ -131,9 +132,9 @@ class EmbedResource extends GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_width()
     {
@@ -146,9 +147,9 @@ class EmbedResource extends GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_height()
     {

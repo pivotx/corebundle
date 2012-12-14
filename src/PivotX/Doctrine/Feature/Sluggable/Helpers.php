@@ -12,7 +12,7 @@ class Helpers
         // standard transliterate
         $name = iconv('UTF-8', 'ASCII', $name);
 
-        $name = preg_replace('/[^a-z0-9_-]+/', '-', $name);
+        $name = preg_replace('/[^a-z0-9_]+/', '-', $name);
 
         $name = preg_replace('/^-+/', '', $name);
         $name = preg_replace('/-+$/', '', $name);

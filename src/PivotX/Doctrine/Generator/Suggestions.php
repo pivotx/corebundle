@@ -45,9 +45,9 @@ class Suggestions
                     'nullable' => true,
                 )
             ),
-            'html.decimal' => array(
-                'type_description' => 'decimal',
-                'description' => 'Decimal number field.',
+            'html.integer' => array(
+                'type_description' => 'integer',
+                'description' => 'Integer number field.',
                 'orm' => array(
                     'type' => 'integer',
                 )
@@ -81,6 +81,24 @@ class Suggestions
                 'description' => 'Time field.',
                 'orm' => array(
                     'type' => 'time',
+                    'nullable' => true,
+                )
+            ),
+            'html.ref' => array(
+                'type_description' => 'reference',
+                'description' => 'A link to an internal reference',
+                'orm' => array(
+                    'type' => 'string',
+                    'length' => 200,
+                    'nullable' => true,
+                )
+            ),
+            'html.link' => array(
+                'type_description' => 'link',
+                'description' => 'A link to a website',
+                'orm' => array(
+                    'type' => 'string',
+                    'length' => 200,
                     'nullable' => true,
                 )
             ),
@@ -151,9 +169,41 @@ class Suggestions
                     )
                 )
             ),
+            'feature.publishable.publish' => array(
+                'type_description' => 'datetime',
+                'description' => 'Publication date',
+                'orm' => array(
+                    'type' => 'datetime',
+                    'auto_entity' => array(
+                        'publishable' => array(
+                            'type' => 'publish_date'
+                        )
+                    )
+                )
+            ),
+            'feature.publishable.depublish' => array(
+                'type_description' => 'datetime',
+                'description' => 'Depublication date',
+                'orm' => array(
+                    'type' => 'datetime',
+                    'auto_entity' => array(
+                        'publishable' => array(
+                            'type' => 'depublish_date'
+                        )
+                    )
+                )
+            ),
             'feature.publishable.state' => array(
                 'type_description' => 'choices',
                 'description' => 'Publish state (publish, hold, publish_on)',
+                'orm' => array(
+                    'type' => 'datetime',
+                    'auto_entity' => array(
+                        'publishable' => array(
+                            'type' => 'publish_state'
+                        )
+                    )
+                )
             ),
 
             'relation.genericresource.single' => array(
@@ -164,12 +214,12 @@ class Suggestions
                 'type_description' => 'multiple-resource',
                 'description' => 'A multiple resource field.'
             ),
-            'relation.any.to-one' => array(
+            'relation.any.many-to-one' => array(
                 'type_description' => 'many-to-one',
                 'description' => 'A many-to-one relation field.',
                 'needs' => 'relation'
             ),
-            'relation.any.to-many' => array(
+            'relation.any.many-to-many' => array(
                 'type_description' => 'many-to-many',
                 'description' => 'A many-to-many relation field.',
                 'needs' => 'relation'
@@ -190,6 +240,211 @@ class Suggestions
                 )
             ),
         );
+
+
+        // @todo default entities should not be hardcoded
+        $this->entities = array(
+
+            /**
+             * Entity 'no-fields'
+             */
+            'no-fields' => array(
+                'description' => 'Id field.',
+                'fields' => array(
+                    array( 'name' => 'id', 'type' => 'entity.id' )
+                )
+            ),
+
+            /**
+             * Entity 'minimal-fields'
+             */
+            'minimal-fields' => array(
+                'description' => 'Id field and date creation/modification fields.',
+                'fields' => array(
+                    array( 'name' => 'id',           'type' => 'entity.id' ),
+                    array( 'name' => 'date_created', 'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified','type' => 'feature.timestampable.update' )
+                )
+            ),
+
+            /**
+             * Entity 'minimal-content'
+             */
+            'minimal-content' => array(
+                'description' => 'Minimal content entity: minimal-fields, publish date, slug, title and body.',
+                'fields' => array(
+                    array( 'name' => 'id',               'type' => 'entity.id' ),
+                    array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
+                    array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'title',            'type' => 'html.text' ),
+                    array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
+                    array( 'name' => 'body',             'type' => 'html.textarea' ),
+                )
+            ),
+
+            /**
+             * Entity 'hierarchal-content'
+             */
+            'hierarchal-content' => array(
+                'description' => 'Hierarchal content entity: minimal-content, self-link and menu title.',
+                'fields' => array(
+                    array( 'name' => 'id',               'type' => 'entity.id' ),
+                    array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
+                    array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'parent_id',        'type' => 'relation.any.many-to-one',    'relation' => 'self.id' ),
+                    array( 'name' => 'order_number',     'type' => 'html.integer' ),
+                    array( 'name' => 'title',            'type' => 'html.text' ),
+                    array( 'name' => 'menu_title',       'type' => 'html.text' ),
+                    array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
+                    array( 'name' => 'body',             'type' => 'html.textarea' ),
+                )
+            ),
+
+            /**
+             * Entity 'minimal-newsitem'
+             */
+            'minimal-newsitem' => array(
+                'description' => 'Minimal newsitem entity: minimal-fields, publish features, slug, title, body and user.',
+                'fields' => array(
+                    array( 'name' => 'id',                 'type' => 'entity.id' ),
+                    array( 'name' => 'date_created',       'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified',      'type' => 'feature.timestampable.update' ),
+                    array( 'name' => 'date_publication',   'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'publish_state',      'type' => 'feature.publishable.state' ),
+                    array( 'name' => 'date_depublication', 'type' => 'feature.publishable.depublish' ),
+                    array( 'name' => 'user_id',            'type' => 'relation.any.many-to-one',    'relation' => 'User.id' ),
+                    array( 'name' => 'title',              'type' => 'html.text' ),
+                    array( 'name' => 'slug',               'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
+                    array( 'name' => 'body',               'type' => 'html.textarea' ),
+                )
+            ),
+
+            /**
+             * Entity 'regular-newsitem'
+             */
+            'regular-newsitem' => array(
+                'description' => 'Regular newsitem entity: minimal-newsitem, image and introduction.',
+                'fields' => array(
+                    array( 'name' => 'id',                 'type' => 'entity.id' ),
+                    array( 'name' => 'date_created',       'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified',      'type' => 'feature.timestampable.update' ),
+                    array( 'name' => 'date_publication',   'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'publish_state',      'type' => 'feature.publishable.state' ),
+                    array( 'name' => 'date_depublication', 'type' => 'feature.publishable.depublish' ),
+                    array( 'name' => 'user_id',            'type' => 'relation.any.many-to-one',    'relation' => 'User.id' ),
+                    array( 'name' => 'title',              'type' => 'html.text' ),
+                    array( 'name' => 'slug',               'type' => 'feature.sluggable.slug',          'arguments' => '%title%' ),
+                    array( 'name' => 'image',              'type' => 'relation.genericresource.single' ),
+                    array( 'name' => 'introduction',       'type' => 'html.textarea' ),
+                    array( 'name' => 'body',               'type' => 'html.textarea' ),
+                )
+            ),
+
+            /**
+             * Entity 'linked-entity'
+             */
+            'linked-entity' => array(
+                'description' => 'Linked entity: minimal-fields, publish date, title and link.',
+                'fields' => array(
+                    array( 'name' => 'id',               'type' => 'entity.id' ),
+                    array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
+                    array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'title',            'type' => 'html.text' ),
+                    array( 'name' => 'ref',              'type' => 'html.ref' ),
+                )
+            ),
+
+            /**
+             * Entity 'regular-event'
+             */
+            'regular-event' => array(
+                'description' => 'Regular event entity: minimal-content, publish features, event dates.',
+                'fields' => array(
+                    array( 'name' => 'id',                 'type' => 'entity.id' ),
+                    array( 'name' => 'date_created',       'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified',      'type' => 'feature.timestampable.update' ),
+                    array( 'name' => 'date_publication',   'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'publish_state',      'type' => 'feature.publishable.state' ),
+                    array( 'name' => 'date_depublication', 'type' => 'feature.publishable.depublish' ),
+                    array( 'name' => 'date_event_start',   'type' => 'html.datetime' ),
+                    array( 'name' => 'date_event_end',     'type' => 'html.datetime' ),
+                    array( 'name' => 'title',              'type' => 'html.text' ),
+                    array( 'name' => 'slug',               'type' => 'feature.sluggable.slug',          'arguments' => '%title%' ),
+                    array( 'name' => 'image',              'type' => 'relation.genericresource.single' ),
+                    array( 'name' => 'introduction',       'type' => 'html.textarea' ),
+                    array( 'name' => 'body',               'type' => 'html.textarea' ),
+                ),
+                'features' => array(
+                    array(
+                        'type' => 'timesliceable',
+                        'orm' => array(
+                            'auto_entity' => array(
+                                'fields' => array(
+                                    array( 'name' => 'Events',    'start_field' => 'date_event_start', 'end_field' => 'date_event_end' )
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+
+            /**
+             * Entity 'minimal-taxonomy'
+             *
+             * Ex. unordered categories, tags
+             */
+            'minimal-taxonomy' => array(
+                'description' => 'Minimal taxonomy: minimal-fields, publish date, slug, title.',
+                'fields' => array(
+                    array( 'name' => 'id',               'type' => 'entity.id' ),
+                    array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
+                    array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'title',            'type' => 'html.text' ),
+                    array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
+                )
+            ),
+
+            /**
+             * Entity 'ordered-taxonomy'
+             *
+             * Ex. ordered categories
+             */
+            'ordered-taxonomy' => array(
+                'description' => 'Ordered taxonomy: minimal-taxonomy and order number.',
+                'fields' => array(
+                    array( 'name' => 'id',               'type' => 'entity.id' ),
+                    array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
+                    array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'order_number',     'type' => 'html.integer' ),
+                    array( 'name' => 'title',            'type' => 'html.text' ),
+                    array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
+                )
+            ),
+
+            /**
+             * Entity 'hierarchal-taxonomy'
+             *
+             * Ex. hierarchal and ordered categories
+             */
+            'hierarchal-taxonomy' => array(
+                'description' => 'Hierarchal taxonomy: ordered-taxonomy and parent taxonomy.',
+                'fields' => array(
+                    array( 'name' => 'id',               'type' => 'entity.id' ),
+                    array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
+                    array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
+                    array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'parent_id',        'type' => 'relation.any.many-to-one',    'relation' => 'self.id' ),
+                    array( 'name' => 'order_number',     'type' => 'html.integer' ),
+                    array( 'name' => 'title',            'type' => 'html.text' ),
+                    array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
+                )
+            ),
+        );
     }
 
     public function getFieldTypes()
@@ -203,6 +458,15 @@ class Suggestions
     {
         $features = array_keys($this->features);
         return $features;
+    }
+
+    public function getEntities()
+    {
+        $entities = array();
+        foreach($this->entities as $key => $entity) {
+            $entities[$key] = $entity['description'];
+        }
+        return $entities;
     }
 
     public function getOrmFieldFromType($type)
@@ -239,20 +503,57 @@ class Suggestions
         $feature = $this->features[$name];
 
         if ($name == 'timesliceable') {
+            // @todo should not be here
             $_fields = explode(',', trim($arguments));
             $fields  = array();
             foreach($_fields as $field) {
-                if (strpos($field, '-') > 0) {
-                    list($f1, $f2) = explode('-', trim($field));
-                    $fields[] = array('start_field'=>trim($f1), 'end_field'=>trim($f2));
+                $name = null;
+                if (preg_match('|(.+)[(](.+)[)]|', $field, $match)) {
+                    $field = $match[1];
+                    $name  = $match[2];
                 }
                 else {
-                    $fields[] = array('field'=>trim($field));
+                    $_name = preg_replace('|[^a-zA-Z_]|', '', $field);
+                    $name = \Doctrine\Common\Util\Inflector::classify($_name);
+                }
+
+                if (strpos($field, '-') > 0) {
+                    list($f1, $f2) = explode('-', trim($field));
+                    $fields[] = array('name'=>$name, 'start_field'=>trim($f1), 'end_field'=>trim($f2));
+                }
+                else {
+                    $fields[] = array('name'=>$name, 'field'=>trim($field));
                 }
             }
             $feature['orm']['auto_entity']['timesliceable']['fields'] = $fields;
         }
 
         return $feature;
+    }
+
+    public function getEntity($type)
+    {
+        if (!isset($this->entities[$type])) {
+            return null;
+        }
+
+        $entity = $this->entities[$type];
+
+        unset($entity['description']);
+
+        return $entity;
+    }
+
+    public function buildEntity($type, $name, $bundle)
+    {
+        $entity = $this->getEntity($type);
+        if (is_null($entity)) {
+            return null;
+        }
+
+        $entity['name']   = $name;
+        $entity['bundle'] = $bundle;
+
+        return $entity;
     }
 }

@@ -13,7 +13,9 @@ class find extends AbstractView
         list($primary, $other) = explode('/', $name, 2);
         $tags = array ( $primary, 'returnOne' );
 
-        parent::__construct($name, 'PivotX/Core', 'Find by id "'.$tags[0].'"', $tags);
+        parent::__construct($name, 'PivotX/Core', 'Find by id "'.strtolower($tags[0]).'"', $tags);
+
+        $this->long_description = 'Find by id "'.strtolower($tags[0]).'"';
 
         $this->repository = $repository;
     }

@@ -3,6 +3,7 @@
 namespace PivotX\CoreBundle\Entity;
 
 use Symfony\Component\Yaml\Yaml;
+use PivotX\Doctrine\Annotation as PivotX;
 
 /**
  */
@@ -361,9 +362,9 @@ class SiteOption
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_date_created()
     {
@@ -376,9 +377,9 @@ class SiteOption
     /**
      * PrePersist the creation timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function prePersist_date_created()
     {
@@ -390,9 +391,9 @@ class SiteOption
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -405,9 +406,9 @@ class SiteOption
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function prePersist_date_modified()
     {
@@ -417,9 +418,9 @@ class SiteOption
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function preUpdate_date_modified()
     {
@@ -429,9 +430,9 @@ class SiteOption
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_mediatype()
     {
@@ -454,9 +455,9 @@ class SiteOption
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_value()
     {
@@ -492,9 +493,9 @@ class SiteOption
     /**
      * Set the activityservice
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public static function setActivityService($service)
     {
@@ -506,9 +507,9 @@ class SiteOption
     /**
      * Store a version
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function onPxPreUpdate_Loggable($changeset)
     {

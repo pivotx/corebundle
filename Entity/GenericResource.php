@@ -1,6 +1,7 @@
 <?php
 
 namespace PivotX\CoreBundle\Entity;
+use PivotX\Doctrine\Annotation as PivotX;
 
 /**
  */
@@ -177,9 +178,9 @@ class GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_date_created()
     {
@@ -192,9 +193,9 @@ class GenericResource
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function prePersist_date_created()
     {
@@ -204,9 +205,9 @@ class GenericResource
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function preUpdate_date_created()
     {
@@ -216,9 +217,9 @@ class GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -231,9 +232,9 @@ class GenericResource
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function prePersist_date_modified()
     {
@@ -243,9 +244,9 @@ class GenericResource
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function preUpdate_date_modified()
     {
@@ -255,9 +256,9 @@ class GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_media_type()
     {

@@ -13,7 +13,11 @@ class findAll extends AbstractView
         list($primary, $other) = explode('/', $name, 2);
         $tags = array ( $primary, 'returnAll' );
 
-        parent::__construct($name, 'PivotX/Core', 'Find all "'.$tags[0].'"', $tags);
+        $plural = \PivotX\Component\Translations\Inflector::pluralize(strtolower($tags[0]));
+
+        parent::__construct($name, 'PivotX/Core', 'Find all "'.$plural.'"', $tags);
+
+        $this->long_description = 'Find all "'.$plural.'"';
 
         $this->repository = $repository;
     }

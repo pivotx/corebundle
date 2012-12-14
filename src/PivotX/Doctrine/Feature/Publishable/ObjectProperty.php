@@ -5,90 +5,121 @@ namespace PivotX\Doctrine\Feature\Publishable;
 
 class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
 {
-    private $field_publish_date = 'publish_on';
-    private $field_depublish_date = 'depublish_on';
+    private $fields = null;
+    private $metaclassdata = null;
+
+    private $field_publish_date = 'date_publication';
+    private $field_depublish_date = 'date_depublication';
     private $field_publish_state = 'publish_state';
 
-    public function __construct()
+    public function __construct(array $fields, $metaclassdata)
     {
+        $this->fields        = $fields;
+        $this->metaclassdata = $metaclassdata;
     }
 
-    public function getPropertyMethods()
+    public function getPropertyMethodsForEntity($config)
     {
-        return array(
-            'evaluateViewable' => 'generateEvaluateViewable',
-            'getCrudIgnore_'.$this->field_publish_date => 'generateGetCrudIgnorePublishDate',
-            'getCrudIgnore_'.$this->field_depublish_date => 'generateGetCrudIgnoreDePublishDate',
-            //'getCrudType_'.$this->field_publish_state => 'generateGetCrudType',
-            'getCrudChoices_'.$this->field_publish_state => 'generateGetCrudChoices',
-            'isPublished' => 'generateIsPublished',
-            'setPublishState' => 'generateSetPublishState',
-            'getPublishState' => 'generateGetPublishState',
-            'setPublishDateTime' => 'generateSetPublishDateTime',
-            'setDepublishDateTime' => 'generateSetDepublishDateTime'
-        );
-    }
+        $methods = array();
 
-    public function generateEvaluateViewable($entity)
-    {
-        return <<<THEEND
-    /**
-     * Returns true if entity is viewable (within the context of this property)
-     */
-    public function evaluateViewable()
-    {
-        \$viewable = false;
+        // @todo not called atm
 
-//        switch (\$this->$this->field_publish_state) {
-        switch (\$this->getPublishState()) {
-            case 'published':
-                \$viewable = true;
-                break;
-            case 'depublished':
-                \$viewable = false;
-                break;
-            case 'timed-publish':
-                \$viewable = false;
-                break;
-            case 'timed-depublish':
-                \$viewable = true;
-                break;
+        $have_state = false;
+        foreach($this->fields as $lfield) {
+            if ($lfield[1]['type'] == 'publish_state') {
+                $have_state = true;
+            }
+        }
+        if ($have_state) {
+            $methods['isPublished'] = 'generateIsPublishedWithState';
+        }
+        else {
+            $methods['isPublished'] = 'generateIsPublishedWithoutState';
         }
 
-        return \$viewable;
+        return $methods;
+    }
+
+    public function getPropertyMethodsForField($field, $config)
+    {
+        $methods = array();
+
+        //$methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfiguration';
+
+        foreach($this->fields as $lfield) {
+            if ($lfield[0] == $field) {
+                switch ($lfield[1]['type']) {
+                    case 'publish_date':
+                        $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfigurationPublishDate';
+                        break;
+                    case 'depublish_date':
+                        break;
+                    case 'publish_state':
+                        break;
+                }
+            }
+        }
+
+        return $methods;
+    }
+
+    public function generateIsPublishedWithoutState($classname, $config)
+    {
+        return <<<THEEND
+    /**
+     * Returns true if entity is published
+     */
+    public function isPublished()
+    {
+        return true;
     }
 
 THEEND;
     }
 
-    public function generateGetCrudIgnorePublishDate()
+    public function generateIsPublishedWithState($classname, $config)
     {
-        $field = $this->field_publish_date;
+        // @todo search for the proper field
+        $state_field = false;
+        foreach($this->fields as $lfield) {
+            if ($lfield[1]['type'] == 'publish_state') {
+                $state_field = $lfield[0];
+            }
+        }
+
+        if ($state_field === false) {
+            return '';
+        }
+
         return <<<THEEND
     /**
+     * Returns true if entity is published
      */
-    public function getCrudIgnore_$field()
+    public function isPublished()
     {
-        return true;
-    }
-THEEND;
+        switch (\$this->$state_field) {
+            case 'published':
+                return true;
+                break;
+            case 'timed-depublish':
+                return true;
+                break;
+            case 'depublished':
+                return false;
+                break;
+            case 'timed-publish':
+                return false;
+                break;
+        }
+        return false;
     }
 
-    public function generateGetCrudIgnoreDePublishDate()
-    {
-        $field = $this->field_depublish_date;
-        return <<<THEEND
-    /**
-     */
-    public function getCrudIgnore_$field()
-    {
-        return true;
-    }
 THEEND;
     }
 
     public function generateGetCrudChoices()
     {
+        // @todo upgrade this
         $statefield = $this->field_publish_state;
         return <<<THEEND
     /**
@@ -110,67 +141,21 @@ THEEND;
 THEEND;
     }
 
-    public function generateIsPublished($entity)
+    public function generateGetCrudConfigurationPublishDate($classname, $field, $config)
     {
         return <<<THEEND
-    public function isPublished()
+    /**
+     * Return the CRUD field configuration
+     * 
+%comment%
+     */
+    public function getCrudConfiguration_$field()
     {
-        return in_array(\$this->getPublishState(), array('published', 'timed-depublish'));
+        return array(
+            'name' => '$field',
+            'type' => 'datetime'
+        );
     }
-
-THEEND;
-    }
-
-    public function generateGetPublishState($entity)
-    {
-        return <<<THEEND
-    public function getPublishState()
-    {
-        return \$this->$this->field_publish_state;
-    }
-
-THEEND;
-    }
-
-    public function generateSetPublishState($entity)
-    {
-        return <<<THEEND
-    public function setPublishState(\$state)
-    {
-        \$this->$this->field_publish_state = \$state;
-        return \$this;
-    }
-
-THEEND;
-    }
-
-    public function generateSetPublishDateTime($entity)
-    {
-        return <<<THEEND
-    public function setPublishDateTime(\$datetime, \$update_state = true)
-    {
-        \$this->$this->field_publish_date = \$datetime;
-        if (\$update_state) {
-            \$this->$this->field_publish_state = 'timed-publish';
-        }
-        return \$this;
-    }
-
-THEEND;
-    }
-
-    public function generateSetDepublishDateTime($entity)
-    {
-        return <<<THEEND
-    public function setDepublishDateTime(\$datetime, \$update_state = true)
-    {
-        \$this->$this->field_depublish_date = \$datetime;
-        if (\$update_state) {
-            \$this->$this->field_publish_state = 'timed-depublish';
-        }
-        return \$this;
-    }
-
 THEEND;
     }
 }

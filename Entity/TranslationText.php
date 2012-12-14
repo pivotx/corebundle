@@ -1,6 +1,7 @@
 <?php
 
 namespace PivotX\CoreBundle\Entity;
+use PivotX\Doctrine\Annotation as PivotX;
 
 /**
  */
@@ -289,9 +290,9 @@ class TranslationText
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_date_created()
     {
@@ -304,9 +305,9 @@ class TranslationText
     /**
      * PrePersist the creation timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function prePersist_date_created()
     {
@@ -318,9 +319,9 @@ class TranslationText
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -333,9 +334,9 @@ class TranslationText
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function prePersist_date_modified()
     {
@@ -345,9 +346,9 @@ class TranslationText
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function preUpdate_date_modified()
     {
@@ -357,9 +358,9 @@ class TranslationText
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_state()
     {
@@ -381,9 +382,9 @@ class TranslationText
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_encoding()
     {
@@ -400,9 +401,9 @@ class TranslationText
     /**
      * Set the activityservice
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public static function setActivityService($service)
     {
@@ -414,9 +415,9 @@ class TranslationText
     /**
      * Store a version
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function onPxPreUpdate_Loggable($changeset)
     {

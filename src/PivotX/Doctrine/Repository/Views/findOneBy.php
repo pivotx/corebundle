@@ -13,7 +13,9 @@ class findOneBy extends AbstractView
         list($primary, $other) = explode('/', $name, 2);
         $tags = array ( $primary, 'returnOne' );
 
-        parent::__construct($name, 'PivotX/Core', 'Find one specific "'.$tags[0].'"', $tags);
+        parent::__construct($name, 'PivotX/Core', 'Find one specific "'.strtolower($tags[0]).'"', $tags);
+
+        $this->long_description = 'Find one specific "'.strtolower($tags[0]).'"';
 
         $this->repository = $repository;
     }

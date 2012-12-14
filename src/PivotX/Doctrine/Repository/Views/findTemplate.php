@@ -19,6 +19,51 @@ class findTemplate extends AbstractView
         $this->method_arguments = $arguments;
     }
 
+    /**
+     */
+    public function getDefaultPhpExample()
+    {
+        $name         = $this->getName();
+        $repos_class = get_class($this->repository);
+        $resultname   = 'items';
+        $loopvar      = 'item';
+        $method       = $this->method;
+
+        $entity_class = str_replace('\\', '\\\\', str_replace('Repository', '', str_replace('Model', 'Entity', $repos_class)));
+
+        if (count($this->tags) > 0) {
+            $singular = strtolower($this->tags[0]);
+
+            $resultname = \PivotX\Component\Translations\Inflector::pluralize($singular);
+            $loopvar    = $singular;
+        }
+
+        $method_title = '->getTitle()';
+
+        $code = <<<THEEND
+<code>\$repository  = \$doctrine->getRepository('$entity_class');
+\$$resultname = \$repository->$method(<span class="argument">...</span>);
+
+\$out = '';
+foreach(\$$resultname as \$$loopvar) {
+    \$out .= \$$loopvar$method_title;
+}</code>
+THEEND;
+
+        return $code;
+    }
+
+    public function getCodeExamples()
+    {
+        if (count($this->code_examples) == 0) {
+            return array(
+                'Twig example' => array('twig', $this->getDefaultTwigExample()),
+                'Php example' => array('php', $this->getDefaultPhpExample())
+            );
+        }
+        return $this->code_examples;
+    }
+
     private function splitArguments()
     {
         $criteria = array();
@@ -41,6 +86,10 @@ class findTemplate extends AbstractView
         $array = array();
 
         foreach($this->method_arguments as $k => $v) {
+            if (isset($this->arguments[$k])) {
+                $v = $this->arguments[$k];
+            }
+
             $array[] = $v;
         }
 

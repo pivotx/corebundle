@@ -10,7 +10,7 @@ class AbstractView implements ViewInterface
     protected $tags = array();
     protected $description = null;
     protected $long_description = null;
-    protected $code_example = null;
+    protected $code_examples = array();
 
     protected $arguments = array();
     protected $range_offset = null;
@@ -211,6 +211,16 @@ class AbstractView implements ViewInterface
     }
 
     /**
+     * Set the long developer description
+     *
+     * @param string $long_description
+     */
+    public function setLongDescription($long_description)
+    {
+        $this->long_description = $long_description;
+    }
+
+    /**
      * Get the long developer description of the view
      *
      * @return string view long description
@@ -225,19 +235,21 @@ class AbstractView implements ViewInterface
 
     /**
      */
-    public function getCodeExample()
+    public function getDefaultTwigExample()
     {
-        if (!is_null($this->code_example)) {
-            return $this->code_example;
-        }
-
         $name       = $this->getName();
         $resultname = 'items';
         $loopvar    = 'item';
 
-        return <<<THEEND
-<pre class="prettyprint linenums lang-html">
-{% loadView '$name' as $resultname %}
+        if (count($this->tags) > 0) {
+            $singular = strtolower($this->tags[0]);
+
+            $resultname = \PivotX\Component\Translations\Inflector::pluralize($singular);
+            $loopvar    = $singular;
+        }
+
+        $code = <<<THEEND
+{% loadView '$name' as $resultname with <span class="arguments">arguments</span> %}
 &lt;ul&gt;
 {% for $loopvar in $resultname %}
     &lt;li&gt;
@@ -245,8 +257,52 @@ class AbstractView implements ViewInterface
     &lt;/li&gt;
 {% endfor %}
 &lt;/ul&gt;
-</pre>
 THEEND;
+
+        return $code;
+    }
+
+    public function getCodeExamples()
+    {
+        if (count($this->code_examples) == 0) {
+            return array(
+                'Twig example' => array('twig', $this->getDefaultTwigExample())
+            );
+        }
+        return $this->code_examples;
+    }
+
+    /**
+     */
+    public function getHelpPages()
+    {
+        $pages = array();
+
+        if ($this->getLongDescription() != '') {
+            $text = $this->getLongDescription();
+            $type = 'default';
+            if (!($text instanceof \Twig_Markup)) {
+                $text = new \Twig_Markup($text, 'utf-8');
+            }
+
+            $pages[] = array(
+                'title' => 'Documentation',
+                'type' => $type,
+                'text' => $text,
+            );
+        }
+
+        foreach($this->getCodeExamples() as $title => $example) {
+            list($type, $text) = $example;
+
+            $pages[] = array(
+                'title' => $title,
+                'type' => $type,
+                'text' => $text
+            );
+        }
+
+        return $pages;
     }
 
     /**
@@ -255,7 +311,7 @@ THEEND;
     public function getValue()
     {
         $result = $this->getResult();
-        if (is_array($result)) {
+        if (is_array($result) && (count($result) > 0)) {
             return $result[0];
         }
         if ($result instanceof \Iterator) {

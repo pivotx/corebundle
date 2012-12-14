@@ -13,7 +13,11 @@ class findBy extends AbstractView
         list($primary, $other) = explode('/', $name, 2);
         $tags = array ( $primary, 'returnMore' );
 
-        parent::__construct($name, 'PivotX/Core', 'Find filtered "'.$tags[0].'"', $tags);
+        $plural = \PivotX\Component\Translations\Inflector::pluralize(strtolower($tags[0]));
+
+        parent::__construct($name, 'PivotX/Core', 'Find filtered "'.$plural.'"', $tags);
+
+        $this->long_description = 'Find filtered "'.$plural.'"';
 
         $this->repository = $repository;
     }

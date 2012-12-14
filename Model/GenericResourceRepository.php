@@ -1,6 +1,7 @@
 <?php
 
 namespace PivotX\CoreBundle\Model;
+use PivotX\Doctrine\Annotation as PivotX;
 
 class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRepository
 {
@@ -12,9 +13,9 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Add generated views
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function addGeneratedViews(\PivotX\Component\Views\Service $service, $prefix)
     {

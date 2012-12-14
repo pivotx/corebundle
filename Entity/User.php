@@ -3,6 +3,7 @@
 namespace PivotX\CoreBundle\Entity;
 
 use \Symfony\Component\Security\Core\User\UserInterface;
+use PivotX\Doctrine\Annotation as PivotX;
 
 /**
  */
@@ -422,9 +423,9 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_date_created()
     {
@@ -437,9 +438,9 @@ class User implements UserInterface
     /**
      * PrePersist the creation timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function prePersist_date_created()
     {
@@ -451,9 +452,9 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_date_modified()
     {
@@ -466,9 +467,9 @@ class User implements UserInterface
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function prePersist_date_modified()
     {
@@ -478,9 +479,9 @@ class User implements UserInterface
     /**
      * PrePersist the update timestamp
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function preUpdate_date_modified()
     {
@@ -490,9 +491,9 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_date_last_login()
     {
@@ -505,9 +506,9 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_level()
     {
@@ -527,9 +528,9 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_passwd_salt()
     {
@@ -542,9 +543,9 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function getCrudConfiguration_passwd()
     {
@@ -563,9 +564,9 @@ class User implements UserInterface
     /**
      * Set the encoder factory
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function setEncoderFactory_passwd($encoder_factory)
     {
@@ -575,9 +576,9 @@ class User implements UserInterface
     /**
      * Set the activityservice
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public static function setActivityService($service)
     {
@@ -589,9 +590,9 @@ class User implements UserInterface
     /**
      * Store a version
      * 
-     * @author PivotX Generator
-     *
-     * Generated on 2012-12-06, 17:47:18
+     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
      */
     public function onPxPreUpdate_Loggable($changeset)
     {

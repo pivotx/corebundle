@@ -1,6 +1,7 @@
 <?php
 
 namespace PivotX\CoreBundle\Entity;
+use PivotX\Doctrine\Annotation as PivotX;
 
 /**
  */
