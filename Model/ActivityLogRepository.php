@@ -16,7 +16,7 @@ class ActivityLogRepository extends \PivotX\Doctrine\Repository\AutoEntityReposi
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

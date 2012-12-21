@@ -315,7 +315,25 @@ THEEND;
     }
 
     /**
+     * Remove the actual Yaml configuration
+     *
+     * @return boolean return true if the configuration changed
+     */
+    public function deleteYaml()
+    {
+        $filename = $this->getYamlFilename();
+
+        if (unlink($filename)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Write the actual Yaml configuration
+     *
+     * @return boolean return true if the configuration changed
      */
     public function writeYaml()
     {
@@ -324,10 +342,19 @@ THEEND;
 
         $content = Yaml::dump($yaml, 6, 2);
 
-        file_put_contents($filename, $content);
-        chmod($filename, 0644);
+        $old_content = false;
+        if (file_exists($filename)) {
+            $old_content = file_get_contents($filename);
+        }
 
-        return true;
+        if (($old_content === false) || ($content != $old_content)) {
+            file_put_contents($filename, $content);
+            chmod($filename, 0644);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

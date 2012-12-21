@@ -362,7 +362,7 @@ class SiteOption
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -377,7 +377,7 @@ class SiteOption
     /**
      * PrePersist the creation timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -391,7 +391,7 @@ class SiteOption
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -406,7 +406,7 @@ class SiteOption
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -418,7 +418,7 @@ class SiteOption
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -430,7 +430,7 @@ class SiteOption
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -455,7 +455,7 @@ class SiteOption
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -493,7 +493,7 @@ class SiteOption
     /**
      * Set the activityservice
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -507,7 +507,7 @@ class SiteOption
     /**
      * Store a version
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:55
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

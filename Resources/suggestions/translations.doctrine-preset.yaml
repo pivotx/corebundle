@@ -7,6 +7,7 @@ any:
     author:         { en: 'author', nl: 'auteur' }
     user:           { en: 'user', nl: 'gebruiker' }
     introduction:   { en: 'introduction text', nl: 'introductietekst' }
+    summary:        { en: 'summary text', nl: 'samenvatting' }
     body:           { en: 'body text', nl: 'broodtekst' }
     symmary:        { en: 'summary text', nl: 'samenvatting' }
     image:          { en: 'image', nl: 'afbeelding' }
@@ -20,6 +21,7 @@ any:
     text_nl:        { en: 'text (dutch)', nl: 'tekst (nederlands)' }
     text_en:        { en: 'text (english)', nl: 'tekst (engels)' }
     primary_tag:    { en: 'primary tag', nl: 'primaire tag' }
+    theme_name:     { en: 'theme name', nl: 'thema naam' }
 
     # Generic technical stuff
     id:                 { en: 'id', nl: 'id' }
@@ -44,6 +46,8 @@ any:
     depublish_date:     'date_depublication'
     date_depublish:     'date_depublication'
     publish_state:      { en: 'publication status', nl: 'publicatiestatus' }
+    event_start:        { en: 'event start', nl: 'evenement start' }
+    event_end:          { en: 'event end', nl: 'evenement einde' }
     order_number:       { en: 'sortorder number', nl: 'volgordenummer' }
     date_logged:        { en: 'logdate', nl: 'logdatum' }
     date_last_login:    { en: 'last login date', nl: 'laatste logindatum' }

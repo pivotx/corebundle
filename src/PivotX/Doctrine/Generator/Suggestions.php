@@ -154,6 +154,32 @@ class Suggestions
                     )
                 )
             ),
+            'feature.structurable.order' => array(
+                'type_description' => 'integer',
+                'description' => 'Structurable order field',
+                'orm' => array(
+                    'type' => 'integer',
+                    'nullable' => false,
+                    'auto_entity' => array(
+                        'structurable' => array(
+                            'kind' => 'order'
+                        )
+                    )
+                )
+            ),
+            'feature.structurable.parent' => array(
+                'type_description' => 'integer',
+                'description' => 'Structurable parent field',
+                'orm' => array(
+                    'type' => 'integer', // @todo foreign key
+                    'nullable' => true,
+                    'auto_entity' => array(
+                        'structurable' => array(
+                            'kind' => 'parent'
+                        )
+                    )
+                )
+            ),
             'feature.sluggable.slug' => array(
                 'type_description' => 'slug',
                 'description' => 'Record slug',
@@ -294,7 +320,7 @@ class Suggestions
                     array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
                     array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
                     array( 'name' => 'parent_id',        'type' => 'relation.any.many-to-one',    'relation' => 'self.id' ),
-                    array( 'name' => 'order_number',     'type' => 'html.integer' ),
+                    array( 'name' => 'order_number',     'type' => 'feature.structurable.order' ),
                     array( 'name' => 'title',            'type' => 'html.text' ),
                     array( 'name' => 'menu_title',       'type' => 'html.text' ),
                     array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
@@ -420,7 +446,7 @@ class Suggestions
                     array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
                     array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
                     array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
-                    array( 'name' => 'order_number',     'type' => 'html.integer' ),
+                    array( 'name' => 'order_number',     'type' => 'feature.structurable.order' ),
                     array( 'name' => 'title',            'type' => 'html.text' ),
                     array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
                 )
@@ -439,7 +465,7 @@ class Suggestions
                     array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
                     array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
                     array( 'name' => 'parent_id',        'type' => 'relation.any.many-to-one',    'relation' => 'self.id' ),
-                    array( 'name' => 'order_number',     'type' => 'html.integer' ),
+                    array( 'name' => 'order_number',     'type' => 'feature.structurable.order' ),
                     array( 'name' => 'title',            'type' => 'html.text' ),
                     array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
                 )

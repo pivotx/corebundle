@@ -1,7 +1,9 @@
 <?php
 
 namespace PivotX\CoreBundle\Entity;
+
 use PivotX\Doctrine\Annotation as PivotX;
+use PivotX\Component\Activity\Service as ActivityService;
 
 /**
  */
@@ -121,6 +123,59 @@ class ActivityLog
     public function getImportance()
     {
         return $this->importance;
+    }
+
+    /**
+     * Get friendly level message
+     *
+     * @return string
+     */
+    public function getFriendlyLevel()
+    {
+        switch ($this->level) {
+            case ActivityService::LEVEL_SITE:
+                return 'website';
+                break;
+            case ActivityService::LEVEL_EDITORIAL:
+                return 'editorial';
+                break;
+            case ActivityService::LEVEL_ADMINISTRATIVE:
+                return 'administrative';
+                break;
+            case ActivityService::LEVEL_SECURITY:
+                return 'security';
+                break;
+            case ActivityService::LEVEL_TECHNICAL:
+                return 'technical';
+                break;
+        }
+
+        return 'level:'.$this->level;
+    }
+
+    /**
+     * Get friendly importance message
+     *
+     * @return string
+     */
+    public function getFriendlyImportance()
+    {
+        switch ($this->importance) {
+            case ActivityService::IMPORTANCE_NOT:
+                return 'not important';
+                break;
+            case ActivityService::IMPORTANCE_AVERAGE:
+                return 'average important';
+                break;
+            case ActivityService::IMPORTANCE_VERY:
+                return 'very important';
+                break;
+            case ActivityService::IMPORTANCE_MOST:
+                return 'most important';
+                break;
+        }
+
+        return 'importance:'.$this->importance;
     }
 
     /**

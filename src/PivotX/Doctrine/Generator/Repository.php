@@ -65,7 +65,7 @@ THEEND;
             $generator       = null;
 
             if (!is_null($generator_class)) {
-                echo 'Repository generator for feature "'.$feature.'"'."\n";
+                //echo 'Repository generator for feature "'.$feature.'"'."\n";
                 $generator = new $generator_class($fields, $this->metaclassdata);
 
                 $field_generators[] = array($generator, null, null);
@@ -75,7 +75,7 @@ THEEND;
                 }
             }
             else {
-                echo 'There is no Repository generator for feature "'.$feature.'"'."\n";
+                //echo 'There is no Repository generator for feature "'.$feature.'"'."\n";
             }
         }
 

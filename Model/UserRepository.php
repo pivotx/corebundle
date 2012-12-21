@@ -18,7 +18,7 @@ class UserRepository extends \PivotX\Doctrine\Repository\AutoEntityRepository
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

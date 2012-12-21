@@ -85,9 +85,11 @@ class Service
 
     /**
      * Finalize webresources to the outputter
+     * 
+     * @param boolean $force_debugging   if debugging is forced
      */
-    public function finalizeWebresources()
+    public function finalizeWebresources($force_debugging = false)
     {
-        return $this->collection->finalize($this->outputterservice);
+        return $this->collection->finalize($this->outputterservice, $force_debugging);
     }
 }

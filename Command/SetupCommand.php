@@ -25,7 +25,7 @@ class SetupCommand extends ContainerAwareCommand
      *
      * @return boolean  true, if update successful
      */
-    protected function updateSiteoptions($output)
+    protected function updateSiteoptions($input, $output, &$messages)
     {
         $doctrine = $this->getContainer()->get('doctrine');
         $siteoptions_service = $this->getContainer()->get('pivotx.siteoptions');
@@ -98,7 +98,7 @@ class SetupCommand extends ContainerAwareCommand
      *
      * @return boolean  true, if setup successful
      */
-    protected function setupUsers($input, $output)
+    protected function setupUsers($input, $output, &$messages)
     {
         $doctrine = $this->getContainer()->get('doctrine');
 
@@ -189,36 +189,63 @@ class SetupCommand extends ContainerAwareCommand
      * Read the defined entities from the PivotX configuration and
      * generate YAML entities and entity/repository code.
      */
-    protected function updateSoftEntities()
+    protected function updateSoftEntities($input, $output, &$messages)
     {
         $doctrine = $this->getContainer()->get('doctrine');
         $siteoption_service = $this->getContainer()->get('pivotx.siteoptions');
+
+        $require_doctrine_update = false;
 
         $siteoptions = $siteoption_service->findSiteOptions(null, 'entities.entity');
         $config_ents = array();
         foreach($siteoptions as $siteoption) {
             $config = $siteoption->getUnpackedValue();
 
-            $config_ents[] = $config['name'];
-
             $entity = new SoftEntity($config, $this->getApplication()->getKernel());
 
-            $entity->writeYaml();
-            $entity->writeEntityPhp(false);
-            $entity->writeRepositoryPhp(false);
+            if (isset($config['delete'])) {
+                if ($entity->deleteYaml()) {
+                    $siteoption_service->clearSiteOptions(null, 'entities.entity', $config['name']);
 
-            $entity->markChanges();
+                    $require_doctrine_update = true;
+                    // @todo this update won't actually delete the table
+                }
+            }
+            else {
+                $config_ents[] = $config['name'];
 
-            $siteoption->setUnpackedValue($entity->getConfig());
+                if ($entity->writeYaml()) {
+                    $require_doctrine_update = true;
+                }
 
-            // @todo the entity/repository php code has not been updated for the PivotX/Doctrine features
-            //       for now, just run the setup again
+                $entity->writeEntityPhp(false);
+                $entity->writeRepositoryPhp(false);
+
+                $entity->markChanges();
+
+                $siteoption->setUnpackedValue($entity->getConfig());
+
+                // @todo the entity/repository php code has not been updated for the PivotX/Doctrine features
+                //       for now, just run the setup again
+            }
         }
 
         $siteoption = $siteoption_service->getSiteOption('config.entities', 'all');
         $siteoption->setUnpackedValue($config_ents);
 
         $siteoption_service->set('config.check.entities', 0, 'x-value/boolean', false, false, 'all');
+
+        if ($require_doctrine_update) {
+            /**
+             * @todo
+             * We do not check if the doctrine updates has been run, so for now you only get one
+             * message. In the future we should perform a doctrine schema check.
+             */
+            $messages[] = 'Your Doctrine configuration has been updated. Run the following command:';
+            $messages[] = '';
+            $messages[] = 'php app/console doctrine:schema:update --force';
+            $messages[] = '';
+        }
 
         return true;
     }
@@ -229,7 +256,7 @@ class SetupCommand extends ContainerAwareCommand
      *
      * @return boolean  true, if update successful
      */
-    protected function updateHardEntities()
+    protected function updateHardEntities($input, $output, &$messages)
     {
         $kernel   = $this->getApplication()->getKernel();
         $doctrine = $this->getContainer()->get('doctrine');
@@ -267,26 +294,38 @@ class SetupCommand extends ContainerAwareCommand
         $output->writeln('PivotX Setup');
         $output->writeln('');
 
-        if (!$this->updateSiteoptions($output)) {
+        $messages = array();
+
+        if (!$this->updateSiteoptions($input, $output, $messages)) {
             $output->writeln('Setup aborted. Options could not be updated.');
             return;
         }
 
-        if (!$this->setupUsers($input, $output)) {
+        if (!$this->setupUsers($input, $output, $messages)) {
             $output->writeln('Setup aborted. Users could not be verified.');
             return;
         }
 
-        if (!$this->updateSoftEntities()) {
+        if (!$this->updateSoftEntities($input, $output, $messages)) {
             $output->writeln('Setup aborted. Soft-entities could not be updated.');
             return;
         }
 
-        if (!$this->updateHardEntities()) {
+        if (!$this->updateHardEntities($input, $output, $messages)) {
             $output->writeln('Setup aborted. Hard-entities could not be updated.');
             return;
         }
 
-        $output->writeln('Setup has been verified. You are good to go!');
+        if (count($messages) == 0) {
+            $output->writeln('Setup has been verified. You are good to go!');
+        }
+        else {
+            $output->writeln('Setup has been verified and the following actions should be performed:');
+            $output->writeln('');
+
+            foreach($messages as $message) {
+                $output->writeln($message);
+            }
+        }
     }
 }

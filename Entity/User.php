@@ -423,7 +423,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -438,7 +438,7 @@ class User implements UserInterface
     /**
      * PrePersist the creation timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -452,7 +452,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -467,7 +467,7 @@ class User implements UserInterface
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -479,7 +479,7 @@ class User implements UserInterface
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -491,7 +491,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -506,7 +506,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -528,7 +528,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -543,7 +543,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -564,7 +564,7 @@ class User implements UserInterface
     /**
      * Set the encoder factory
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -576,7 +576,7 @@ class User implements UserInterface
     /**
      * Set the activityservice
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -590,7 +590,7 @@ class User implements UserInterface
     /**
      * Store a version
      * 
-     * @PivotX\UpdateDate     2012-12-14 16:05:56
+     * @PivotX\UpdateDate     2012-12-21 16:37:18
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
