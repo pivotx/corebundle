@@ -4,6 +4,7 @@ namespace PivotX\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use PivotX\Component\Referencer\Reference;
 
 
 class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
@@ -44,6 +45,45 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         //echo '<pre>'; var_dump($context); echo '</pre>';
 
         return $context;
+    }
+
+    /**
+     * Call forward() but use a reference as input
+     *
+     * @param $link either a string (textreference) or an actual Reference
+     */
+    public function forwardByReference($link)
+    {
+        $routing    = $this->get('pivotx.routing');
+        $routesetup = $routing->getRouteSetup();
+
+        $routematch = null;
+        if ($link instanceof Reference) {
+            $routematch = $routesetup->matchReference($link, true);
+        }
+        else {
+            $reference = new \PivotX\Component\Referencer\Reference(null, $link);
+
+            $routematch = $routesetup->matchReference($reference, true);
+        }
+
+        $parameters = array();
+        $controller = false;
+        if (!is_null($routematch)) {
+            $parameters = $routematch->getAttributes();
+
+            if (isset($parameters['_controller'])) {
+                $controller = $parameters['_controller'];
+            }
+
+            $this->getRequest()->attributes->add($parameters);
+        }
+
+        if (($controller !== false) && ($parameters !== false)) {
+            return $this->forward($controller, $parameters);
+        }
+
+        return null;
     }
 
     protected function runOnce()

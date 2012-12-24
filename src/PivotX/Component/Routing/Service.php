@@ -166,12 +166,6 @@ class Service
                 $route
             );
         }
-
-        /*
-         * @todo remove
-        $fname = '/tmp/routing.json';
-        file_put_contents($fname, json_encode($config));
-         */
     }
 
     public function setLatestRouteMatch(RouteMatch $routematch)

@@ -227,7 +227,9 @@ class RouteMatch
             }
         }
 
-        $url  = $this->routeprefix->buildUrl();
+        // @todo mfw: was this the correct fix for enabling the ->forward()
+        //$url  = $this->routeprefix->buildUrl();
+        $url  = $this->routeprefix->getLatestMatchPrefix();
         $url .= $this->route->buildUrl($this->arguments);
 
         return $url;
