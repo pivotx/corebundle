@@ -25,6 +25,7 @@ class Output
     protected $content = false;
     protected $type;
     protected $debuggable = false;
+    protected $routing_service = false;
 
     private static $last_source_directory = false;
     private static $active_temp_directory = false;
@@ -118,10 +119,9 @@ class Output
      * @param string $filename    cached filename
      * @return string             cache url to use
      */
-    public function getCacheUrl($filename)
+    protected function getCacheUrl($filename)
     {
-        // @todo error, error, wrong, error, wrong
-        return '/app_dev.php/cwr/'.$filename;
+        return $this->routing_service->buildUrl('(language=none)@_cwr/'.$filename);
     }
 
     /**
@@ -133,7 +133,7 @@ class Output
      * @param string $name_suggestion  name suggestion
      * @return string                  the cache url to use
      */
-    public function prepareCacheFile($content, $extension, $temp_directory, $name_suggestion)
+    private function prepareCacheFile($content, $extension, $temp_directory, $name_suggestion)
     {
         $fname = $this->determineCacheFilename($extension, $name_suggestion);
 
@@ -151,7 +151,7 @@ class Output
      * @param string $temp_directory  our cache directory
      * @return string                 the cache url to use
      */
-    public function copyFileToCache($source, $temp_directory)
+    private function copyFileToCache($source, $temp_directory)
     {
         $extension = 'dat';
         if (preg_match('|[.]([^.\\/]+)$|', $source, $match)) {
@@ -177,9 +177,11 @@ class Output
     {
         $target = trim($match[1]);
 
+
         if (preg_match('|^(["\'])(.+)\\1$|', $target, $quotematch)) {
             $target = $quotematch[2];
         }
+
 
         if (preg_match('/(https?|data)/', $target, $urlmatch)) {
             // ignore this string for now
@@ -236,12 +238,18 @@ class Output
         switch ($merge_filter) {
             case 'concat':
                 $data = '';
-                $first_src = $srcs[0];
+                $first_src = false;
                 foreach($srcs as $src) {
-                    $src  = preg_replace('|(.*)/cwr/(.+)|', '\\2', $src);
-                    $file = $temp_directory . '/' . $src;
+                    if ($src != '') {
+                        if ($first_src === false) {
+                            $first_src = $src;
+                        }
+                        // @todo ugly, we assume the url has 'cwr/' in it..
+                        $src  = preg_replace('|(.*)cwr/(.+)|', '\\2', $src);
+                        $file = $temp_directory . '/' . $src;
 
-                    $data .= file_get_contents($file) . "\n";
+                        $data .= file_get_contents($file) . "\n";
+                    }
                 }
                 $src = $this->prepareCacheFile($data, 'js', $temp_directory, '/merged/'.basename($first_src));
                 $content = '<script type="text/javascript" src="'.$src.'"></script>'."\n";
@@ -302,7 +310,8 @@ class Output
                 $data = '';
                 $first_href = $hrefs[0];
                 foreach($hrefs as $href) {
-                    $href  = preg_replace('|(.*)/cwr/(.+)|', '\\2', $href);
+                    // @todo ugly, we assume the url has 'cwr/' in it..
+                    $href  = preg_replace('|(.*)cwr/(.+)|', '\\2', $href);
                     $file = $temp_directory . '/' . $href;
 
                     $data .= file_get_contents($file) . "\n";
@@ -399,10 +408,11 @@ class Output
      *
      * @return string    html valid output
      */
-    public function getHtml($temp_directory)
+    public function getHtml($temp_directory, $routing_service)
     {
         $output = '';
 
+        $this->routing_service       = $routing_service;
         self::$active_temp_directory = $temp_directory;
 
         switch ($this->type) {

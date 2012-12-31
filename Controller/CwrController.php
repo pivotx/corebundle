@@ -8,14 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CwrController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 {
-    public function cwrAction(Request $request, $name)
+    public function cwrAction(Request $request, $file)
     {
         $code    = 404;
         $content = '<h1>File not found.</h1>';
         $headers = array();
 
         $directory = $this->get('kernel')->getCacheDir() . '/outputter/';
-        $filename  = preg_replace('|[^a-zA-Z0-9_.-]|', '', $name);
+        $filename  = preg_replace('|[^a-zA-Z0-9_.-]|', '', $file);
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
         if (file_exists($directory.$filename)) {

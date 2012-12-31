@@ -26,6 +26,6 @@ class GenericResourceController extends \Symfony\Bundle\FrameworkBundle\Controll
             }
         }
 
-        return new \Symfony\Component\HttpFoundation\Response($content, $code, $headers);
+        return new Response($content, $code, $headers);
     }
 }

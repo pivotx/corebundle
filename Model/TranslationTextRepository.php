@@ -49,7 +49,7 @@ class TranslationTextRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

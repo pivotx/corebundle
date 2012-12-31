@@ -104,7 +104,8 @@
         <service id="pivotx.outputter" class="%pivotx.outputter.class%" public="true">
             <argument type="service" id="logger" on-invalid="ignore" />
             <argument type="service" id="kernel" />
-            <argument type="service" id="debug.stopwatch" />
+            <argument type="service" id="pivotx.routing" />
+            <argument type="service" id="debug.stopwatch" on-invalid="ignore" />
         </service>
 
         <service id="pivotx.webresourcer" class="%pivotx.webresourcer.class%" public="true">

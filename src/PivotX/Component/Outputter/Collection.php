@@ -13,6 +13,7 @@ class Collection
 {
     private $groups;
     private $output_directory;
+    private $routing_service;
 
     // these locations are available by default and PivotX makes sure these work
     const HEAD_START = 'headStart';
@@ -21,9 +22,10 @@ class Collection
     const BODY_START = 'bodyStart';
     const BODY_END = 'bodyEnd';
 
-    public function __construct($output_directory)
+    public function __construct($output_directory, $routing_service)
     {
         $this->output_directory = $output_directory;
+        $this->routing_service  = $routing_service;
 
         $this->groups = array(
             self::HEAD_START => array(),
@@ -56,7 +58,7 @@ class Collection
 
             $groupoutput = '';
             foreach($outputs as $output) {
-                $groupoutput .= $output->getHtml($temp_directory);
+                $groupoutput .= $output->getHtml($temp_directory, $this->routing_service);
             }
 
             $html .= $groupoutput;

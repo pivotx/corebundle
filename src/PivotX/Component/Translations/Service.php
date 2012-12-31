@@ -113,6 +113,10 @@ class Service
         ));
 
         $method = 'getText'.ucfirst($language);
+        if (!method_exists($this->entity_class, $method)) {
+            $this->logger->warn('Unsupported language "'.$language.'" requested');
+            return;
+        }
 
         $tr = array();
         foreach($translations as $translation) {
@@ -135,11 +139,11 @@ class Service
         $language = null;
 
         if (!is_null($filter)) {
-            if (preg_match('/&(site|s)=([^&]+)/', '&'.$filter, $match)) {
-                $site = $match[1];
+            if (preg_match('/&?(site|s)=([^&]+)/', '&'.$filter, $match)) {
+                $site = $match[2];
             }
-            if (preg_match('/&(language|l)=([^&]+)/', '&'.$filter, $match)) {
-                $language = $match[1];
+            if (preg_match('/&?(language|l)=([^&]+)/', '&'.$filter, $match)) {
+                $language = $match[2];
             }
         }
 

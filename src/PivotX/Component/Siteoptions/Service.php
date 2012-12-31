@@ -96,6 +96,7 @@ class Service
         $language = null;
 
         if (!is_null($filter)) {
+            // @todo this is just wrong.. is_scalar and then preg_match??
             if (is_scalar($filter)) {
                 $site = $filter;
             }

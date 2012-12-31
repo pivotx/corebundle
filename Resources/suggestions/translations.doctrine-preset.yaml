@@ -22,11 +22,16 @@ any:
     text_en:        { en: 'text (english)', nl: 'tekst (engels)' }
     primary_tag:    { en: 'primary tag', nl: 'primaire tag' }
     theme_name:     { en: 'theme name', nl: 'thema naam' }
+    ref:            { en: 'internal reference', nl: 'interne referentie' }
 
     # Generic technical stuff
     id:                 { en: 'id', nl: 'id' }
     publicid:           { en: 'public id', nl: 'publieke id' }
+    parent_id:          { en: 'parent item', nl: 'bovenliggend item' }
+    user_id:            { en: 'user', nl: 'gebruiker' }
     level:              { en: 'level', nl: 'niveau' }
+    menu_title:         { en: 'menu title', nl: 'menu titel' }
+    order_number:       { en: 'order number', nl: 'volgordenummer' }
     date_creation:      { en: 'creation date', nl: 'aanmaakdatum' }
     date_created:       'date_creation'
     date_create:        'date_creation'
@@ -41,13 +46,17 @@ any:
     publication_date:   'date_publication'
     publish_date:       'date_publication'
     date_publish:       'date_publication'
+    date_published:     'date_publication'
     date_depublication: { en: 'depublication date', nl: 'depublicatiedatum' }
     depublication_date: 'date_depublication'
     depublish_date:     'date_depublication'
     date_depublish:     'date_depublication'
+    date_depublished:   'date_depublication'
     publish_state:      { en: 'publication status', nl: 'publicatiestatus' }
     event_start:        { en: 'event start', nl: 'evenement start' }
+    date_event_start:   'event_start'
     event_end:          { en: 'event end', nl: 'evenement einde' }
+    date_event_end:     'event_end'
     order_number:       { en: 'sortorder number', nl: 'volgordenummer' }
     date_logged:        { en: 'logdate', nl: 'logdatum' }
     date_last_login:    { en: 'last login date', nl: 'laatste logindatum' }
@@ -61,8 +70,7 @@ any:
     media_type:         { en: 'media type', nl: 'media formaat' }
     mediatype:          'media_type'
     uri:                { en: 'uri', nl: 'uri' }
-    state:              { en: 'state', nl: 'staat' }
-    state:              { en: 'state', nl: 'staat' }
+    state:              { en: 'state', nl: 'status' }
     autoload:           { en: 'autoload', nl: 'automatisch laden' }
     rawhtml:            { en: 'raw html', nl: 'rauwe html' }
     value:              { en: 'value', nl: 'waarde' }
@@ -88,3 +96,41 @@ genericresource:
 
 user:
     entity.title:       { en: 'users', nl: 'gebruikers' }
+
+sites:
+    item:
+        plural_title:   { en: 'items', nl: 'items' }
+        plural_slug:    { en: 'items', nl: 'items' }
+        singular_title: { en: 'item', nl: 'item' }
+        singular_slug:  { en: 'item', nl: 'item' }
+
+    page:
+        plural_title:   { en: 'pages', nl: "pagina's" }
+        plural_slug:    { en: 'pages', nl: 'paginas' }
+        singular_title: { en: 'page', nl: 'pagina' }
+        singular_slug:  { en: 'page', nl: 'pagina' }
+
+    entry:
+        plural_title:   { en: 'entries', nl: 'berichten' }
+        plural_slug:    { en: 'entries', nl: 'berichten' }
+        singular_title: { en: 'entry', nl: 'bericht' }
+        singular_slug:  { en: 'entry', nl: 'bericht' }
+
+    category:
+        plural_title:   { en: 'categories', nl: 'categorieen' }
+        plural_slug:    { en: 'categories', nl: 'categorieen' }
+        singular_title: { en: 'category', nl: 'categorie' }
+        singular_slug:  { en: 'category', nl: 'categorie' }
+
+    event:
+        plural_title:   { en: 'events', nl: 'evenementen' }
+        plural_slug:    { en: 'events', nl: 'evenementen' }
+        singular_title: { en: 'event', nl: 'evenement' }
+        singular_slug:  { en: 'event', nl: 'evenement' }
+
+    chapter:
+        plural_title:   { en: 'chapters', nl: 'hoofdstukken' }
+        plural_slug:    { en: 'chapters', nl: 'hoofdstukken' }
+        singular_title: { en: 'chapter', nl: 'hoofdstuk' }
+        singular_slug:  { en: 'chapter', nl: 'hoofdstuk' }
+

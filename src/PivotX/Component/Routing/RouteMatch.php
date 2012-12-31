@@ -396,6 +396,8 @@ class RouteMatch
     {
         $reference = new \PivotX\Component\Referencer\Reference($this->buildReference(), $link);
 
+        //echo '<pre>';var_dump($reference);echo '</pre><br/>';
+
         $routematch = $this->routesetup->matchReference($reference);
 
         if (!is_null($routematch)) {

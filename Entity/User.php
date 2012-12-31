@@ -23,7 +23,7 @@ class User implements UserInterface
     private $email;
     private $passwd_salt;
     private $passwd;
-    private $theme_name;
+    private $settings;
     private $activitylogs;
 
     /**
@@ -241,24 +241,25 @@ class User implements UserInterface
     }
 
     /**
-     * Set theme_name
+     * Set settings
      *
-     * @param string $theme_name
+     * @param mixed $settings
      */
-    public function setThemeName($theme_name)
+    public function setSettings($settings)
     {
-        $this->theme_name = $theme_name;
+        $this->settings = json_encode($settings);
     }
 
     /**
-     * Get theme_name
+     * Get settings
      *
-     * @return string 
+     * @return mixed 
      */
-    public function getThemeName()
+    public function getSettings()
     {
-        return $this->theme_name;
+        return json_decode($this->settings, true);
     }
+
 
     /**
      * Add activitylog
@@ -423,7 +424,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -438,7 +439,7 @@ class User implements UserInterface
     /**
      * PrePersist the creation timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -452,7 +453,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -467,7 +468,7 @@ class User implements UserInterface
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -479,7 +480,7 @@ class User implements UserInterface
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -491,7 +492,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -506,7 +507,22 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
+     */
+    public function getCrudConfiguration_settings()
+    {
+        return array(
+            'name' => 'settings',
+            'type' => false
+        );
+    }
+
+    /**
+     * Return the CRUD field configuration
+     * 
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -528,7 +544,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -543,7 +559,7 @@ class User implements UserInterface
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -564,7 +580,7 @@ class User implements UserInterface
     /**
      * Set the encoder factory
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -576,7 +592,7 @@ class User implements UserInterface
     /**
      * Set the activityservice
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -590,13 +606,13 @@ class User implements UserInterface
     /**
      * Store a version
      * 
-     * @PivotX\UpdateDate     2012-12-21 16:37:18
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
     public function onPxPreUpdate_Loggable($changeset)
     {
-        $fields = array( "date_created","date_modified","date_last_login","enabled","level","email","theme_name" );
+        $fields = array( "date_created","date_modified","date_last_login","enabled","level","email","settings" );
 
         $data    = array();
         $changes = false;
@@ -623,5 +639,18 @@ class User implements UserInterface
 
         return null;
     }
+
+    /**
+     * Returns the generic title for this object
+     *
+     * @PivotX\UpdateDate     2012-12-28 17:22:24
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
+     */
+    public function getGenericTitle()
+    {
+        return $this->email;
+    }
+
 
 }

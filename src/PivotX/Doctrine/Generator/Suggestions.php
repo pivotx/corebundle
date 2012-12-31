@@ -2,6 +2,10 @@
 namespace PivotX\Doctrine\Generator;
 
 
+use Symfony\Component\Yaml\Yaml;
+use PivotX\CoreBundle\Entity\TranslationText;
+
+
 /**
  * Suggestions for new entity types and entity features
  *
@@ -212,6 +216,7 @@ class Suggestions
                 'description' => 'Depublication date',
                 'orm' => array(
                     'type' => 'datetime',
+                    'nullable' => true,
                     'auto_entity' => array(
                         'publishable' => array(
                             'type' => 'depublish_date'
@@ -223,7 +228,8 @@ class Suggestions
                 'type_description' => 'choices',
                 'description' => 'Publish state (publish, hold, publish_on)',
                 'orm' => array(
-                    'type' => 'datetime',
+                    'type' => 'string',
+                    'length' => 32,
                     'auto_entity' => array(
                         'publishable' => array(
                             'type' => 'publish_state'
@@ -234,21 +240,35 @@ class Suggestions
 
             'relation.genericresource.single' => array(
                 'type_description' => 'single-resource',
-                'description' => 'A single resource field.'
+                'description' => 'A single resource field.',
+                'relation' => array(
+                    'type' => 'manyToOne',
+                    'targetEntity' => 'PivotX\CoreBundle\Entity\GenericResource',
+                )
             ),
             'relation.genericresource.multiple' => array(
                 'type_description' => 'multiple-resource',
-                'description' => 'A multiple resource field.'
+                'description' => 'A multiple resource field.',
+                'relation' => array(
+                    'type' => 'manyToMany',
+                    'targetEntity' => 'PivotX\CoreBundle\Entity\GenericResource',
+                )
             ),
             'relation.any.many-to-one' => array(
                 'type_description' => 'many-to-one',
                 'description' => 'A many-to-one relation field.',
-                'needs' => 'relation'
+                'needs' => 'relation',
+                'relation' => array(
+                    'type' => 'manyToOne',
+                )
             ),
             'relation.any.many-to-many' => array(
                 'type_description' => 'many-to-many',
                 'description' => 'A many-to-many relation field.',
-                'needs' => 'relation'
+                'needs' => 'relation',
+                'relation' => array(
+                    'type' => 'manyToMany',
+                )
             ),
         );
 
@@ -337,10 +357,10 @@ class Suggestions
                     array( 'name' => 'id',                 'type' => 'entity.id' ),
                     array( 'name' => 'date_created',       'type' => 'feature.timestampable.create' ),
                     array( 'name' => 'date_modified',      'type' => 'feature.timestampable.update' ),
-                    array( 'name' => 'date_publication',   'type' => 'feature.publishable.publish' ),
                     array( 'name' => 'publish_state',      'type' => 'feature.publishable.state' ),
+                    array( 'name' => 'date_publication',   'type' => 'feature.publishable.publish' ),
                     array( 'name' => 'date_depublication', 'type' => 'feature.publishable.depublish' ),
-                    array( 'name' => 'user_id',            'type' => 'relation.any.many-to-one',    'relation' => 'User.id' ),
+                    array( 'name' => 'user',               'type' => 'relation.any.many-to-one',    'relation' => 'PivotX\CoreBundle\Entity\User' ),
                     array( 'name' => 'title',              'type' => 'html.text' ),
                     array( 'name' => 'slug',               'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
                     array( 'name' => 'body',               'type' => 'html.textarea' ),
@@ -356,10 +376,10 @@ class Suggestions
                     array( 'name' => 'id',                 'type' => 'entity.id' ),
                     array( 'name' => 'date_created',       'type' => 'feature.timestampable.create' ),
                     array( 'name' => 'date_modified',      'type' => 'feature.timestampable.update' ),
-                    array( 'name' => 'date_publication',   'type' => 'feature.publishable.publish' ),
                     array( 'name' => 'publish_state',      'type' => 'feature.publishable.state' ),
+                    array( 'name' => 'date_publication',   'type' => 'feature.publishable.publish' ),
                     array( 'name' => 'date_depublication', 'type' => 'feature.publishable.depublish' ),
-                    array( 'name' => 'user_id',            'type' => 'relation.any.many-to-one',    'relation' => 'User.id' ),
+                    array( 'name' => 'user',               'type' => 'relation.any.many-to-one',    'relation' => 'PivotX\CoreBundle\Entity\User' ),
                     array( 'name' => 'title',              'type' => 'html.text' ),
                     array( 'name' => 'slug',               'type' => 'feature.sluggable.slug',          'arguments' => '%title%' ),
                     array( 'name' => 'image',              'type' => 'relation.genericresource.single' ),
@@ -392,8 +412,8 @@ class Suggestions
                     array( 'name' => 'id',                 'type' => 'entity.id' ),
                     array( 'name' => 'date_created',       'type' => 'feature.timestampable.create' ),
                     array( 'name' => 'date_modified',      'type' => 'feature.timestampable.update' ),
-                    array( 'name' => 'date_publication',   'type' => 'feature.publishable.publish' ),
                     array( 'name' => 'publish_state',      'type' => 'feature.publishable.state' ),
+                    array( 'name' => 'date_publication',   'type' => 'feature.publishable.publish' ),
                     array( 'name' => 'date_depublication', 'type' => 'feature.publishable.depublish' ),
                     array( 'name' => 'date_event_start',   'type' => 'html.datetime' ),
                     array( 'name' => 'date_event_end',     'type' => 'html.datetime' ),
@@ -506,6 +526,24 @@ class Suggestions
         return null;
     }
 
+    public function getRelationFromDefinition($definition)
+    {
+        $type = $definition['type'];
+
+        if (isset($this->types[$type])) {
+            if (isset($this->types[$type]['relation'])) {
+                $relation = $this->types[$type]['relation'];
+                $relation['id'] = $definition['name'];
+                if (!isset($relation['targetEntity'])) {
+                    $relation['targetEntity'] = $definition['relation'];
+                }
+                return $relation;
+            }
+        }
+
+        return null;
+    }
+
     public function getTwigFieldFromType($type)
     {
         $field = array(
@@ -568,6 +606,27 @@ class Suggestions
         unset($entity['description']);
 
         return $entity;
+    }
+
+    public function setTranslationsForNewEntity($translations, $site, $entity_name)
+    {
+        $entity_name = strtolower($entity_name);
+
+        // @todo wrong..
+        $fname = dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/Resources/suggestions/translations.doctrine-preset.yaml';
+
+        $suggestions = Yaml::parse($fname);
+
+        $sites = $suggestions['sites'];
+
+        $name = $entity_name;
+        if (!isset($sites[$name])) {
+            $name = 'item';
+        }
+
+        foreach($sites[$name] as $k => $v) {
+            $translations->setTexts($entity_name, 'common.'.$k, $site, null, $v, TranslationText::STATE_SUGGESTED);
+        }
     }
 
     public function buildEntity($type, $name, $bundle)

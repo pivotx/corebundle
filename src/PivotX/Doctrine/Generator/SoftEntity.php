@@ -158,6 +158,7 @@ class SoftEntity
 
         $yaml_fields   = array();
         $yaml_features = array();
+        $yaml_relation = array();
 
         foreach($this->config['fields'] as $definition) {
             $id = $definition['name'];
@@ -187,7 +188,22 @@ class SoftEntity
                 }
             }
 
-            $yaml_fields[$id] = $field;
+            $relation = $suggestions->getRelationFromDefinition($definition);
+
+            if (!is_null($relation)) {
+                $id   = $relation['id'];
+                $type = $relation['type'];
+                unset($relation['id']);
+                unset($relation['type']);
+
+                if (!isset($yaml_relation[$type])) {
+                    $yraml_relation[$type] = array();
+                }
+                $yaml_relation[$type][$id] = $relation;
+            }
+            else {
+                $yaml_fields[$id] = $field;
+            }
         }
 
         if (isset($this->config['features'])) {
@@ -207,6 +223,8 @@ class SoftEntity
             'fields' => $yaml_fields,
             'auto_entity' => $yaml_features
         );
+
+        $yaml_entity = array_merge($yaml_entity, $yaml_relation);
 
         $entity_class = $this->getEntityClass();
         $yaml = array(
@@ -323,7 +341,7 @@ THEEND;
     {
         $filename = $this->getYamlFilename();
 
-        if (unlink($filename)) {
+        if (file_exists($filename) && unlink($filename)) {
             return true;
         }
 

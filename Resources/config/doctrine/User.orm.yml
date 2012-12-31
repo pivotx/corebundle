@@ -93,13 +93,16 @@ PivotX\CoreBundle\Entity\User:
       auto_entity:
         passwordable:
           type: password
-    theme_name:
-      type: string
-      length: 64
+    settings:
+      type: text
+      length: null
       precision: 0
       scale: 0
-      nullable: true
+      nullable: false
       unique: false
+      auto_entity:
+        pivotx_ignore:
+          ~
   oneToMany:
     activitylogs:
       targetEntity: User
@@ -111,3 +114,5 @@ PivotX\CoreBundle\Entity\User:
         days:        365
         records:     100
       remove-fields: [ 'passwd', 'passwd_salt' ]
+    genericable:
+      title:         '%email%'

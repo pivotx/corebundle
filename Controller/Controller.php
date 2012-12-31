@@ -90,6 +90,8 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
     {
         $webresourcer = $this->container->get('pivotx.webresourcer');
         $webresourcer->finalizeWebresources();
+
+        return null;
     }
 
     public function render($view, array $parameters = array(), Response $response = null)
@@ -100,7 +102,11 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         if ($run_once === false) {
             $run_once = true;
 
-            $this->runOnce();
+            $once_response = $this->runOnce();
+
+            if ((!is_null($once_response)) && ($once_response instanceof Response)) {
+                return $once_response;
+            }
         }
 
 

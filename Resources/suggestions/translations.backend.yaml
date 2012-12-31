@@ -48,8 +48,13 @@ form:
     backend_file.status-fail:           { en: 'Failed', nl: 'Mislukt' }
     backend_file.uploadbutton-singular: { en: 'Choose file', nl: 'Kies bestand' }
     backend_unique.empty-value:         { en: '(no value)', nl: '(geen waarde)' }
+    choices.empty-value:                { en: '(choose)', nl: '(kies)' }
 
 config:
     check.require-attention:    { en: 'Require attention.', nl: 'Aandacht nodig.' }
     check.entities.false:       { en: 'Ok.', nl: 'Ok.' }
     check.entities.true:        { en: 'Run the command-line setup.', nl: 'Doe de command-line setup.' }
+
+entities:
+    message.entity-is-fixed:    { en: 'Cannot be edited by this backend.', nl: 'Kan niet bewerkt worden door de backend.' }
+    message.entity-is-deleted:  { en: 'Entity has been deleted. Update the configuration.', nl: 'Entiteit is verwijderd. Update de configuratie.' }

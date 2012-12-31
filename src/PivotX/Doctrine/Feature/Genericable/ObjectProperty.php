@@ -1,16 +1,12 @@
 <?php
 
-namespace PivotX\Doctrine\Feature\Publishable;
+namespace PivotX\Doctrine\Feature\Genericable;
 
 
 class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
 {
     private $fields = null;
     private $metaclassdata = null;
-
-    private $field_publish_date = 'date_publication';
-    private $field_depublish_date = 'date_depublication';
-    private $field_publish_state = 'publish_state';
 
     public function __construct(array $fields, $metaclassdata)
     {
@@ -22,20 +18,7 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
     {
         $methods = array();
 
-        // @todo not called atm
-
-        $have_state = false;
-        foreach($this->fields as $lfield) {
-            if ($lfield[1]['type'] == 'publish_state') {
-                $have_state = true;
-            }
-        }
-        if ($have_state) {
-            $methods['isPublished'] = 'generateIsPublishedWithState';
-        }
-        else {
-            $methods['isPublished'] = 'generateIsPublishedWithoutState';
-        }
+        $methods['getGenericTitle'] = 'generateGenericTitle';
 
         return $methods;
     }
@@ -44,54 +27,38 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
     {
         $methods = array();
 
-        //$methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfiguration';
+        return $methods;
+    }
 
-        foreach($this->fields as $lfield) {
-            if ($lfield[0] == $field) {
-                switch ($lfield[1]['type']) {
-                    case 'publish_date':
-                        $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfigurationPublishDate';
-                        break;
-                    case 'depublish_date':
-                        $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfigurationDepublishDate';
-                        break;
-                    case 'publish_state':
-                        $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfigurationPublishState';
-                        break;
+    public function generateGenericTitle($classname, $config)
+    {
+        $title_field = false;
+
+        // @todo read actual configuration
+
+        if ($title_field === false) {
+            foreach($this->metaclassdata->fieldMappings as $name => $data) {
+                if (in_array($name, array('title', 'name', 'email'))) {
+                    $title_field = $name;
+                    break;
                 }
             }
         }
 
-        return $methods;
-    }
-
-    public function generateIsPublishedWithoutState($classname, $config)
-    {
-        $date_field = false;
-        foreach($this->fields as $lfield) {
-            if ($lfield[1]['type'] == 'publish_date') {
-                $date_field = $lfield[0];
-            }
+        if ($title_field === false) {
+            // @todo
+            $title_field = 'id';
         }
-
-        if ($date_field === false) {
-            return '';
-        }
-
-        $method_call = $date_field.'->getTimestamp()';
 
         return <<<THEEND
     /**
-     * Returns true if entity is published
+     * Returns the generic title for this object
      *
 %comment%
      */
-    public function isPublished()
+    public function getGenericTitle()
     {
-        if (time() >= \$this->$method_call) {
-            return true;
-        }
-        return false;
+        return \$this->$title_field;
     }
 
 THEEND;
@@ -165,27 +132,6 @@ THEEND;
     }
 
     public function generateGetCrudConfigurationPublishDate($classname, $field, $config)
-    {
-        return <<<THEEND
-    /**
-     * Return the CRUD field configuration
-     * 
-%comment%
-     */
-    public function getCrudConfiguration_$field()
-    {
-        return array(
-            'name' => '$field',
-            'type' => 'datetime',
-            'arguments' => array(
-                'data' => new \DateTime()
-            )
-        );
-    }
-THEEND;
-    }
-
-    public function generateGetCrudConfigurationDepublishDate($classname, $field, $config)
     {
         return <<<THEEND
     /**

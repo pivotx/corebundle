@@ -63,6 +63,27 @@ class Service
         $this->processArrayConfig($config);
     }
 
+    public function replaceMacros($in)
+    {
+        if (preg_match_all('|%([^%]+)%|', $in, $matches) > 0) {
+            $replacements = array();
+            for($i=0; $i < count($matches[0]); $i++) {
+                switch ($matches[1][$i]) {
+                    case 'request.host':
+                        // @todo we should get either the kernel or the kernel's container
+                        if (isset($_SERVER['HTTP_HOST'])) {
+                            $replacements[$matches[0][$i]] = $_SERVER['HTTP_HOST'];
+                        }
+                        break;
+                }
+            }
+
+            return strtr($in, $replacements);
+        }
+
+        return $in;
+    }
+
     private function processArrayConfig($config)
     {
         if (!isset($config['targets']) || !is_array($config['targets'])) {
@@ -122,7 +143,7 @@ class Service
                 return;
             }
             $filter      = array ( 'target' => $routeprefixa['filter']['target'], 'site' => $routeprefixa['filter']['site'], 'language' => $routeprefixa['filter']['language'] );
-            $prefix      = $routeprefixa['prefix'];
+            $prefix      = $this->replaceMacros($routeprefixa['prefix']);
             $aliases     = array();
             if (isset($routeprefixa['aliases'])) {
                 $aliases = $routeprefixa['aliases'];

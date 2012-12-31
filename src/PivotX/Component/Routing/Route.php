@@ -351,7 +351,6 @@ class Route
         if ($this->matchFilter($filter)) {
             if ($this->entity == $reference->getEntity()) {
                 if ($this->efilter_pattern !== false) {
-                    // echo 'pattern['.$this->efilter_pattern.']'." - ".$efilter."\n";
                     if (preg_match($this->efilter_pattern,$efilter,$matches)) {
                         $arguments = array();
                         foreach($this->requirements as $k => $v) {
