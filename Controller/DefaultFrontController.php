@@ -103,6 +103,10 @@ class DefaultFrontController extends Controller
         $repository = $this->get('doctrine')->getRepository($entity_class);
         $record = $repository->find($id);
 
+        if (is_null($record)) {
+            return $this->forwardByReference('_http/404');
+        }
+
         return $this->_showEntityTemplate($request, $entity, $entity_class, $record);
     }
 }
