@@ -79,13 +79,25 @@ class DefaultFrontController extends Controller
 
     public function showEntityBySlugAction(Request $request, $slug)
     {
-        $parameters = $this->getDefaultHtmlContext();
+        if (!$request->attributes->has('_entity')) {
+            return $this->forwardByReference('_http/404');
+        }
 
-        $views = array();
+        $entity       = $request->attributes->get('_entity');
+        $entity_class = $this->getEntityClassByName($entity);
+        if (is_null($entity_class)) {
+            return $this->forwardByReference('_http/500');
+        }
 
-        $views[] = 'CoreBundle:Default:entity.html.twig';
+        // @todo ouch this just assumes the field is called 'slug'
+        $repository = $this->get('doctrine')->getRepository($entity_class);
+        $record = $repository->findOneBySlug($slug);
 
-        return $this->render($views, $parameters);
+        if (is_null($record)) {
+            return $this->forwardByReference('_http/404');
+        }
+
+        return $this->_showEntityTemplate($request, $entity, $entity_class, $record);
     }
 
     public function showEntityByIdAction(Request $request, $id)

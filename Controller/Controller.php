@@ -45,8 +45,6 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             );
         }
 
-        //echo '<pre>'; var_dump($context); echo '</pre>';
-
         return $context;
     }
 

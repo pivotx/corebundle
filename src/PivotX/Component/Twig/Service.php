@@ -297,6 +297,19 @@ class Service extends \Twig_Extension
     {
         $documentation = array(
             'introduction' => '',
+            'template_suggestion' => $object_name.'.html.twig',
+            'template_example' => new \Twig_Markup(<<<THEEND
+<pre class="snippet">
+{% extends "CoreBundle::Html/Html5.html.twig" %}
+
+{% block body_content %}
+
+&lt;h2&gt;{{ $object_name.title }}&lt;/h2&gt;
+
+{% endblock %}
+</pre>
+THEEND
+, 'utf-8'),
             'examples' => array()
         );
 

@@ -4,25 +4,43 @@
 
 {% if developer_help %}
 
-<h1>Fall-back template for single entity "{{ entity }}"</h1>
+    {% set documentation = unusable_record|pivotx_documentation(entity) %}
+
+<h1>Fall-back template for {{ entity }}</h1>
 
 <p>
-    You are now viewing the fall-back template for entity "{{ entity }}".<br/>
-    You should configure you're own template. Below you will find suggestion on
-    how to do this and also which fields are available and examples how to use them.
+    You are now viewing the fall-back template for entity "{{ entity }}", meaning
+    you have not configured your own template yet.
+</p>
+<p>
+    In this document we help you to create your own template.
 </p>
 
-<h2>How to configure</h2>
 
-<dl>
-    <dt>Suggested template:</dt>
-    <dd>{{ entity }}.html.twig</dd>
-</dl>
+<h2>Table of contents</h2>
+
+<ol>
+    <li><a href="#configure">How to configure</a></li>
+    <li><a href="#fields">Available fields and how to use them</a></li>
+    <li><a href="#dump">Dump of {{ entity }} with id {{ unusable_record.id }}</a></li>
+</ol>
 
 
-<h2>Available fields</h2>
+<h2 id="configure">How to configure</h2>
 
-{% set documentation = unusable_record|pivotx_documentation(entity) %}
+<p>
+    We suggest you create the following template: <strong>{{ documentation.template_suggestion }}</strong>.
+</p>
+
+<p>
+    Paste the following snippet to jump-start your template:
+</p>
+
+{{ documentation.template_example }}
+
+
+<h2 id="fields">Available fields and how to use them</h2>
+
 
 <dl>
 {% for example in documentation.examples %}
@@ -33,7 +51,7 @@
 </dl>
 
 
-<h2>Dump of "{{ entity }}" contents for id {{ unusable_record.id }}</h2>
+<h2 id="dump">Dump of {{ entity }} with id {{ unusable_record.id }}</h2>
 
 {{ pxdump(unusable_record) }}
 

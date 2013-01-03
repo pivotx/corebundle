@@ -1,0 +1,29 @@
+{#
+    This is the default HTML5 template.
+#}
+<!DOCTYPE html>
+<html lang="{{ app.request.get('_language') }}">
+
+    <head>
+        {{ outputter('headStart') }}
+
+        <meta charset="{{ html.meta.charset }}">
+
+        <title>{{ html.title }}</title>
+
+        {{ outputter('titleAfter') }}
+        
+        {{ outputter('headEnd') }}
+    </head>
+
+    <body{{ block body_attributes }}{{ endblock }}>
+        {{ outputter('bodyStart') }}
+
+        {% block body_content %}
+
+        {% endblock %}
+
+        {{ outputter('bodyEnd') }}
+    </body>
+
+</html>
