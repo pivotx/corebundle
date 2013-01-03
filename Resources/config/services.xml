@@ -68,6 +68,7 @@
         <service id="pivotx.siteoptions" class="%pivotx.siteoptions.class%" public="true">
             <argument type="service" id="pivotx.routing" />
             <argument type="service" id="doctrine" />
+            <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 
         <service id="pivotx.routing" class="%pivotx.routing.class%">

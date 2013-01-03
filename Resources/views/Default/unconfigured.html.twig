@@ -1,1 +1,15 @@
-<p>Oops.</p>
+{% extends "CoreBundle::Default/base.html.twig" %}
+
+{% block content %}
+
+    <h1>Oops!</h1>
+
+    <p>It seems that there is no view configured or found.</p>
+
+    {% if debug %}
+        <h2>This is the routing information:</h2>
+
+        {{ pxdump(routing) }}
+    {% endif %}
+
+{% endblock %}

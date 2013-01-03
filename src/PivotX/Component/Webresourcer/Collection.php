@@ -14,12 +14,14 @@ namespace PivotX\Component\Webresourcer;
 
 class Collection
 {
+    protected $webresources;
     protected $webresource_weights;
 
     /**
      */
     public function __construct()
     {
+        $this->webresources        = array();
         $this->webresource_weights = array();
     }
 

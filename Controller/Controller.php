@@ -109,6 +109,11 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             }
         }
 
+        if (count($parameters) == 0) {
+            die('No parameters given. Aborting.');
+            // @todo maybe we should not do this (because not always necessary)
+            $parameters = $this->getDefaultHtmlContext();
+        }
 
         if (is_null($view)) {
             $request = $this->getRequest();
@@ -116,20 +121,20 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         }
         if (is_null($view)) {
             $view = 'CoreBundle:Default:unconfigured.html.twig';
-        }
 
-        if (count($parameters) == 0) {
-            $parameters = $this->getDefaultHtmlContext();
+            $parameters['debug'] = $this->get('kernel')->isDebug();
         }
 
         //echo '<hr/><pre>'; var_dump($parameters); echo '</pre><hr/>';
 
-        //$parameters['html'] = $parameters;
-
         if (is_array($view)) {
             foreach($view as $_view) {
                 try {
-                    return parent::render($_view, $parameters, $response);
+                    $actual_response = parent::render($_view, $parameters, $response);
+
+                    $this->get('pivotx.siteoptions')->logCachePerformance();
+
+                    return $actual_response;
                 }
                 catch (\InvalidArgumentException $e) {
                 }
@@ -137,7 +142,11 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             throw new \InvalidArgumentException('Cannot find any of the given templates.');
         }
 
-        return parent::render($view, $parameters, $response);
+        $actual_response = parent::render($view, $parameters, $response);
+
+        $this->get('pivotx.siteoptions')->logCachePerformance();
+
+        return $actual_response;
     }
 
     public function anyAction(Request $request)

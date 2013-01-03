@@ -36,7 +36,7 @@ class Routing
             'pattern' => $pattern,
             'public' => $public,
             'defaults' => array(
-                '_controller' => 'CoreBundle::DefaultFrontController::showEntityBySlug',
+                '_controller' => 'CoreBundle:DefaultFront:showEntityBySlug',
                 //'_view' => $view
             ),
             'requirements' => array(
@@ -56,7 +56,7 @@ class Routing
             'pattern' => $pattern,
             'public' => $public,
             'defaults' => array(
-                '_controller' => 'CoreBundle::DefaultFrontController::showEntityById',
+                '_controller' => 'CoreBundle:DefaultFront:showEntityById',
                 //'_view' => $view
             ),
             'requirements' => array(

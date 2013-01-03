@@ -8,8 +8,9 @@
 
 namespace PivotX\Component\Siteoptions;
 
-use PivotX\Component\Routing\Service as RoutingService;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use PivotX\Component\Routing\Service as RoutingService;
 use PivotX\CoreBundle\Entity\SiteOption;
 
 /**
@@ -21,6 +22,7 @@ use PivotX\CoreBundle\Entity\SiteOption;
  */
 class Service
 {
+    private $pivotx_logger = false;
     private $pivotx_routing = false;
     private $doctrine_registry = false;
     private $entity_manager = false;
@@ -29,14 +31,24 @@ class Service
     // If true, we don't flush after every ->persist()
     private $in_transaction = false;
 
-    public function __construct(RoutingService $pivotx_routing, Registry $doctrine_registry)
+    // siteoptions cache: a simple read-only cache
+    private $cache = false;
+    private $cache_hits = 0;
+    private $cache_misses = 0;
+    private $cache_miss_keys = false;
+
+    public function __construct(RoutingService $pivotx_routing, Registry $doctrine_registry, LoggerInterface $logger)
     {
         $this->pivotx_routing    = $pivotx_routing;
         $this->doctrine_registry = $doctrine_registry;
+        $this->pivotx_logger     = $logger;
 
         $this->entity_manager = $this->doctrine_registry->getEntityManager();
 
         $this->determineEntityClass();
+
+        $this->cache = array();
+        $this->cache_miss_keys = array();
     }
 
     /**
@@ -129,6 +141,54 @@ class Service
     }
 
     /**
+     */
+    public function logCachePerformance()
+    {
+        if (!is_null($this->pivotx_logger)) {
+            $this->pivotx_logger->info('Siteoptions cache statistics: hits='.$this->cache_hits.', misses='.$this->cache_misses);
+
+            if (count($this->cache_miss_keys) > 0) {
+                foreach($this->cache_miss_keys as $key) {
+                    $this->pivotx_logger->info('Siteoptions cache-miss: key='.$key);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get the internal cachekey
+     */
+    private function getCacheKey($groupname, $name, $site)
+    {
+        $cachekey  = $groupname.'.'.$name;
+        if (!is_null($site)) {
+            $cachekey = $site.'.'.$cachekey;
+        }
+
+        return $cachekey;
+    }
+
+    /**
+     * Cache the autoloads
+     */
+    public function initAutoloadsToCache()
+    {
+        $arguments = array(
+            'autoload' => true
+        );
+
+        $siteoptions = $this->doctrine_registry->getRepository($this->entity_class)->findBy($arguments);
+
+        foreach($siteoptions as $siteoption) {
+            $cachekey = $this->getCacheKey($siteoption->getGroupname(), $siteoption->getName(), $siteoption->getSitename());
+
+            $this->cache[$cachekey] = $siteoption;
+        }
+
+        return true;
+    }
+
+    /**
      * Find the entity of the key/filter
      *
      * @param string $key         key to search for
@@ -144,16 +204,30 @@ class Service
             'name' => $name
         );
         if (!is_null($site)) {
-            $arguments['sitename'] = $site;
+            $arguments['sitename']  = $site;
+        }
+
+        $cachekey = $this->getCacheKey($groupname, $name, $site);
+        if (isset($this->cache[$cachekey])) {
+            $this->cache_hits++;
+            return $this->cache[$cachekey];
         }
 
         $siteoption = $this->doctrine_registry->getRepository($this->entity_class)->findOneBy($arguments);
+
+        $this->cache[$cachekey] = $siteoption;
+        $this->cache_misses++;
+
+        // only enable when developing PX4
+        $this->cache_miss_keys[] = $cachekey;
 
         return $siteoption;
     }
 
     /**
      * Get a particular group of siteoptions
+     * 
+     * The cache is bypassed by this function.
      *
      * @param string $sitename      sitename to search for, if null then don't search
      * @param string $groupname     groupname to search for, if null then don't search
@@ -236,6 +310,8 @@ class Service
 
     /**
      * Set value for a specific key
+     *
+     * Cache is not updated for this at the moment.
      *
      * Default arguments will not be changed for existing keys.
      * For new keys, the following .real. defaults will be used:

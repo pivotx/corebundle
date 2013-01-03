@@ -47,20 +47,23 @@ class Service
 
     public function load($fname)
     {
-        //echo "Loading Route Service..\n";
         $this->logger->info('Loading PivotX Routefile '.$fname);
 
         // @todo this is really wrong
         $config = Yaml::parse($fname);
 
-        $this->processArrayConfig($config);
+        if (!$this->processArrayConfig($config, true)) {
+            $this->logger->info('PivotX routing failure, file: '.$fname);
+        }
     }
 
     public function processTextConfig($text)
     {
         $config = Yaml::parse($text);
 
-        $this->processArrayConfig($config);
+        if (!$this->processArrayConfig($config, true)) {
+            $this->logger->info('PivotX routing failure, text input');
+        }
     }
 
     public function replaceMacros($in)
@@ -84,29 +87,54 @@ class Service
         return $in;
     }
 
-    private function processArrayConfig($config)
+    public function loadCompiledRoutes($routing)
+    {
+        $this->processArrayConfig($routing, false);
+
+        return true;
+    }
+
+    /**
+     * Process array styled routing configuration
+     *
+     * @param array $config    routing data
+     * @param boolean $strict  fail if routing information is not complete
+     * @return boolean         true if routing information was ok
+     */
+
+    private function processArrayConfig($config, $strict = false)
     {
         if (!isset($config['targets']) || !is_array($config['targets'])) {
-            // @todo throw exception
-            $this->logger->err('No targets defined in route configuration.');
-            return;
+            if ($strict) {
+                echo '<pre>'; var_dump($config); echo '</pre>';
+                // @todo throw exception
+                $this->logger->err('No targets defined in route configuration.');
+                return false;
+            }
+            $config['targets'] = array();
         }
         if (!isset($config['sites']) || !is_array($config['sites'])) {
-            // @todo throw exception
-            $this->logger->err('No sites defined in route configuration.');
-            return;
+            if ($strict) {
+                // @todo throw exception
+                $this->logger->err('No sites defined in route configuration.');
+                return false;
+            }
+            $config['sites'] = array();
         }
         if (!isset($config['languages']) || !is_array($config['languages'])) {
-            // @todo throw exception
-            $this->logger->err('No languages defined in route configuration.');
-            return;
+            if ($strict) {
+                // @todo throw exception
+                $this->logger->err('No languages defined in route configuration.');
+                return false;
+            }
+            $config['languages'] = array();
         }
 
         foreach($config['targets'] as $targeta) {
             if (!isset($targeta['name']) || !isset($targeta['description'])) {
                 // @todo throw exception
                 $this->logger->err('No name and description defined for a target.');
-                return;
+                return false;
             }
 
             $this->routesetup->addTarget(new Target($targeta['name'],$targeta['description']));
@@ -115,7 +143,7 @@ class Service
             if (!isset($sitea['name']) || !isset($sitea['description'])) {
                 // @todo throw exception
                 $this->logger->err('No name and description defined for a site.');
-                return;
+                return false;
             }
 
             $this->routesetup->addSite(new Site($sitea['name'],$sitea['description']));
@@ -124,7 +152,7 @@ class Service
             if (!isset($languagea['name']) || !isset($languagea['description']) || !isset($languagea['locale'])) {
                 // @todo throw exception
                 $this->logger->err('No name, description and locale defined for a language.');
-                return;
+                return false;
             }
 
             $this->routesetup->addLanguage(new Language($languagea['name'],$languagea['description'],$languagea['locale']));
@@ -135,12 +163,12 @@ class Service
             if (!isset($routeprefixa['filter']) || !isset($routeprefixa['filter']['target']) || !isset($routeprefixa['filter']['site']) || !isset($routeprefixa['filter']['language'])) {
                 // @todo throw exception
                 $this->logger->err('Missing target, site or language for routeprefix/filter.');
-                return;
+                return false;
             }
             if (!isset($routeprefixa['prefix'])) {
                 // @todo throw exception
                 $this->logger->err('Missing prefix for routeprefix.');
-                return;
+                return false;
             }
             $filter      = array ( 'target' => $routeprefixa['filter']['target'], 'site' => $routeprefixa['filter']['site'], 'language' => $routeprefixa['filter']['language'] );
             $prefix      = $this->replaceMacros($routeprefixa['prefix']);
@@ -161,12 +189,12 @@ class Service
             if (!isset($routea['filter']) || !isset($routea['filter']['target']) || !isset($routea['filter']['site']) || !isset($routea['filter']['language'])) {
                 // @todo throw exception
                 $this->logger->err('Missing target, site and language for route.');
-                return;
+                return false;
             }
             if (!isset($routea['pattern']) || !isset($routea['public'])) {
                 // @todo throw exception
                 $this->logger->err('Missing pattern and public for route.');
-                return;
+                return false;
             }
             $requirements = array();
             $defaults     = array();
@@ -187,6 +215,8 @@ class Service
                 $route
             );
         }
+
+        return true;
     }
 
     public function setLatestRouteMatch(RouteMatch $routematch)
@@ -256,7 +286,7 @@ class Service
             $url = str_replace('twokings.eu/','twokings.eu/app_dev.php/',$url);
         }
 
-        $this->logger->info('Text "'.$text.'", url "'.$url.'"');
+        //$this->logger->info('Text "'.$text.'", url "'.$url.'"');
 
         if (is_array($arguments) && (count($arguments) > 0)) {
             $anchor = false;

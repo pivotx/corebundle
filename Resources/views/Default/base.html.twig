@@ -1,0 +1,33 @@
+{#
+    The is the base template for all problems.
+#}
+<!DOCTYPE html>
+<html lang="{{ app.request.get('_language') }}">
+
+    <head>
+        {{ outputter('headStart') }}
+
+        <meta charset="{{ html.meta.charset }}">
+
+        <title>{{ html.title }}</title>
+
+        {{ outputter('titleAfter') }}
+        
+        {{ outputter('headEnd') }}
+    </head>
+
+    <body>
+        {{ outputter('bodyStart') }}
+
+        {% block content %}
+
+        <h1>Oops!</h1>
+
+        <p>Something went wrong.</p>
+
+        {% endblock %}
+
+        {{ outputter('bodyEnd') }}
+    </body>
+
+</html>
