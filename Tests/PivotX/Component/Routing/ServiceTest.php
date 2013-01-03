@@ -142,7 +142,7 @@ routes:
     - filter:       { target: "desktop", site: "main", language: "en" }
       pattern:      "_page/route-not-found"
       public:       "route-not-found"
-      defaults:     { _redirect: "_page/not-found" }
+      defaults:     { _redirect: "_http/404" }
 THEEND;
 
         $this->logger = new Logger('test-logger');

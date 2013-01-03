@@ -1,0 +1,44 @@
+{% extends "CoreBundle::Default/base.html.twig" %}
+
+{% block content %}
+
+{% if developer_help %}
+
+<h1>Fall-back template for single entity "{{ entity }}"</h1>
+
+<p>
+    You are now viewing the fall-back template for entity "{{ entity }}".<br/>
+    You should configure you're own template. Below you will find suggestion on
+    how to do this and also which fields are available and examples how to use them.
+</p>
+
+<h2>How to configure</h2>
+
+<dl>
+    <dt>Suggested template:</dt>
+    <dd>{{ entity }}.html.twig</dd>
+</dl>
+
+
+<h2>Available fields</h2>
+
+{% set documentation = unusable_record|pivotx_documentation(entity) %}
+
+<dl>
+{% for example in documentation.examples %}
+    <dt>{{ example.title }}</dt>
+    <dd>{{ example.snippet }}</dd>
+    <dd>{{ example.description }}</dd>
+{% endfor %}
+</dl>
+
+
+<h2>Dump of "{{ entity }}" contents for id {{ unusable_record.id }}</h2>
+
+{{ pxdump(unusable_record) }}
+
+{% endif %}
+
+{{ pxdump(routing) }}
+
+{% endblock %}

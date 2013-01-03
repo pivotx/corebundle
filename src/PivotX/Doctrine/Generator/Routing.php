@@ -37,6 +37,7 @@ class Routing
             'public' => $public,
             'defaults' => array(
                 '_controller' => 'CoreBundle:DefaultFront:showEntityBySlug',
+                '_entity' => $name,
                 //'_view' => $view
             ),
             'requirements' => array(
@@ -57,6 +58,7 @@ class Routing
             'public' => $public,
             'defaults' => array(
                 '_controller' => 'CoreBundle:DefaultFront:showEntityById',
+                '_entity' => $name,
                 //'_view' => $view
             ),
             'requirements' => array(

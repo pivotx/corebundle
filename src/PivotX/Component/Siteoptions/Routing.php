@@ -21,16 +21,30 @@ class Routing
         $this->siteoptions = $siteoptions;
     }
 
-    private function buildSiteRouteStart()
+    private function buildSiteRouteStart($site)
     {
         $routes = array();
 
         return $routes;
     }
 
-    private function buildSiteRouteEnd()
+    private function buildSiteRouteEnd($site)
     {
         $routes = array();
+
+        $routes[] = array(
+            'filter' => array(
+                'target' => false,
+                'site' => $site,
+                'language' => false,
+            ),
+            'pattern' => '_http/404',
+            'public' => 'page-not-found',
+            'defaults' => array(
+                '_controller' => 'CoreBundle:DefaultFront:showError',
+                '_http_status' => 404
+            )
+        );
 
         return $routes;
     }
@@ -39,7 +53,7 @@ class Routing
     {
         $routes = array();
 
-        $keys = explode("\n", $this->siteoptions->getValue('routing.keys', array(), $site));
+        $keys = explode("\n", $this->siteoptions->getValue('routing.keys', '', $site));
         foreach($keys as $key) {
             $routes = array_merge(
                 $routes,
@@ -50,25 +64,49 @@ class Routing
         return $routes;
     }
 
+    private function compileRoutePrefixes($site)
+    {
+        $routeprefixes = array();
+
+        $config = $this->siteoptions->getValue('routing.setup', array(), $site);
+        if (count($config) == 0) {
+            // @todo maybe should throw an error?
+            return $routeprefixes;
+        }
+
+        foreach($config['targets'] as $target) {
+            foreach($config['languages'] as $language) {
+                $hosts = explode("\n", trim($config['hosts'][$target['name']][$language['name']]));
+
+                foreach($hosts as $host) {
+                    $host = trim($host);
+                    if (($host != '') && (substr($host, -1) == '/')) {
+                        $routeprefixes[] = array(
+                            'filter' => array(
+                                'target' => $target['name'],
+                                'site' => $site,
+                                'language' => $language['name']
+                            ),
+                            'prefix' => $host
+                        );
+                    }
+                }
+            }
+        }
+
+
+        return $routeprefixes;
+    }
+
     public function compileSiteRoutes($site)
     {
+        $routeprefixes = $this->compileRoutePrefixes($site);
+
         $routes = array();
 
-        $routes = array_merge($routes, $this->buildSiteRouteStart());
+        $routes = array_merge($routes, $this->buildSiteRouteStart($site));
         $routes = array_merge($routes, $this->combineRoutes($site));
-        $routes = array_merge($routes, $this->buildSiteRouteEnd());
-
-
-        $routeprefixes = array(
-            array(
-                'filter' => array(
-                    'target' => 'desktop',
-                    'site' => $site,
-                    'language' => 'en'
-                ),
-                'prefix' => 'http://%request.host%/'
-            )
-        );
+        $routes = array_merge($routes, $this->buildSiteRouteEnd($site));
 
         $routing = array(
             'routeprefixes' => $routeprefixes,

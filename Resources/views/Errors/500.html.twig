@@ -1,0 +1,15 @@
+{% extends "CoreBundle::Errors/base.html.twig" %}
+
+{% block content %}
+
+    <h1>Internal error!</h1>
+
+    <p>We encountered an internal error.</p>
+
+    {% if debug is defined %}
+        <h2>This is the routing information:</h2>
+
+        {{ pxdump(routing) }}
+    {% endif %}
+
+{% endblock %}

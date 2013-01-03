@@ -9,6 +9,9 @@ use PivotX\Component\Referencer\Reference;
 
 class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 {
+    /**
+     * Return default HTML context parameters
+     */
     public function getDefaultHtmlContext()
     {
         $context = array(
@@ -120,7 +123,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $view    = $request->get('_view');
         }
         if (is_null($view)) {
-            $view = 'CoreBundle:Default:unconfigured.html.twig';
+            $view = 'CoreBundle:Errors:unconfigured.html.twig';
 
             $parameters['debug'] = $this->get('kernel')->isDebug();
         }

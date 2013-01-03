@@ -70,7 +70,8 @@ class Service extends \Twig_Extension
     {
         return array(
             'formatas' => new \Twig_Filter_Method($this, 'filterFormatAs'),
-            'htmliterator' => new \Twig_Filter_Method($this, 'filterHtmlIterator')
+            'htmliterator' => new \Twig_Filter_Method($this, 'filterHtmlIterator'),
+            'pivotx_documentation' => new \Twig_Filter_Method($this, 'filterPivotxDocumentation')
         );
     }
 
@@ -234,6 +235,9 @@ class Service extends \Twig_Extension
         return $out;
     }
 
+    /**
+     * Return an HTML iterator for any array
+     */
     public function filterHtmlIterator($in, $active_key = null, $active_value = null)
     {
         $args = array();
@@ -244,5 +248,74 @@ class Service extends \Twig_Extension
             $args['active_value'] = $active_value;
         }
         return new HtmlIterator($in, $args);
+    }
+
+    /**
+     * A simple documentation extractor (not really fault tolerant)
+     *
+     * @param string $doccomment      the DocComment found
+     * @param string $property_name   property name
+     * @param string $object_name     name to use in the example
+     * @return array                  associative array
+     *                                - description   all the text found
+     *                                - snippet       an example snippet
+     */
+    private function convertDocCommentToDocumentation($doccomment, $property_name, $object_name)
+    {
+        $source  = explode("\n", trim($doccomment));
+        $text    = array();
+        $snippet = '{{ ' . $object_name . '.' . $property_name . ' }}';
+
+        foreach($source as $src) {
+            $line = trim(preg_replace('|/?[*]+/? *(.*)|', '\\1', trim($src)));
+
+            if (preg_match('|@return +([^ ]+)|', $line, $match)) {
+                switch ($match[1]) {
+                    case 'datetime':
+                        $snippet = '{{ ' . $object_name . '.' . $property_name . '|formatas(\'Backend/Auto\') }}';
+                        break;
+                }
+                continue;
+            }
+
+            $text[] = $line;
+        }
+
+        $snippet     = '<pre class="snippet">' . $snippet . '</pre>';
+        $description = '<pre class="description">' . trim(implode("\n", $text)) . '</pre>';
+
+        return array(
+            'description' => new \Twig_Markup($description, 'utf-8'),
+            'snippet' => new \Twig_Markup($snippet, 'utf-8')
+        );
+    }
+
+    /**
+     * Extra documentation from a random object
+     */
+    public function filterPivotxDocumentation($in, $object_name)
+    {
+        $documentation = array(
+            'introduction' => '',
+            'examples' => array()
+        );
+
+        $refl_class = new \ReflectionClass($in);
+        $methods    = $refl_class->getMethods(\ReflectionMethod::IS_PUBLIC);
+        foreach($methods as $method) {
+            if (substr($method->name, 0, 3) == 'get') {
+                $name        = substr($method->name, 3);
+                $doccomment  = $method->getDocComment();
+                $docs        = $this->convertDocCommentToDocumentation($doccomment, $name, $object_name);
+
+                $documentation['examples'][] = array(
+                    'title' => $name,
+                    'snippet' => $docs['snippet'],
+                    'description' => $docs['description'],
+                );
+            }
+        }
+
+        return $documentation;
     }
 }
