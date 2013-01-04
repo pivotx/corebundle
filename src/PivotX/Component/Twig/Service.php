@@ -264,7 +264,7 @@ class Service extends \Twig_Extension
     {
         $source  = explode("\n", trim($doccomment));
         $text    = array();
-        $snippet = '{{ ' . $object_name . '.' . $property_name . ' }}';
+        $snippet = '{{ ' . $object_name . '.' . strtolower($property_name) . ' }}';
 
         foreach($source as $src) {
             $line = trim(preg_replace('|/?[*]+/? *(.*)|', '\\1', trim($src)));
@@ -272,7 +272,7 @@ class Service extends \Twig_Extension
             if (preg_match('|@return +([^ ]+)|', $line, $match)) {
                 switch ($match[1]) {
                     case 'datetime':
-                        $snippet = '{{ ' . $object_name . '.' . $property_name . '|formatas(\'Backend/Auto\') }}';
+                        $snippet = '{{ ' . $object_name . '.' . strtolower($property_name) . '|formatas(\'Backend/Auto\') }}';
                         break;
                 }
                 continue;
@@ -281,8 +281,10 @@ class Service extends \Twig_Extension
             $text[] = $line;
         }
 
-        $snippet     = '<pre class="snippet">' . $snippet . '</pre>';
-        $description = '<pre class="description">' . trim(implode("\n", $text)) . '</pre>';
+        //$snippet     = '<pre class="snippet">' . $snippet . '</pre>';
+        $description = trim(implode("\n", $text));
+        $description = preg_replace("|\n+|", "\n", $description);
+        $description = str_replace("\n", '<br/>', $description);
 
         return array(
             'description' => new \Twig_Markup($description, 'utf-8'),
@@ -298,18 +300,16 @@ class Service extends \Twig_Extension
         $documentation = array(
             'introduction' => '',
             'template_suggestion' => $object_name.'.html.twig',
-            'template_example' => new \Twig_Markup(<<<THEEND
-<pre class="snippet">
+            'template_example' => <<<THEEND
 {% extends "CoreBundle::Html/Html5.html.twig" %}
 
 {% block body_content %}
 
-&lt;h2&gt;{{ $object_name.title }}&lt;/h2&gt;
+<h1>{{ $object_name.title }}</h1>
 
 {% endblock %}
-</pre>
 THEEND
-, 'utf-8'),
+,
             'examples' => array()
         );
 
@@ -319,13 +319,17 @@ THEEND
             if (substr($method->name, 0, 3) == 'get') {
                 $name        = substr($method->name, 3);
                 $doccomment  = $method->getDocComment();
-                $docs        = $this->convertDocCommentToDocumentation($doccomment, $name, $object_name);
 
-                $documentation['examples'][] = array(
-                    'title' => $name,
-                    'snippet' => $docs['snippet'],
-                    'description' => $docs['description'],
-                );
+                if (strstr($doccomment, '@PivotX\\Internal') === false) {
+                    $docs        = $this->convertDocCommentToDocumentation($doccomment, $name, $object_name);
+
+                    $documentation['examples'][] = array(
+                        'title' => $name,
+                        'property' => strtolower($name),
+                        'snippet' => $docs['snippet'],
+                        'description' => $docs['description'],
+                    );
+                }
             }
         }
 

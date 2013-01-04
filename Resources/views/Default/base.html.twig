@@ -12,6 +12,17 @@
         <title>{{ html.title }}</title>
 
         {{ outputter('titleAfter') }}
+
+        <!-- @todo move this to a proper file -->
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <style type="text/css">
+
+        dl.dl-horizontal dt,
+        dl.dl-horizontal dd {
+            margin-bottom: 1em;
+        }
+
+        </style>
         
         {{ outputter('headEnd') }}
     </head>
@@ -19,6 +30,7 @@
     <body>
         {{ outputter('bodyStart') }}
 
+        <div class="container">
         {% block content %}
 
         <h1>Oops!</h1>
@@ -26,6 +38,7 @@
         <p>Something went wrong.</p>
 
         {% endblock %}
+        </div>
 
         {{ outputter('bodyEnd') }}
     </body>

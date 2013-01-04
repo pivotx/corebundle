@@ -78,6 +78,7 @@ THEEND;
     /**
      * Store a version
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function onPxPreUpdate_Loggable(\$changeset)

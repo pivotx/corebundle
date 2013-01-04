@@ -351,7 +351,7 @@ class RouteSetup
      *
      * @param mixed $link     Reference to link to, in string or associative array format
      * @param string $default Link to return when no match found
-     * @return string         URL
+     * @return string         URL or null if no url could be created
      */
     public function buildUrl($link, $default = null)
     {

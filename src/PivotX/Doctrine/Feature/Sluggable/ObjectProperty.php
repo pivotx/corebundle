@@ -62,6 +62,7 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
     /**
      * Return the CRUD field configuration
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function getCrudConfiguration_$field()
@@ -107,6 +108,7 @@ THEEND;
     /**
      * Generate a slug using the format argument
      *
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function getSlugSuggestion(\$number = 0)

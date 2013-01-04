@@ -147,6 +147,19 @@ class Routing
                 false, false,
                 $site
             );
+
+            $keys = explode("\n", $this->siteoptions->getValue('routing.keys', '', $site));
+            if (!in_array('routing.entity.'.$name, $keys)) {
+                $keys[] = 'routing.entity.'.$name;
+
+                $this->siteoptions->set(
+                    'routing.keys',
+                    trim(implode("\n", $keys)),
+                    'text/plain',
+                    false, true,
+                    $site
+                );
+            }
         }
     }
 }

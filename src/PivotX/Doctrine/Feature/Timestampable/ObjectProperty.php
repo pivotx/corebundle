@@ -54,6 +54,7 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
     /**
      * Return the CRUD field configuration
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function getCrudConfiguration_$field()
@@ -72,6 +73,7 @@ THEEND;
     /**
      * PrePersist the creation timestamp
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function prePersist_$field()
@@ -89,6 +91,7 @@ THEEND;
     /**
      * PrePersist the update timestamp
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function prePersist_$field()
@@ -104,6 +107,7 @@ THEEND;
     /**
      * PrePersist the update timestamp
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function preUpdate_$field()

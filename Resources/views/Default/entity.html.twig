@@ -36,17 +36,19 @@
     Paste the following snippet to jump-start your template:
 </p>
 
-{{ documentation.template_example }}
+<pre>{{ documentation.template_example }}</pre>
 
 
 <h2 id="fields">Available fields and how to use them</h2>
 
 
-<dl>
+<dl class="dl-horizontal">
 {% for example in documentation.examples %}
     <dt>{{ example.title }}</dt>
-    <dd>{{ example.snippet }}</dd>
-    <dd>{{ example.description }}</dd>
+    <dd>
+        {{ example.description }}<br/>
+        Example: <code>{{ example.snippet }}</code>
+    </dd>
 {% endfor %}
 </dl>
 

@@ -48,6 +48,7 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
     /**
      * Return the CRUD table configuration
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function getCrudTableConfiguration()
@@ -65,6 +66,7 @@ THEEND;
     /**
      * Return the CRUD field configuration
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function getCrudConfiguration_$field()

@@ -146,6 +146,7 @@ THEEND;
     /**
      * Return all the CRUD choices
      *
+     * @PivotX\Internal       internal use only
 %comment%
      *
      * @return array Array of choices
@@ -170,6 +171,7 @@ THEEND;
     /**
      * Return the CRUD field configuration
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function getCrudConfiguration_$field()
@@ -191,6 +193,7 @@ THEEND;
     /**
      * Return the CRUD field configuration
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function getCrudConfiguration_$field()
@@ -209,6 +212,7 @@ THEEND;
     /**
      * Return the CRUD field configuration
      * 
+     * @PivotX\Internal       internal use only
 %comment%
      */
     public function getCrudConfiguration_$field()

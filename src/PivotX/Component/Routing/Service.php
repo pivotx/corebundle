@@ -269,15 +269,16 @@ class Service
         //echo get_class($this->latest_routematch); var_dump($options);
 
         $url = null;
-//        if (!$options['absolute']) {
         if (!is_null($this->latest_routematch)) {
             $url = $this->latest_routematch->buildOtherUrl($text, $options);
         }
 
-        //var_dump($text); var_dump($url);
-
         if (is_null($url)) {
             $url = $this->routesetup->buildUrl($text);
+        }
+
+        if (is_null($url)) {
+            return null;
         }
 
         // @todo we created absolute url's for too easy

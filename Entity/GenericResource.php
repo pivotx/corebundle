@@ -178,7 +178,8 @@ class GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-28 17:22:24
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-04 09:21:15
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -193,7 +194,8 @@ class GenericResource
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-28 17:22:24
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-04 09:21:15
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -205,7 +207,8 @@ class GenericResource
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-28 17:22:24
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-04 09:21:15
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -217,7 +220,8 @@ class GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-28 17:22:24
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-04 09:21:15
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -232,7 +236,8 @@ class GenericResource
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-28 17:22:24
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-04 09:21:15
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -244,7 +249,8 @@ class GenericResource
     /**
      * PrePersist the update timestamp
      * 
-     * @PivotX\UpdateDate     2012-12-28 17:22:24
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-04 09:21:15
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -256,7 +262,7 @@ class GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2012-12-28 17:22:24
+     * @PivotX\UpdateDate     2013-01-04 09:21:15
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
