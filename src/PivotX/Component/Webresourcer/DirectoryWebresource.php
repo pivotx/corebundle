@@ -162,8 +162,16 @@ class DirectoryWebresource extends Webresource
             }
             else {
                 foreach(glob($directory.'/'.$file) as $gfile) {
-                    $output = new Output($gfile, $type);
-                    $this->addOutput($variant, $group, $output);
+                    if ($type === false) {
+                        list($glob_group, $glob_type, $glob_ext) = $this->getFileInfo($gfile);
+
+                        $output = new Output($gfile, $glob_type);
+                        $this->addOutput($variant, $glob_group, $output);
+                    }
+                    else {
+                        $output = new Output($gfile, $type);
+                        $this->addOutput($variant, $group, $output);
+                    }
                 }
             }
         }
