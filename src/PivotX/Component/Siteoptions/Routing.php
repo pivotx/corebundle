@@ -38,6 +38,23 @@ class Routing
                 'site' => $site,
                 'language' => false,
             ),
+            'pattern' => '_resource/{options}/{publicid}',
+            'public' => 'resource/{options}/{publicid}',
+            'defaults' => array(
+                '_controller' => 'CoreBundle:GenericResource:getDownload',
+                '_http_status' => 404
+            ),
+            'requirements' => array(
+                'publicid' => '[a-z0-9_.-]+',
+                'options' => '[a-z0-9_./-]+'
+            )
+        );
+        $routes[] = array(
+            'filter' => array(
+                'target' => false,
+                'site' => $site,
+                'language' => false,
+            ),
             'pattern' => '_http/404',
             'public' => 'page-not-found',
             'defaults' => array(

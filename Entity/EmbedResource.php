@@ -132,7 +132,8 @@ class EmbedResource extends GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2013-01-04 09:21:15
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-08 16:30:25
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -147,7 +148,8 @@ class EmbedResource extends GenericResource
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2013-01-04 09:21:15
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-08 16:30:25
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

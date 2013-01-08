@@ -244,6 +244,9 @@ class Suggestions
                 'relation' => array(
                     'type' => 'manyToOne',
                     'targetEntity' => 'PivotX\CoreBundle\Entity\GenericResource',
+                    'auto_entity' => array(
+                        'pivotx_backendresource' => array ( null )
+                    )
                 )
             ),
             'relation.genericresource.multiple' => array(

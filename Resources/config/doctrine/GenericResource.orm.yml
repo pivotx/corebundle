@@ -55,7 +55,7 @@ PivotX\CoreBundle\Entity\GenericResource:
       length: 250
       precision: 0
       scale: 0
-      nullable: false
+      nullable: true
       unique: false
     media_type:
       type: string
@@ -64,6 +64,9 @@ PivotX\CoreBundle\Entity\GenericResource:
       scale: 0
       nullable: false
       unique: false
-      auto_entity:
-        pivotx_ignore:
-          ~
+  auto_entity:
+    pivotx_ignore:
+      ~
+    genericable:
+      title:        'title'
+      description:  'author'

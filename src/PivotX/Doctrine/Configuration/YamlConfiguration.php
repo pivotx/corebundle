@@ -29,17 +29,23 @@ class YamlConfiguration extends Configuration
     {
         $this->clearConfiguration();
 
+        $fieldgroups = array( 'fields', 'manyToOne', 'oneToOne', 'oneToMany' );
+
         // read auto_entity definitions and parse them into ->fields
         $instance = null;
         foreach($array as $entity) {
-            foreach($entity['fields'] as $field => $definition) {
-                if (isset($definition['auto_entity'])) {
-                    foreach($definition['auto_entity'] as $feature => $config) {
-                        if (!isset($this->features[$feature])) {
-                            $this->features[$feature] = array();
-                        }
+            foreach($fieldgroups as $fieldgroup) {
+                if (isset($entity[$fieldgroup])) {
+                    foreach($entity[$fieldgroup] as $field => $definition) {
+                        if (isset($definition['auto_entity'])) {
+                            foreach($definition['auto_entity'] as $feature => $config) {
+                                if (!isset($this->features[$feature])) {
+                                    $this->features[$feature] = array();
+                                }
 
-                        $this->features[$feature][] = array($field, $config);
+                                $this->features[$feature][] = array($field, $config);
+                            }
+                        }
                     }
                 }
             }

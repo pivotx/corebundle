@@ -18,7 +18,8 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
     {
         $methods = array();
 
-        $methods['getGenericTitle'] = 'generateGenericTitle';
+        $methods['getGenericTitle']       = 'generateGenericTitle';
+        $methods['getGenericDescription'] = 'generateGenericDescription';
 
         return $methods;
     }
@@ -34,20 +35,18 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
     {
         $title_field = false;
 
-        // @todo read actual configuration
-
-        if ($title_field === false) {
-            foreach($this->metaclassdata->fieldMappings as $name => $data) {
-                if (in_array($name, array('title', 'name', 'email'))) {
-                    $title_field = $name;
-                    break;
-                }
-            }
+        if (isset($config['title'])) {
+            $title_field = $config['title'];
         }
 
         if ($title_field === false) {
             // @todo
             $title_field = 'id';
+        }
+
+        $code = 'return \'\';';
+        if ($title_field != false) {
+            $code = 'return $this->'.$title_field.';';
         }
 
         return <<<THEEND
@@ -58,7 +57,34 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
      */
     public function getGenericTitle()
     {
-        return \$this->$title_field;
+        $code
+    }
+
+THEEND;
+    }
+
+    public function generateGenericDescription($classname, $config)
+    {
+        $description_field = false;
+
+        if (isset($config['description'])) {
+            $description_field = $config['description'];
+        }
+
+        $code = 'return \'\';';
+        if ($description_field != false) {
+            $code = 'return $this->'.$description_field.';';
+        }
+
+        return <<<THEEND
+    /**
+     * Returns the generic description for this object
+     *
+%comment%
+     */
+    public function getGenericDescription()
+    {
+        $code
     }
 
 THEEND;

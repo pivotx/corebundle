@@ -46,6 +46,7 @@ class Entities
 
         $source_updated = $entity->getUpdatedCode($source_original);
 
+
         if ($source_original != $source_updated) {
             $backup_filename = str_replace('.php', '.php~', $filename);
 

@@ -42,13 +42,20 @@ translationtext:
 user:
     crud-heading.last_login:   { en: 'last login', nl: 'laatste login' }
 
+genericresource:
+    crud-heading.type:      { en: 'type', nl: 'type' }
+    crud-heading.preview:   { en: 'preview', nl: 'voorbeeld' }
+    crud-form.filename:     { en: 'file', nl: 'bestand' }
+
 form:
-    backend_file.droparea-singular:     { en: 'Drop file here', nl: 'Sleep bestand hierheen' }
-    backend_file.status-done:           { en: 'Success', nl: 'Succes' }
-    backend_file.status-fail:           { en: 'Failed', nl: 'Mislukt' }
-    backend_file.uploadbutton-singular: { en: 'Choose file', nl: 'Kies bestand' }
-    backend_unique.empty-value:         { en: '(no value)', nl: '(geen waarde)' }
-    choices.empty-value:                { en: '(choose)', nl: '(kies)' }
+    backend_file.droparea-singular:         { en: 'Drop file here', nl: 'Sleep bestand hierheen' }
+    backend_file.status-done:               { en: 'Success', nl: 'Succes' }
+    backend_file.status-fail:               { en: 'Failed', nl: 'Mislukt' }
+    backend_file.uploadbutton-singular:     { en: 'Choose file from your computer', nl: 'Kies bestand van je computer' }
+    backend_unique.empty-value:             { en: '(no value)', nl: '(geen waarde)' }
+    choices.empty-value:                    { en: '(choose)', nl: '(kies)' }
+    backend_resource.choosebutton-singular: { en: 'Choose from library', nl: 'Kies uit bibliotheek' }
+    backend_resource.uploadbutton-singular: { en: 'Choose file from your computer', nl: 'Kies bestand van je computer' }
 
 config:
     check.require-attention:    { en: 'Require attention.', nl: 'Aandacht nodig.' }

@@ -71,6 +71,21 @@ class LocalEmbedResource extends EmbedResource
         return $this->filesize;
     }
 
+    public function getFileInfo()
+    {
+        return array(
+            'valid' => true,
+            'mimetype' => $this->media_type,
+            'size' => $this->filesize,
+            'name' => $this->filename
+        );
+    }
+
+    public function getFilesInfo()
+    {
+        return array($this->getFileInfo());
+    }
+
     public function getRealFilename()
     {
         list($fdir,$fid) = explode('-', $this->getFileid());
@@ -127,17 +142,11 @@ class LocalEmbedResource extends EmbedResource
         $this->setHeight($height);
     }
 
-
     /**
-     * Get the html to embed this
+     * Get the html for a regular image
      */
-    public function getHtml($inWidth = null, $inHeight = null, $options = null)
+    public function getImageHtml($inWidth = null, $inHeight = null, $options = null)
     {
-        // @todo fix the source!
-        //$src  = $this->getRealFilename();
-        $src  = '/resource/'.$this->publicid;
-        $alt  = '';
-
         $scaleMethod = 'keep-aspect';
         if (isset($options['scale'])) {
             $scaleMethod = $options['scale'];
@@ -146,12 +155,58 @@ class LocalEmbedResource extends EmbedResource
 
         list($width, $height) = $this->determineWidthAndHeight($inWidth, $inHeight, $scaleMethod, $options);
 
+        if ($scaleMethod == 'keep-aspect') {
+            $src_opts = sprintf('%dx%d', $width, $height);
+        }
+        else {
+            $src_opts = sprintf('%dx%d/%s', $width, $height, $scaleMethod);
+        }
+
+        // @todo fix the source!
+        //$src  = $this->getRealFilename();
+        $src  = '/resource/'.$src_opts.'/'.$this->publicid;
+        $alt  = '';
+
         $html = '<img src="'.$src.'" width="'.$width.'" height="'.$height.'" alt="'.$alt.'" />';
 
         if (\PivotX\Component\Twig\Test::isTwigReturn()) {
             return new \Twig_Markup($html, 'utf-8');
         }
         return $html;
+    }
+
+    /**
+     * Get the html to embed this
+     *
+     * For now we only support images
+     */
+    public function getHtml($inWidth = null, $inHeight = null, $options = null)
+    {
+        return $this->getImageHtml($inWidth, $inHeight, $options);
+    }
+
+    /**
+     */
+    public function isEmbeddable()
+    {
+        switch ($this->media_type) {
+            case 'image/png':
+            case 'image/jpeg':
+            case 'image/jpg':
+            case 'image/pjpeg':
+            case 'image/x-jpeg':
+                return true;
+                break;
+        }
+
+        return false;
+    }
+
+    /**
+     */
+    public function getDownloadLink()
+    {
+        return '/resource/download/'.$this->publicid;
     }
 
     /**
@@ -200,7 +255,7 @@ class LocalEmbedResource extends EmbedResource
                 $this->media_type = mime_content_type($file);
             }
             else {
-                $this->media_type = 'application/octect-stream';
+                $this->media_type = 'application/octet-stream';
 
                 if (preg_match('|[.]([^.]+)$|', $file, $match)) {
                     switch (mb_strtolower($match[1])) {
@@ -263,6 +318,7 @@ class LocalEmbedResource extends EmbedResource
      */
     public function fixCrudBeforePersist()
     {
+        var_dump($this); echo '<br/>';
         if (substr($this->filename,0,5) == "[\n  {") {
             $json = json_decode($this->filename);
 
@@ -288,7 +344,8 @@ class LocalEmbedResource extends EmbedResource
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2013-01-04 09:21:15
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-08 16:30:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -303,7 +360,8 @@ class LocalEmbedResource extends EmbedResource
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2013-01-04 09:21:15
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-08 16:30:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -318,7 +376,8 @@ class LocalEmbedResource extends EmbedResource
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2013-01-04 09:21:15
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-08 16:30:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -333,7 +392,8 @@ class LocalEmbedResource extends EmbedResource
     /**
      * Return the CRUD field configuration
      * 
-     * @PivotX\UpdateDate     2013-01-04 09:21:15
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-08 16:30:24
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

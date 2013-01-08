@@ -115,4 +115,4 @@ PivotX\CoreBundle\Entity\User:
         records:     100
       remove-fields: [ 'passwd', 'passwd_salt' ]
     genericable:
-      title:         '%email%'
+      title:         'email'

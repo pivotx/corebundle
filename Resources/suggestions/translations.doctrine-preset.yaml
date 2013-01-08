@@ -92,7 +92,7 @@ siteoption:
     entity.title:       { en: 'site options', nl: 'site instellingen' }
 
 genericresource:
-    entity.title:       { en: 'site resources', nl: 'site bronnen' }
+    entity.title:           { en: 'site resources', nl: 'site bronnen' }
 
 user:
     entity.title:       { en: 'users', nl: 'gebruikers' }
