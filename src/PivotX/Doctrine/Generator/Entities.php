@@ -46,8 +46,11 @@ class Entities
 
         $source_updated = $entity->getUpdatedCode($source_original);
 
+        $_stripped_original = preg_replace('|@PivotX\\\\UpdateDate.+|m', '', $source_original);
+        $_stripped_updated  = preg_replace('|@PivotX\\\\UpdateDate.+|m', '', $source_updated);
 
-        if ($source_original != $source_updated) {
+        // only update when there are real changes
+        if ($_stripped_original != $_stripped_updated) {
             $backup_filename = str_replace('.php', '.php~', $filename);
 
             $ok = true;
@@ -83,7 +86,11 @@ class Entities
 
         $source_updated = $repository->getUpdatedCode($source_original);
 
-        if ($source_original != $source_updated) {
+        $_stripped_original = preg_replace('|@PivotX\\\\UpdateDate.+|m', '', $source_original);
+        $_stripped_updated  = preg_replace('|@PivotX\\\\UpdateDate.+|m', '', $source_updated);
+
+        // only update when there are real changes
+        if ($_stripped_original != $_stripped_updated) {
             $backup_filename = str_replace('.php', '.php~', $filename);
 
             $ok = true;

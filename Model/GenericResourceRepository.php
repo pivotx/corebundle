@@ -13,7 +13,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-08 17:18:56
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

@@ -8,7 +8,7 @@ class SiteOptionRepository extends \PivotX\Doctrine\Repository\AutoEntityReposit
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2013-01-08 16:30:25
+     * @PivotX\UpdateDate     2013-01-08 17:18:56
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
