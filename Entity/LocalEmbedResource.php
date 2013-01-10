@@ -162,7 +162,7 @@ class LocalEmbedResource extends EmbedResource
             $src_opts = sprintf('%dx%d/%s', $width, $height, $scaleMethod);
         }
 
-        // @todo fix the source!
+        // @todo fix the src!
         //$src  = $this->getRealFilename();
         $src  = '/resource/'.$src_opts.'/'.$this->publicid;
         $alt  = '';
@@ -195,6 +195,7 @@ class LocalEmbedResource extends EmbedResource
             case 'image/jpg':
             case 'image/pjpeg':
             case 'image/x-jpeg':
+            case 'image/gif':
                 return true;
                 break;
         }
@@ -405,14 +406,23 @@ class LocalEmbedResource extends EmbedResource
             'size' => $this->filesize,
             'name' => $this->filename
         );
+        if ($this->filename == '') {
+            $file_info['valid'] = false;
+        }
         $file_info['json'] = json_encode($file_info);
+
+        $files = array();
+        if ($file_info['valid']) {
+            $files[] = $file_info;
+        }
+
 
         return array(
             'name' => 'filename',
             'type' => 'backend_file',
             'arguments' => array(
                 'attr' => array('multiple' => false),
-                'files' => array($file_info)
+                'files' => $files
             )
         );
     }
