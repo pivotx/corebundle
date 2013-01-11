@@ -15,6 +15,7 @@ class GenericResource
     protected $title;
     protected $author;
     protected $media_type;
+    protected $meta;
 
     /**
      * Get id
@@ -155,6 +156,26 @@ class GenericResource
         return $this->media_type;
     }
 
+    /**
+     * Set meta information
+     *
+     * @param mixed $meta
+     */
+    public function setMeta($meta)
+    {
+        $this->meta = json_encode($meta);
+    }
+
+    /**
+     * Get meta information
+     *
+     * @return mixed 
+     */
+    public function getMeta()
+    {
+        return json_decode($this->meta, true);
+    }
+
 
     /**
      * Crud defaults
@@ -195,7 +216,7 @@ class GenericResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 09:16:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -211,7 +232,7 @@ class GenericResource
      * PrePersist the update timestamp
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 09:16:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -224,7 +245,7 @@ class GenericResource
      * PrePersist the update timestamp
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 09:16:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -237,7 +258,7 @@ class GenericResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 09:16:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -253,7 +274,7 @@ class GenericResource
      * PrePersist the update timestamp
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 09:16:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -266,7 +287,7 @@ class GenericResource
      * PrePersist the update timestamp
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 09:16:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -276,9 +297,25 @@ class GenericResource
     }
 
     /**
+     * Return the CRUD field configuration
+     * 
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-11 09:16:28
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
+     */
+    public function getCrudConfiguration_meta()
+    {
+        return array(
+            'name' => 'meta',
+            'type' => false
+        );
+    }
+
+    /**
      * Returns the generic title for this object
      *
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 09:16:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -291,7 +328,7 @@ class GenericResource
     /**
      * Returns the generic description for this object
      *
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 09:16:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

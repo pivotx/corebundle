@@ -79,6 +79,26 @@ class Subscriber implements EventSubscriber
     }
 
     /**
+     * preRemove
+     */
+    public function preRemove(LifecycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+        $entityManager = $args->getEntityManager();
+
+        //*
+        ob_start();
+        //var_dump($entityManager);
+        echo get_class($entityManager);
+        echo "\n";
+        $out = ob_get_clean();
+        file_put_contents('/tmp/listener.txt', $out, FILE_APPEND);
+        //*/
+
+        $this->callWithPrefix('preRemove_', $entity);
+    }
+
+    /**
      * onFlush
      */
     public function onFlush(OnFlushEventArgs $eventArgs)
@@ -117,7 +137,6 @@ class Subscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array('prePersist', 'preUpdate', 'onFlush');
-        return array('prePersist', 'preUpdate', 'onFlush', 'preFlush');
+        return array('prePersist', 'preUpdate', 'onFlush', 'preRemove');
     }
 }

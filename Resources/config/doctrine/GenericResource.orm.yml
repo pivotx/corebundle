@@ -64,6 +64,16 @@ PivotX\CoreBundle\Entity\GenericResource:
       scale: 0
       nullable: false
       unique: false
+    meta:
+      type: text
+      length: null
+      precision: 0
+      scale: 0
+      nullable: true
+      unique: false
+      auto_entity:
+        pivotx_ignore:
+          ~
   auto_entity:
     pivotx_ignore:
       ~

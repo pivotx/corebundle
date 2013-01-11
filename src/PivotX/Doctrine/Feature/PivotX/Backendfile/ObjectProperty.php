@@ -30,6 +30,7 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
         $methods = array();
 
         $methods['getCrudConfiguration_'.$field] = 'generateGetCrudConfiguration';
+        $methods['preRemove_'.$field]            = 'generatePreRemove';
 
         return $methods;
     }
@@ -61,6 +62,25 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
                 'files' => array(\$file_info)
             )
         );
+    }
+THEEND;
+    }
+
+    public function generatePreRemove($classname, $field, $config)
+    {
+        return <<<THEEND
+    /**
+     * Remove the actual file
+     * 
+     * @PivotX\Internal       internal use only
+%comment%
+     */
+    public function preRemove_$field()
+    {
+        \$filename = \$this->getRealFilename();
+        if (file_exists(\$filename)) {
+            @unlink(\$filename);
+        }
     }
 THEEND;
     }

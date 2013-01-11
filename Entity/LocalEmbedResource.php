@@ -71,21 +71,31 @@ class LocalEmbedResource extends EmbedResource
         return $this->filesize;
     }
 
+    /**
+     * Get file information in JSON-format
+     */
     public function getFileInfo()
     {
         return array(
             'valid' => true,
             'mimetype' => $this->media_type,
             'size' => $this->filesize,
-            'name' => $this->filename
+            'name' => $this->filename,
+            'embed_html' => $this->getHtml(90, 60)
         );
     }
 
+    /**
+     * Access method for backend form fields
+     */
     public function getFilesInfo()
     {
         return array($this->getFileInfo());
     }
 
+    /**
+     * Get the actual filename on the system
+     */
     public function getRealFilename()
     {
         list($fdir,$fid) = explode('-', $this->getFileid());
@@ -94,6 +104,9 @@ class LocalEmbedResource extends EmbedResource
         return $directory . '/' . $fid . '.dat';
     }
 
+    /**
+     * Move file from quarantaie to actual directory
+     */
     public function moveFile($tmp_name, $from_quarantaine = true)
     {
         if ($from_quarantaine) {
@@ -134,12 +147,33 @@ class LocalEmbedResource extends EmbedResource
         return true;
     }
 
-    public function updateImageInfo()
+    /**
+     * Update the image information
+     */
+    public function updateMetaInfo()
     {
-        list($width,$height) = getimagesize($this->getRealFilename());
+        $info = array();
+        list($width,$height) = getimagesize($this->getRealFilename(), $info);
+
+        // should check if it's an image..
 
         $this->setWidth($width);
         $this->setHeight($height);
+
+        $meta = array();
+        if (isset($info['APP13'])) {
+            $iptc = iptcparse($info['APP13']);
+            if ($iptc !== false) {
+                $meta['iptc'] = $iptc;
+            }
+        }
+        if (true) {
+            $exif = @exif_read_data($this->getRealFilename());
+            if ($exif !== false) {
+                $meta['exif'] = $exif;
+            }
+        }
+        $this->setMeta($meta);
     }
 
     /**
@@ -235,7 +269,7 @@ class LocalEmbedResource extends EmbedResource
 
             $this->moveFile($file->tmp_name);
 
-            $this->updateImageInfo();
+            $this->updateMetaInfo();
         }
     }
 
@@ -294,7 +328,7 @@ class LocalEmbedResource extends EmbedResource
             $this->fileid     = date('Ym') . '-' . md5(uniqid());
 
             $this->title    = preg_replace('|[^a-zA-Z0-9.-]|','',mb_strtolower($this->filename));
-            $this->publicid = trim(preg_replace('|[^a-z0-9.-]|','',mb_strtolower($this->filename)));
+            $this->publicid = mt_rand(1000,9999).'-'.trim(preg_replace('|[^a-z0-9.-]|','',mb_strtolower($this->filename)));
 
             if ($this->publicid == '') {
                 $this->publicid = null;
@@ -305,7 +339,7 @@ class LocalEmbedResource extends EmbedResource
 
             $this->moveFile($file, false);
 
-            $this->updateImageInfo();
+            $this->updateMetaInfo();
         }
     }
 
@@ -319,7 +353,6 @@ class LocalEmbedResource extends EmbedResource
      */
     public function fixCrudBeforePersist()
     {
-        var_dump($this); echo '<br/>';
         if (substr($this->filename,0,5) == "[\n  {") {
             $json = json_decode($this->filename);
 
@@ -333,11 +366,11 @@ class LocalEmbedResource extends EmbedResource
                 // @todo should be better
                 //       normalize filename?
                 //       normalize mediatype?
-                $this->publicid = trim(preg_replace('|[^a-z0-9.-]|','',mb_strtolower($this->filename)));
+                $this->publicid = mt_rand(1000,9999).'-'.trim(preg_replace('|[^a-z0-9.-]|','',mb_strtolower($this->filename)));
 
                 $this->moveFile($json[0]->tmp_name);
 
-                $this->updateImageInfo();
+                $this->updateMetaInfo();
             }
         }
     }
@@ -346,7 +379,7 @@ class LocalEmbedResource extends EmbedResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 10:41:43
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -362,7 +395,7 @@ class LocalEmbedResource extends EmbedResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 10:41:43
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -378,7 +411,7 @@ class LocalEmbedResource extends EmbedResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 10:41:43
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -394,28 +427,16 @@ class LocalEmbedResource extends EmbedResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-08 16:30:24
+     * @PivotX\UpdateDate     2013-01-11 10:41:43
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
     public function getCrudConfiguration_filename()
     {
-        $file_info = array(
-            'valid' => true,
-            'mimetype' => $this->media_type,
-            'size' => $this->filesize,
-            'name' => $this->filename
-        );
-        if ($this->filename == '') {
-            $file_info['valid'] = false;
-        }
+        $file_info = $this->getFileInfo();
         $file_info['json'] = json_encode($file_info);
 
-        $files = array();
-        if ($file_info['valid']) {
-            $files[] = $file_info;
-        }
-
+        $files = array ( $file_info );
 
         return array(
             'name' => 'filename',
@@ -425,6 +446,22 @@ class LocalEmbedResource extends EmbedResource
                 'files' => $files
             )
         );
+    }
+
+    /**
+     * Remove the actual file
+     * 
+     * @PivotX\Internal       internal use only
+     * @PivotX\UpdateDate     2013-01-11 10:41:43
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
+     */
+    public function preRemove_filename()
+    {
+        $filename = $this->getRealFilename();
+        if (file_exists($filename)) {
+            @unlink($filename);
+        }
     }
 
 }
