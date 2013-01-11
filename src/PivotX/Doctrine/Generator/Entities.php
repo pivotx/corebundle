@@ -325,10 +325,20 @@ class Entities
                 //$entity = $this->deCamelCase($base_class);
                 $entity = mb_strtolower($base_class);
 
-                if (isset($translations[$entity]) && isset($translations[$entity]['entity.title'])) {
+                if (isset($translations[$entity])) {
+                    foreach($translations[$entity] as $key => $terms) {
+                        $texts = $this->convertTermsToLanguageTexts($terms, $languages);
+                        $this->translation_service->suggestTexts($entity, $key, 'pivotx-backend', 'utf-8', $texts);
+                    }
+
+                    /*
+                    echo "found\n";
                     $terms = $translations[$entity]['entity.title'];
+                    var_dump($terms);
                     $texts = $this->convertTermsToLanguageTexts($terms, $languages);
+                    var_dump($texts);
                     $this->translation_service->suggestTexts($entity, 'entity.title', 'pivotx-backend', 'utf-8', $texts);
+                 */
                 }
 
                 foreach($class->fieldMappings as $key => $config) {

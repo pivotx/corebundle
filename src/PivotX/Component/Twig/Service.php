@@ -107,12 +107,23 @@ class Service extends \Twig_Extension
     /**
      * Shortcut into the translation system
      */
-    public function getTranslate($key, $sitename = null, $encoding = 'utf-8')
+    //public function getTranslate($key, $sitename = null, $encoding = 'utf-8')
+    public function getTranslate($key, $macros = array())
     {
+        $sitename = null;
+        $encoding = 'utf-8';
+
         if (is_array($key)) {
             $key = implode('', $key);
         }
-        return $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $encoding);
+        if (true) {
+            $class_automagic = ($this->pivotx_translations->isTranslatedAutomagically(mb_strtolower($key), $sitename)) ? '' : ' automagic';
+            $text = $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $encoding, $macros);
+            $text = new \Twig_Markup('<span class="pivotx-is-translated'.$class_automagic.'" title="'.htmlspecialchars($key).'">'.$text.'</span>', 'utf-8');
+
+            return $text;
+        }
+        return $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $encoding, $macros);
     }
 
     /**

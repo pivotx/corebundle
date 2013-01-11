@@ -46,20 +46,17 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
      */
     public function getCrudConfiguration_$field()
     {
-        \$file_info = array(
-            'valid' => true,
-            'mimetype' => \$this->media_type,
-            'size' => \$this->filesize,
-            'name' => \$this->filename
-        );
+        \$file_info = \$this->getFileInfo();
         \$file_info['json'] = json_encode(\$file_info);
+
+        \$files = array(\$file_info);
 
         return array(
             'name' => '$field',
             'type' => 'backend_file',
             'arguments' => array(
                 'attr' => array('multiple' => false),
-                'files' => array(\$file_info)
+                'files' => \$files
             )
         );
     }

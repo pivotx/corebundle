@@ -239,6 +239,13 @@ class LocalEmbedResource extends EmbedResource
 
     /**
      */
+    public function isDownloadable()
+    {
+        return true;
+    }
+
+    /**
+     */
     public function getDownloadLink()
     {
         return '/resource/download/'.$this->publicid;
@@ -379,7 +386,7 @@ class LocalEmbedResource extends EmbedResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-11 10:41:43
+     * @PivotX\UpdateDate     2013-01-11 15:37:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -395,7 +402,7 @@ class LocalEmbedResource extends EmbedResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-11 10:41:43
+     * @PivotX\UpdateDate     2013-01-11 15:37:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -411,7 +418,7 @@ class LocalEmbedResource extends EmbedResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-11 10:41:43
+     * @PivotX\UpdateDate     2013-01-11 15:37:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -427,7 +434,7 @@ class LocalEmbedResource extends EmbedResource
      * Return the CRUD field configuration
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-11 10:41:43
+     * @PivotX\UpdateDate     2013-01-11 15:37:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -436,7 +443,7 @@ class LocalEmbedResource extends EmbedResource
         $file_info = $this->getFileInfo();
         $file_info['json'] = json_encode($file_info);
 
-        $files = array ( $file_info );
+        $files = array($file_info);
 
         return array(
             'name' => 'filename',
@@ -452,7 +459,7 @@ class LocalEmbedResource extends EmbedResource
      * Remove the actual file
      * 
      * @PivotX\Internal       internal use only
-     * @PivotX\UpdateDate     2013-01-11 10:41:43
+     * @PivotX\UpdateDate     2013-01-11 15:37:28
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

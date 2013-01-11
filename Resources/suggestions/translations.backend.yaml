@@ -7,9 +7,10 @@ pagination:
     last-page:      { en: 'last page', nl: 'laatste pagina' }
 
 entity:
-    button.edit:    { en: 'edit', nl: 'bewerk' }
-    button.delete:  { en: 'delete', nl: 'verwijder' }
-    button.dump:    { en: 'dump', nl: 'dump' }
+    button.edit:        { en: 'edit', nl: 'bewerk' }
+    button.delete:      { en: 'delete', nl: 'verwijder' }
+    button.dump:        { en: 'dump', nl: 'dump' }
+    button.download:    { en: 'download', nl: 'download' }
 
 modal:
     default-title:  { en: 'Title', nl: 'Titel' }
@@ -27,7 +28,7 @@ header:
     button.content-group:   { en: 'Content', nl: 'Inhoud' }
 
 footer:
-    button.configuration:   { en: 'Configuration', nl: 'Configuratie' }
+    button.translations:   { en: 'Translations', nl: 'Vertalingen' }
 
 translationtext:
     state-0:                { en: 'Valid', nl: 'Valide' }
@@ -46,17 +47,51 @@ genericresource:
     crud-heading.type:      { en: 'type', nl: 'type' }
     crud-heading.preview:   { en: 'preview', nl: 'voorbeeld' }
     crud-form.filename:     { en: 'file', nl: 'bestand' }
+    no-preview:             { en: 'No preview available.', nl: 'Geen voorbeeld beschikbaar.' }
+
+localembedresource:
+    plural_title:           { en: 'files', nl: 'bestanden' }
+    singular_title:         { en: 'file', nl: 'bestand' }
+
+remoteembedresource:
+    plural_title:           { en: "URL's", nl: "URL's" }
+    singular_title:         { en: 'URL', nl: 'URL' }
 
 form:
     backend_file.droparea-singular:         { en: 'Drop file here', nl: 'Sleep bestand hierheen' }
     backend_file.status-done:               { en: 'Success', nl: 'Succes' }
     backend_file.status-fail:               { en: 'Failed', nl: 'Mislukt' }
     backend_file.uploadbutton-singular:     { en: 'Choose file from your computer', nl: 'Kies bestand van je computer' }
+    backend_file.removebutton:              { en: 'Remove file', nl: 'Verwijder bestand' }
+    backend_file.file-name:                 { en: 'Name', nl: 'Naam' }
+    backend_file.file-type:                 { en: 'Type', nl: 'Type' }
+    backend_file.file-size:                 { en: 'size', nl: 'grootte' }
+    backend_file.file-bytes:                { en: 'bytes', nl: 'bytes' }
+    backend_file.no-preview:                { en: 'No preview available.', nl: 'Geen voorbeeld beschikbaar.' }
     backend_unique.empty-value:             { en: '(no value)', nl: '(geen waarde)' }
     choices.empty-value:                    { en: '(choose)', nl: '(kies)' }
     backend_resource.choosebutton-singular: { en: 'Choose from library', nl: 'Kies uit bibliotheek' }
     backend_resource.uploadbutton-singular: { en: 'Choose file from your computer', nl: 'Kies bestand van je computer' }
-    backend_resource.removebutton-singular: { en: 'Don\x27t select any image', nl: 'Selecteer juist geen plaatje' }
+    backend_resource.removebutton-singular: { en: "Don't select any image", nl: 'Selecteer juist geen plaatje' }
+
+    widget.back-to-all:                     { en: '« Back to all :items', nl: '« Terug naar alle :items' }
+    widget.general-information:             { en: 'General information', nl: 'Algemene informatie' }
+    widget.item-created:                    { en: ':item was created on :date.', nl: ':item is aangemaakt op :date.' }
+    widget.item-modified:                   { en: ':item was last edited on :date.', nl: ':item is op :date voor het laatste aangepast.' }
+    widget.new-item:                        { en: 'New :item.', nl: 'Nieuw(e) :item.' }
+    widget.selection-next-message:          { en: "You're editing a selection, by saving you are going to the next.", nl: 'Bij opslaan ga je door naar de volgende geselecteerde.' }
+    widget.savebutton:                      { en: 'Save', nl: 'Bewaar' }
+    widget.savecontinuebutton:              { en: 'Save and continue editing', nl: 'Bewaar en blijf bewerken' }
+
+table:
+    widget.general-information:             { en: 'General information', nl: 'Algemene informatie' }
+    widget.item-count-0:                    { en: 'There are no :items.', nl: 'Er zijn geen :items.' }
+    widget.item-count-1:                    { en: 'There is :count :item.', nl: 'Er is :count :item.' }
+    widget.item-count-n:                    { en: 'There are :count :items.', nl: 'Er zijn :count :items.' }
+    widget.addbutton:                       { en: 'Add :item', nl: 'Voeg :item toe' }
+    widget.selection-information:           { en: 'Selection', nl: 'Selectie' }
+    widget.editsequencebutton:              { en: 'Edit in sequence', nl: 'Bewerk in volgorde' }
+    widget.deleteselectionbutton:           { en: 'Delete', nl: 'Verwijder' }
 
 config:
     check.require-attention:    { en: 'Require attention.', nl: 'Aandacht nodig.' }

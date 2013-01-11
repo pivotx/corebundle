@@ -59,6 +59,10 @@ class EmbedResource extends GenericResource
         $width  = $this->getWidth();
         $height = $this->getHeight();
 
+        if (($width == 0) || ($height == 0)) {
+            return array(0,0);
+        }
+
         $aspect = 1;
         if ($height != 0) {
             $aspect = $width / $height;

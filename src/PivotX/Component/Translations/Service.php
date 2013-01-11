@@ -198,6 +198,27 @@ class Service
     }
 
     /**
+     * @param string $key       key to search for
+     * @param array $filter     pivotxrouting filter, if null use latest routematch
+     */
+    public function isTranslatedAutomagically($key, $filter = null)
+    {
+        list($groupname, $name, $site, $language) = $this->decodeKeyFilter($key, $filter);
+
+        $translationtext = $this->findEntity($groupname, $name, $site);
+
+        if (is_null($translationtext)) {
+            return false;
+        }
+
+        if ($translationtext->getState() > TranslationText::STATE_SUGGESTED) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Translate key to readable text
      *
      * @param string $key       key to search for
@@ -214,12 +235,14 @@ class Service
 
         list($groupname, $name, $site, $language) = $this->decodeKeyFilter($key, $filter);
 
-
-
         $this->initializeCache($site, $language);
         if (isset($this->cache[$site]) && isset($this->cache[$site][$language])) {
             if (isset($this->cache[$site][$language][$key])) {
-                return $this->cache[$site][$language][$key];
+                $readable_text = $this->cache[$site][$language][$key];
+                if (is_array($macros) && (count($macros) > 0)) {
+                    $readable_text = strtr($readable_text, $macros);
+                }
+                return $readable_text;
             }
         }
 

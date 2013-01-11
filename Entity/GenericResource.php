@@ -178,6 +178,23 @@ class GenericResource
 
 
     /**
+     * By default not embeddable
+     */
+    public function isEmbeddable()
+    {
+        return false;
+    }
+
+    /**
+     * By default not downloadable
+     */
+    public function isDownloadable()
+    {
+        return false;
+    }
+
+
+    /**
      * Crud defaults
      */
 

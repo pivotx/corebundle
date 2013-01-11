@@ -86,16 +86,20 @@ any:
     technical_context:  { en: 'technical context', nl: 'technische context' }
 
 translationtext:
-    entity.title:       { en: 'translations', nl: 'vertalingen' }
+    plural_title:       { en: 'translations', nl: 'vertalingen' }
+    singular_title:     { en: 'translation', nl: 'vertaling' }
 
 siteoption:
-    entity.title:       { en: 'site options', nl: 'site instellingen' }
+    plural_title:       { en: 'site options', nl: 'site instellingen' }
+    singular_title:     { en: 'site option', nl: 'site instelling' }
 
 genericresource:
-    entity.title:           { en: 'site resources', nl: 'site bronnen' }
+    plural_title:       { en: 'resources', nl: 'bronmaterialen' }
+    singular_title:     { en: 'resource', nl: 'bronmateriaal' }
 
 user:
-    entity.title:       { en: 'users', nl: 'gebruikers' }
+    plural_title:       { en: 'users', nl: 'gebruikers' }
+    singular_title:     { en: 'user', nl: 'gebruiker' }
 
 sites:
     item:
