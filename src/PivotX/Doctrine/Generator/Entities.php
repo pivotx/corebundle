@@ -344,6 +344,9 @@ class Entities
                 foreach($class->fieldMappings as $key => $config) {
                     $this->addEntityTranslation($translations, $languages, $entity, $key);
                 }
+                foreach($class->associationMappings as $key => $config) {
+                    $this->addEntityTranslation($translations, $languages, $entity, $key);
+                }
             }
         }
 
