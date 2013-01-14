@@ -36,6 +36,8 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
 
     public function generateGetCrudConfiguration($classname, $field, $config)
     {
+        $ucfield = ucfirst($field);
+
         return <<<THEEND
     /**
      * Return the CRUD field configuration
@@ -45,20 +47,31 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
      */
     public function getCrudConfiguration_$field()
     {
-        \$file_info = array(
-            'valid' => true,
-            'mimetype' => '',
-            'size' => 0,
-            'name' => ''
-        );
+        \$image = \$this->get$ucfield();
+        if (!is_null(\$image)) {
+            \$file_info = \$image->getFileInfo();
+        }
+        else {
+            \$file_info = array(
+                'valid' => false,
+                'mimetype' => '',
+                'size' => 0,
+                'name' => ''
+            );
+        }
         \$file_info['json'] = json_encode(\$file_info);
+
+        \$files = array();
+        if (\$file_info['valid']) {
+            \$files[] = \$file_info;
+        }
 
         return array(
             'name' => '$field',
             'type' => 'backend_resource',
             'arguments' => array(
                 'attr' => array('multiple' => false),
-                'files' => array(\$file_info)
+                'files' => \$files
             )
         );
     }
