@@ -44,6 +44,10 @@ class ObjectRepository implements \PivotX\Doctrine\Entity\EntityRepository
 
                 //echo 'date = '.$field."\n";
 
+                $methods['decodeCriteriaFor'.$name] = array('generateDecodeCriteriaFor',  $field, $name);
+
+                $methods['findLatestBy'.$name] = array('generateFindLatestBy',  $field, $name);
+
                 $methods['findBy'.$name.'BetweenDates'] = array('generateFindByBetweenDates',  $field, $name);
 
                 $methods['findBy'.$name.'OnYear']  = array('generateFindByYear',  $field, $name);
@@ -146,6 +150,13 @@ class ObjectRepository implements \PivotX\Doctrine\Entity\EntityRepository
     {
         $views = array();
 
+        $views[] = $this->buildView(
+            'findLatestBy'.$name,
+            'array()',
+            'Find latest "'.$plural.'" by "'.$name.'" ',
+            array(
+            )
+        );
 
         $views[] = $this->buildView(
             'findBy'.$name.'BetweenDates',
@@ -280,10 +291,8 @@ class ObjectRepository implements \PivotX\Doctrine\Entity\EntityRepository
             }
         }
 
-        // @todo create this:
-        // \$criteria = \$this->decodeCriteria(\$_criteria, \$order_by, \$limit, \$offset);
+        \$criteria = \$this->decodeCriteriaFor$name(\$_criteria, \$order_by, \$limit, \$offset);
 
-        \$criteria = new \Doctrine\Common\Collections\Criteria;
         \$builder  = new \Doctrine\Common\Collections\ExpressionBuilder;
 
         \$first_expression = null;
@@ -320,6 +329,78 @@ class ObjectRepository implements \PivotX\Doctrine\Entity\EntityRepository
 THEEND;
     }
 
+    public function generateDecodeCriteriaFor($classname, $config, $field, $name)
+    {
+        $method   = 'decodeCriteriaFor'.$name.'';
+
+        return <<<THEEND
+    /**
+     * Default build/decode criteria for $name
+     *
+     * @param mixed \$_criteria    additional criteria
+     * @param mixed \$order_by     specified order 
+     * @param integer \$limit      limit the number of results
+     * @param integer \$offset     first result to return
+     * @return object             Criteria object
+%comment%
+     */
+    public function $method(\$_criteria = null, \$order_by = null, \$limit = null, \$offset = null)
+    {
+        if (is_null(\$_criteria)) {
+            \$criteria = new \Doctrine\Common\Collections\Criteria;
+        }
+        else if (\$_criteria instanceof \Doctrine\Common\Collections\Criteria) {
+            \$criteria = \$_criteria;
+        }
+        else {
+            \$criteria = new \Doctrine\Common\Collections\Criteria;
+
+            // @todo do something with \$_criteria
+        }
+
+        if (is_array(\$order_by)) {
+            \$criteria->orderBy(\$order_by);
+        }
+        else {
+            \$criteria->orderBy(array('$field' => \Doctrine\Common\Collections\Criteria::ASC));
+        }
+
+        if (!is_null(\$limit)) {
+            \$criteria->setMaxResults(\$limit);
+        }
+        if (!is_null(\$offset)) {
+            \$criteria->setFirstResult(\$offset);
+        }
+
+        return \$criteria;
+    }
+THEEND;
+    }
+
+    public function generateFindLatestBy($classname, $config, $field, $name)
+    {
+        $method   = 'findLatestBy'.$name;
+
+        return <<<THEEND
+    /**
+     * Find lastest by $name 
+%comment%
+     */
+    public function $method(\$_criteria = null, \$order_by = null, \$limit = null, \$offset = null)
+    {
+        \$order_by = array(
+            '$field' => \Doctrine\Common\Collections\Criteria::DESC
+        );
+
+        \$criteria = \$this->decodeCriteriaFor$name(\$_criteria, \$order_by, \$limit, \$offset);
+
+        \$builder  = new \Doctrine\Common\Collections\ExpressionBuilder;
+
+        return \$this->matching(\$criteria);
+    }
+THEEND;
+    }
+
     public function generateFindByBetweenDates($classname, $config, $field, $name)
     {
         $method   = 'findBy'.$name.'BetweenDates';
@@ -327,7 +408,6 @@ THEEND;
         return <<<THEEND
     /**
      * Find by $name between 2 dates (the former is inclusive, the latter exclusive)
-     * 
 %comment%
      */
     public function $method(\$date_first = null, \$date_last = null, \$_criteria = null, \$order_by = null, \$limit = null, \$offset = null)
@@ -351,10 +431,8 @@ THEEND;
             }
         }
 
-        // @todo create this:
-        // \$criteria = \$this->decodeCriteria(\$_criteria, \$order_by, \$limit, \$offset);
+        \$criteria = \$this->decodeCriteriaFor$name(\$_criteria, \$order_by, \$limit, \$offset);
 
-        \$criteria = new \Doctrine\Common\Collections\Criteria;
         \$builder  = new \Doctrine\Common\Collections\ExpressionBuilder;
 
         if (!is_null(\$date_first)) {
