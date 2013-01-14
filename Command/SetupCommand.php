@@ -224,7 +224,7 @@ class SetupCommand extends ContainerAwareCommand
                 $entity->markChanges();
 
                 $siteoption->setUnpackedValue($entity->getConfig());
-
+                //
                 // @todo the entity/repository php code has not been updated for the PivotX/Doctrine features
                 //       for now, just run the setup again
             }
