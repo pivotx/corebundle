@@ -17,9 +17,9 @@ namespace PivotX\Component\Twig;
  */
 class Loadviewnode extends \Twig_Node
 {
-    public function __construct($name, $view, $with_attributes, $lineno, $tag = null)
+    public function __construct($name, $view, $with_attributes, $limit_attribute, $lineno, $tag = null)
     {
-        parent::__construct(array('with_attributes'=>$with_attributes), array('name' => $name, 'view' => $view), $lineno, $tag);
+        parent::__construct(array('with_attributes'=>$with_attributes, 'with_limit' => $limit_attribute), array('name' => $name, 'view' => $view), $lineno, $tag);
     }
 
     public function compile(\Twig_Compiler $compiler)
@@ -37,7 +37,14 @@ class Loadviewnode extends \Twig_Node
                 ->subcompile($this->getNode('with_attributes'))
                 ->write(');')
                 ;
-
+        }
+        if (!is_null($this->getNode('with_limit'))) {
+            $compiler
+                ->addDebugInfo($this)
+                ->write('$context[\''.$this->getAttribute('name').'\']->setRange(')
+                ->subcompile($this->getNode('with_limit'))
+                ->write(');')
+                ;
         }
     }
 }

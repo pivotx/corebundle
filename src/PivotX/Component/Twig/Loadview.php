@@ -49,9 +49,16 @@ class Loadview extends \Twig_TokenParser
             $withexpr = $this->parser->getExpressionParser()->parseExpression();
         }
 
+        $limitexpr = null;
+        if ($this->parser->getStream()->test(\Twig_Token::NAME_TYPE, 'limit')) {
+            $this->parser->getStream()->next();
+
+            $limitexpr = $this->parser->getExpressionParser()->parseExpression();
+        }
+
         $this->parser->getStream()->expect(\Twig_Token::BLOCK_END_TYPE);
 
-        return new Loadviewnode($name, $view, $withexpr, $lineno, $this->getTag());
+        return new Loadviewnode($name, $view, $withexpr, $limitexpr, $lineno, $this->getTag());
     }
 
     public function getTag()
