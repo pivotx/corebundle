@@ -36,19 +36,33 @@ class ObjectProperty implements \PivotX\Doctrine\Entity\EntityProperty
 
     public function generateGetCrudConfiguration($classname, $field, $config)
     {
-        $type = $config['type'];
-
         $more = '';
-        if (isset($config['choices'])) {
-            $more .= ",\n";
-            $more .= "           'choices' => array(\n";
-            foreach($config['choices'] as $key => $value) {
-                $more .= "               '$key' => '$value',\n";
+
+        if (isset($config['type'])) {
+            $type = $config['type'];
+
+            if (isset($config['choices'])) {
+                $more .= ",\n";
+                $more .= "           'choices' => array(\n";
+                foreach($config['choices'] as $key => $value) {
+                    $more .= "               '$key' => '$value',\n";
+                }
+                $more  = substr($more, 0, -2) . "\n";
+                $more .= "           )\n";
             }
-            $more  = substr($more, 0, -2) . "\n";
-            $more .= "           )\n";
-            $more  = rtrim($more);
+            if (isset($config['class'])) {
+                $class = $config['class'];
+
+                $more .= ",\n";
+                $more .= "            'arguments' => array(\n";
+                $more .= "                'attr' => array(\n";
+                $more .= "                     'widget_class' => '$class'\n";
+                $more .= "                )\n";
+                $more .= "            )\n";
+            }
         }
+
+        $more  = rtrim($more);
 
         return <<<THEEND
     /**
