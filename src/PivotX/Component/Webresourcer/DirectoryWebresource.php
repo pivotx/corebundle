@@ -153,14 +153,7 @@ class DirectoryWebresource extends Webresource
                 list($group, $type, $ext) = $this->getFileInfo($file);
             }
 
-            if (strstr($file, '*') === false) {
-                $full = $directory . '/' . $file;
-                if (is_file($full)) {
-                    $output = new Output($full, $type);
-                    $this->addOutput($variant, $group, $output);
-                }
-            }
-            else {
+            if (strstr($file, '*') !== false) {
                 foreach(glob($directory.'/'.$file) as $gfile) {
                     if ($type === false) {
                         list($glob_group, $glob_type, $glob_ext) = $this->getFileInfo($gfile);
@@ -172,6 +165,13 @@ class DirectoryWebresource extends Webresource
                         $output = new Output($gfile, $type);
                         $this->addOutput($variant, $group, $output);
                     }
+                }
+            }
+            else {
+                $full = $directory . '/' . $file;
+                if (is_file($full)) {
+                    $output = new Output($full, $type);
+                    $this->addOutput($variant, $group, $output);
                 }
             }
         }
