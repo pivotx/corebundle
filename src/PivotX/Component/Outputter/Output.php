@@ -27,7 +27,7 @@ class Output
     protected $debuggable = false;
     protected $routing_service = false;
 
-    private static $last_source_directory = false;
+    private static $last_source_directories = false;
     private static $active_temp_directory = false;
 
     const TYPE_HTML = 'text/html';
@@ -170,6 +170,30 @@ class Output
         return $this->prepareCacheFile($content, $extension, $temp_directory, $source);
     }
 
+    private function findSourceFile($filename)
+    {
+        foreach(self::$last_source_directories as $dir) {
+            $file = realpath($dir.'/'.$filename);
+            if (file_exists($file)) {
+                return $file;
+            }
+        }
+
+        return null;
+    }
+
+    private function clearSourceDirectories()
+    {
+        self::$last_source_directories = array();
+    }
+
+    private function addSourceDirectory($directory)
+    {
+        if (!in_array($directory, self::$last_source_directories)) {
+            self::$last_source_directories[] = $directory;
+        }
+    }
+
     /**
      * Internal preg callback
      */
@@ -182,16 +206,15 @@ class Output
             $target = $quotematch[2];
         }
 
-
         if (preg_match('/(https?|data)/', $target, $urlmatch)) {
             // ignore this string for now
             // @todo a https? target could match our host of course
             return $match[0];
         }
 
-        $source_filename = realpath(self::$last_source_directory . '/' . $target);
+        $source_filename = $this->findSourceFile($target);
 
-        if (file_exists($source_filename)) {
+        if (!is_null($source_filename) && file_exists($source_filename)) {
             $out = $this->copyFileToCache($source_filename, self::$active_temp_directory);
 
             $out = 'url('.$out.')';
@@ -217,13 +240,47 @@ class Output
     }
 
     /**
+     * Internal preg callback
+     */
+    public function fixJavascriptUrl($match)
+    {
+        $target = trim($match[1]);
+
+        $source_filename = $this->findSourceFile($target);
+
+        if (file_exists($source_filename)) {
+            $out = $this->copyFileToCache($source_filename, self::$active_temp_directory);
+
+            //$out = 'url('.$out.')';
+        }
+        else {
+            $out = '';
+        }
+
+        return $out;
+    }
+
+    /**
+     * Our own javascript url filter
+     *
+     * @todo maybe make this unnecessary some day
+     *
+     * @param string $content   the content to filter
+     * @return string           the filtered content
+     */
+    private function rewriteJavascriptUrlFilter($content)
+    {
+        return preg_replace_callback('|[{][{]url[(]([^)]+)[)][}][}]|U', array($this, 'fixJavascriptUrl'), $content);
+    }
+
+    /**
      * Our text/javascript filter
      */
     private function filterTextJavascript($content)
     {
         return 
             '<script type="text/javascript">'."\n".
-            $content.
+            $this->rewriteJavascriptUrlFilter($content).
             '</script>'."\n"
             ;
     }
@@ -251,6 +308,7 @@ class Output
                         $data .= file_get_contents($file) . "\n";
                     }
                 }
+                $data = $this->rewriteJavascriptUrlFilter($data);
                 $src = $this->prepareCacheFile($data, 'js', $temp_directory, '/merged/'.basename($first_src));
                 $content = '<script type="text/javascript" src="'.$src.'"></script>'."\n";
                 break;
@@ -274,9 +332,14 @@ class Output
             $sources = array($sources);
         }
 
+        $this->clearSourceDirectories();
+
         $srcs = array();
         foreach($sources as $source) {
+            $this->addSourceDirectory(dirname($source));
+
             $src = $this->copyFileToCache($source, $temp_directory);
+            $src = $this->rewriteJavascriptUrlFilter($src);
 
             $srcs[] = $src;
         }
@@ -341,7 +404,8 @@ class Output
 
         $hrefs = array();
         foreach($sources as $source) {
-            self::$last_source_directory = dirname($source);
+            $this->clearSourceDirectories();
+            $this->addSourceDirectory(dirname($source));
 
             $data = file_get_contents($source);
 
@@ -380,7 +444,9 @@ class Output
                 }
             }
 
-            self::$last_source_directory = dirname($source);
+            $this->clearSourceDirectories();
+            $this->addSourceDirectory(dirname($source));
+
 
             $cmd = '/usr/local/bin/lessc '.$source;
             //echo 'cmd[ '. $cmd .' ]<br/>';
