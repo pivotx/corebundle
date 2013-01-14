@@ -80,3 +80,7 @@ PivotX\CoreBundle\Entity\GenericResource:
     genericable:
       title:        'title'
       description:  'author'
+    timesliceable:
+      fields:
+        - name:     'Modified'
+          field:    'date_modified'
