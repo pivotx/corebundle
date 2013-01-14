@@ -176,6 +176,18 @@ class GenericResource
         return json_decode($this->meta, true);
     }
 
+    /**
+     * Return resource information
+     */
+    public function getFileInfo()
+    {
+        return array(
+            'valid' => true,
+            'id' => $this->getId(),
+            'mimetype' => $this->media_type,
+            'title' => $this->title
+        );
+    }
 
     /**
      * By default not embeddable

@@ -46,6 +46,7 @@ user:
 genericresource:
     crud-heading.type:      { en: 'type', nl: 'type' }
     crud-heading.preview:   { en: 'preview', nl: 'voorbeeld' }
+    crud-heading.date:      { en: 'date', nl: 'datum' }
     crud-form.filename:     { en: 'file', nl: 'bestand' }
     no-preview:             { en: 'No preview available.', nl: 'Geen voorbeeld beschikbaar.' }
 

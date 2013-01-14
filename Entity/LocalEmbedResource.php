@@ -72,12 +72,13 @@ class LocalEmbedResource extends EmbedResource
     }
 
     /**
-     * Get file information in JSON-format
+     * Return file information
      */
     public function getFileInfo()
     {
         return array(
             'valid' => true,
+            'id' => $this->getId(),
             'mimetype' => $this->media_type,
             'size' => $this->filesize,
             'name' => $this->filename,
