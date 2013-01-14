@@ -43,7 +43,7 @@ class Suggestions
             ),
             'html.textarea' => array(
                 'type_description' => 'textarea',
-                'description' => 'Multi-line text field',
+                'description' => 'Multi-line text field, contents is plain text.',
                 'orm' => array(
                     'type' => 'text',
                     'nullable' => true,
@@ -131,6 +131,35 @@ class Suggestions
                     'type' => 'string',
                     'length' => 200,
                     'nullable' => true
+                )
+            ),
+
+            'text.html' => array(
+                'type_description' => 'textarea',
+                'description' => 'Multi-line text field, contents is html.',
+                'orm' => array(
+                    'type' => 'text',
+                    'nullable' => true,
+                    'auto_entity' => array(
+                        'pivotx_type' => array(
+                            'type' => 'textarea',
+                            'class' => 'wysiwyg-normal'
+                        )
+                    )
+                )
+            ),
+            'text.markdown' => array(
+                'type_description' => 'textarea',
+                'description' => 'Multi-line text field, contents is markdown.',
+                'orm' => array(
+                    'type' => 'text',
+                    'nullable' => true,
+                    'auto_entity' => array(
+                        'pivotx_type' => array(
+                            'type' => 'textarea',
+                            'class' => 'markdown'
+                        )
+                    )
                 )
             ),
 
