@@ -95,6 +95,7 @@
             <argument type="service" id="pivotx.formats" />
             <argument type="service" id="pivotx.webresourcer" />
             <argument type="service" id="pivotx.outputter" />
+            <argument type="service" id="pivotx.siteoptions" />
         </service>
 
         <service id="pivotx.activity" class="%pivotx.activity.class%" public="true">

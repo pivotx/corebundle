@@ -13,6 +13,7 @@ use PivotX\Component\Translations\Service as TranslationsService;
 use PivotX\Component\Formats\Service as FormatsService;
 use PivotX\Component\Webresourcer\Service as WebresourcerService;
 use PivotX\Component\Outputter\Service as OutputterService;
+use PivotX\Component\Siteoptions\Service as SiteoptionsService;
 
 include_once dirname(__FILE__).'/util.php';
 
@@ -31,16 +32,18 @@ class Service extends \Twig_Extension
     protected $pivotx_formats = false;
     protected $pivotx_webresourcer = false;
     protected $pivotx_outputter = false;
+    protected $pivotx_siteoptions = false;
 
     /**
      */
-    public function __construct(RoutingService $pivotx_routing, TranslationsService $pivotx_translations, FormatsService $pivotx_formats, WebresourcerService $pivotx_webresourcer, OutputterService $pivotx_outputter)
+    public function __construct(RoutingService $pivotx_routing, TranslationsService $pivotx_translations, FormatsService $pivotx_formats, WebresourcerService $pivotx_webresourcer, OutputterService $pivotx_outputter, SiteoptionsService $pivotx_siteoptions)
     {
         $this->pivotx_routing      = $pivotx_routing;
         $this->pivotx_translations = $pivotx_translations;
         $this->pivotx_formats      = $pivotx_formats;
         $this->pivotx_webresourcer = $pivotx_webresourcer;
         $this->pivotx_outputter    = $pivotx_outputter;
+        $this->pivotx_siteoptions  = $pivotx_siteoptions;
     }
 
     /**
@@ -57,21 +60,33 @@ class Service extends \Twig_Extension
 
     public function getFunctions()
     {
-        return array(
+        $functions = array(
+            // normal use
             'ref' =>  new \Twig_Function_Method($this, 'getReference'),
-            'translate' => new \Twig_Function_Method($this, 'getTranslate'),
             'pagination' => new \Twig_Function_Method($this, 'getPagination'),
+            'translate' => new \Twig_Function_Method($this, 'getTranslate'),
+
+            // house-keeping
             'outputter' => new \Twig_Function_Method($this, 'getOutputter'),
             'pxdump' => new \Twig_Function_Method($this, 'getPxDump')
         );
+
+        if ($this->pivotx_siteoptions->getValue('translations.debug', false) === true) {
+            $functions['translate'] = new \Twig_Function_Method($this, 'getDebugTranslate');
+        }
+
+        return $functions;
     }
 
     public function getFilters()
     {
         return array(
+            // normal use
             'formatas' => new \Twig_Filter_Method($this, 'filterFormatAs'),
             'fa' => new \Twig_Filter_Method($this, 'filterFormatAs'),
             'htmliterator' => new \Twig_Filter_Method($this, 'filterHtmlIterator'),
+
+            // pivotx internal
             'pivotx_documentation' => new \Twig_Filter_Method($this, 'filterPivotxDocumentation')
         );
     }
@@ -108,7 +123,6 @@ class Service extends \Twig_Extension
     /**
      * Shortcut into the translation system
      */
-    //public function getTranslate($key, $sitename = null, $encoding = 'utf-8')
     public function getTranslate($key, $macros = array())
     {
         $sitename = null;
@@ -117,14 +131,25 @@ class Service extends \Twig_Extension
         if (is_array($key)) {
             $key = implode('', $key);
         }
-        if (true) {
-            $class_automagic = ($this->pivotx_translations->isTranslatedAutomagically(mb_strtolower($key), $sitename)) ? '' : ' automagic';
-            $text = $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $encoding, $macros);
-            $text = new \Twig_Markup('<span class="pivotx-is-translated'.$class_automagic.'" title="'.htmlspecialchars($key).'">'.$text.'</span>', 'utf-8');
-
-            return $text;
-        }
         return $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $encoding, $macros);
+    }
+
+    /**
+     * Shortcut into the translation system
+     */
+    public function getDebugTranslate($key, $macros = array())
+    {
+        $sitename = null;
+        $encoding = 'utf-8';
+
+        if (is_array($key)) {
+            $key = implode('', $key);
+        }
+        $class_automagic = ($this->pivotx_translations->isTranslatedAutomagically(mb_strtolower($key), $sitename)) ? '' : ' automagic';
+        $text = $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $encoding, $macros);
+        $text = new \Twig_Markup('<span class="pivotx-is-translated'.$class_automagic.'" title="'.htmlspecialchars($key).'">'.$text.'</span>', 'utf-8');
+
+        return $text;
     }
 
     /**

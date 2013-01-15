@@ -17,7 +17,7 @@ class CoreBundle extends Bundle
             //$service->load($fname);
 
 
-            // loop all entities
+            // add all Views from all Doctrine repositories
 
             $doctrine_service = $this->container->get('doctrine');
             foreach ($doctrine_service->getEntityManagers() as $em) {

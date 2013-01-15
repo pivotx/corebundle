@@ -46,29 +46,6 @@ Add the following to lines to the $bundles array:
     new PivotX\CoreBundle\CoreBundle(),
     new PivotX\BackendBundle\BackendBundle() 
 
-### Fixing LESS in Assetic (currently server-side required)
-
-Edit app/config/config.yml
-Add "BackendBundle" to assetic / bundles:
-
-    bundles:        [ "BackendBundle" ]
-
-Add the following lines after assetic / filters:
-
-        less:
-            node:       /usr/bin/node
-            node_paths: [/usr/lib/nodejs, /usr/local/lib/node_modules]
-
-
-### Fix login
-
-Edit app/config/routing.yml
-Add the following at the end of the file:
-
-    login_check:
-        pattern:    /pivotx/en/login_check
-
-
 #### Install for Mysql/Pgsql
 
 Modify app/config/parameters.yml and fill in your database configuration.
@@ -140,6 +117,9 @@ Run your browser and go to http://YOURSITE/pivotx/en/
 (next step before full composer compatibility)
 
 
+
+
+## Ideal situation (@todo)
 
 ### Installing Composer and Symfony
 
