@@ -1,5 +1,13 @@
 {% extends "CoreBundle::Errors/base.html.twig" %}
 
+{#
+    This template is called when no actual has been defined elsewhere.
+
+    It should only be displayed when there is no view configured yet.
+
+    This is the final template to be searched for. It should be very rare to show this.
+#}
+
 {% block content %}
 
     <h1>Oops!</h1>

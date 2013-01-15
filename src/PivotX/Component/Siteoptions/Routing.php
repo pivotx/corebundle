@@ -21,6 +21,9 @@ class Routing
         $this->siteoptions = $siteoptions;
     }
 
+    /**
+     * Routes to always put the at the beginning of the list
+     */
     private function buildSiteRouteStart($site)
     {
         $routes = array();
@@ -28,6 +31,9 @@ class Routing
         return $routes;
     }
 
+    /**
+     * Routes to always put the at the end of the list
+     */
     private function buildSiteRouteEnd($site)
     {
         $routes = array();
@@ -49,6 +55,23 @@ class Routing
                 'options' => '[a-z0-9_./-]+'
             )
         );
+
+        $routes[] = array(
+            'filter' => array(
+                'target' => false,
+                'site' => $site,
+                'language' => false,
+            ),
+            'pattern' => '_page/frontpage',
+            'public' => '',
+            'defaults' => array(
+                '_controller' => 'CoreBundle:DefaultFront:showPage',
+                '_http_status' => 200,
+                '_special' => 'frontpage'
+            )
+        );
+
+        // this is the explicit not found message
         $routes[] = array(
             'filter' => array(
                 'target' => false,

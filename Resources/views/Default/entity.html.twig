@@ -1,5 +1,11 @@
 {% extends "CoreBundle::Default/base.html.twig" %}
 
+{#
+    This template is called when no actual has been defined elsewhere.
+
+    It should only be displayed when the entity controller has no view of its own.
+#}
+
 {% block content %}
 
 {% if developer_help %}

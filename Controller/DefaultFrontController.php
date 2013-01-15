@@ -41,6 +41,24 @@ class DefaultFrontController extends Controller
         return null;
     }
 
+    public function showPageAction(Request $request)
+    {
+        $parameters = $this->getDefaultHtmlContext();
+
+        $http_status = $request->attributes->get('_http_status', 200);
+        $special     = $request->attributes->get('_special', 'page');
+
+        $views = array();
+
+        $views[] = 'CoreBundle:Default:'.$special.'.html.twig';
+        $views[] = 'CoreBundle:Default:page.html.twig';
+
+        $response = $this->render($views, $parameters);
+        $response->setStatusCode($http_status);
+
+        return $response;
+    }
+
     public function showErrorAction(Request $request)
     {
         $parameters = $this->getDefaultHtmlContext();
