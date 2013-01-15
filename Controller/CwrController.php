@@ -15,7 +15,7 @@ class CwrController extends \Symfony\Bundle\FrameworkBundle\Controller\Controlle
         $headers = array();
 
         $directory = $this->get('kernel')->getCacheDir() . '/outputter/';
-        $filename  = preg_replace('|[^a-zA-Z0-9_.-]|', '', $file);
+        $filename  = preg_replace('|[^a-zA-Z0-9/_.-]|', '', $file);
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
         if (file_exists($directory.$filename)) {

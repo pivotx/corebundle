@@ -16,6 +16,7 @@ class Collection
     private $routing_service;
 
     // these locations are available by default and PivotX makes sure these work
+    const NONE = 'none';
     const HEAD_START = 'headStart';
     const TITLE_AFTER = 'titleAfter';
     const HEAD_END = 'headEnd';
@@ -97,6 +98,11 @@ class Collection
         $previous_debug = false;
         $type_contents  = array();
         foreach($in_outputs as $output) {
+            if (!$output->allowConcat()) {
+                $out_outputs[] = $output;
+                continue;
+            }
+
             if (($previous_type !== false) && (($previous_type != $output->getType()) || ($previous_debug != $output->shouldBeDebuggable()))) {
                 if (count($type_contents) > 0) {
                     $new_output = new Output($type_contents, $previous_type);

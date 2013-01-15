@@ -70,6 +70,7 @@ class Service extends \Twig_Extension
     {
         return array(
             'formatas' => new \Twig_Filter_Method($this, 'filterFormatAs'),
+            'fa' => new \Twig_Filter_Method($this, 'filterFormatAs'),
             'htmliterator' => new \Twig_Filter_Method($this, 'filterHtmlIterator'),
             'pivotx_documentation' => new \Twig_Filter_Method($this, 'filterPivotxDocumentation')
         );
@@ -230,12 +231,20 @@ class Service extends \Twig_Extension
 
     public function filterFormatAs($in, $name = '')
     {
+        $arguments = false;
         $out = $in;
+
+        if ($name == '') {
+            $name = 'auto';
+        }
+        else if (is_array($name)) {
+            $arguments = $name;
+            $name      = 'auto';
+        }
 
         $format = $this->pivotx_formats->findFormat($name);
         if (!is_null($format)) {
-            $arguments = array();
-            if (func_num_args() > 2) {
+            if (($arguments === false) && (func_num_args() > 2)) {
                 $arguments = func_get_args();
                 array_shift($arguments);
                 array_shift($arguments);

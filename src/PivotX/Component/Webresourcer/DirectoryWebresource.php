@@ -11,6 +11,8 @@ namespace PivotX\Component\Webresourcer;
 use PivotX\Component\Outputter\Service as OutputterService;
 use PivotX\Component\Outputter\Collection as OutputterCollection;
 use PivotX\Component\Outputter\Output as Output;
+use PivotX\Component\Outputter\CopyOutput as CopyOutput;
+use PivotX\Component\Outputter\DirectOutput as DirectOutput;
 
 /**
  * A Webresource describe a set of resources that are bundled together.
@@ -92,7 +94,6 @@ class DirectoryWebresource extends Webresource
         $this->addVariant($variant);
         foreach($files as $file) {
             $full = $directory . '/' . $file;
-
             if ((substr($file, 0, 1) != '.') && (is_dir($full))) {
                 $subfiles = scandir($full);
 
@@ -135,7 +136,17 @@ class DirectoryWebresource extends Webresource
     {
         $this->addVariant($variant);
         foreach($files as $_file) {
-            if (is_array($_file)) {
+            if (is_array($_file) && (isset($_file['copy']))) {
+                $output = new CopyOutput($directory.'/'.$_file['file'], $_file['copy']);
+                $this->addOutput($variant, OutputterCollection::HEAD_START, $output);
+                continue;
+            }
+            else if (is_array($_file) && (isset($_file['content']))) {
+                $output = new DirectOutput($_file['content'], $_file['type']);
+                $this->addOutput($variant, $_file['group'], $output);
+                continue;
+            }
+            else if (is_array($_file)) {
                 $file = $_file['file'];
                 list($group, $type, $ext) = $this->getFileInfo($file);
                 if (isset($_file['group'])) {

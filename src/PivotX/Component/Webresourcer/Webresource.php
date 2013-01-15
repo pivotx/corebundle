@@ -185,6 +185,7 @@ class Webresource
     {
         if (!isset($this->variants[$variant])) {
             $this->variants[$variant] = array(
+                OutputterCollection::NONE => array(),
                 OutputterCollection::HEAD_START => array(),
                 OutputterCollection::TITLE_AFTER => array(),
                 OutputterCollection::HEAD_END => array(),

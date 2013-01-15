@@ -9,7 +9,7 @@ PivotX\CoreBundle\Entity\RemoteEmbedResource:
       scale: 0
       nullable: false
       unique: false
-    rawhtml:
+    responses:
       type: text
       length: null
       precision: 0

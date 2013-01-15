@@ -183,9 +183,13 @@ class LocalEmbedResource extends EmbedResource
     public function getImageHtml($inWidth = null, $inHeight = null, $options = null)
     {
         $scaleMethod = 'keep-aspect';
-        if (isset($options['scale'])) {
+        if (is_array($options) && isset($options['scale'])) {
             $scaleMethod = $options['scale'];
             unset($options['scale']);
+        }
+        else if (is_scalar($options)) {
+            $scaleMethod = $options;
+            $options     = null;
         }
 
         list($width, $height) = $this->determineWidthAndHeight($inWidth, $inHeight, $scaleMethod, $options);
@@ -201,6 +205,10 @@ class LocalEmbedResource extends EmbedResource
         //$src  = $this->getRealFilename();
         $src  = '/resource/'.$src_opts.'/'.$this->publicid;
         $alt  = '';
+
+        if (!is_null($this->getTitle())) {
+            $alt = htmlspecialchars($this->getTitle());
+        }
 
         $html = '<img src="'.$src.'" width="'.$width.'" height="'.$height.'" alt="'.$alt.'" />';
 

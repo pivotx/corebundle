@@ -65,6 +65,16 @@ class Output
     }
 
     /**
+     */
+    public function allowConcat()
+    {
+        if ($this->debuggable) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Set the content for this output
      *
      * @param string $content  Content to output later

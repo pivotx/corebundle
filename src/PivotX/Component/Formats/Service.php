@@ -38,6 +38,10 @@ class Service
         \PivotX\Component\Formats\Formats::setServices($this, $logger);
 
         //echo "loaded formats service\n";
+
+
+        $format = new Formats\AutoFormat('auto', 'PivotX/Core', 'Smart escaping to usable html output.');
+        $this->registerFormat($format);
     }
 
     public function registerFormat(FormatInterface $format)

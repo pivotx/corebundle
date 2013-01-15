@@ -73,6 +73,7 @@ any:
     state:              { en: 'state', nl: 'status' }
     autoload:           { en: 'autoload', nl: 'automatisch laden' }
     rawhtml:            { en: 'raw html', nl: 'rauwe html' }
+    responses:          { en: 'responses', nl: 'antwoorden' }
     value:              { en: 'value', nl: 'waarde' }
     human_editable:     { en: 'user editable', nl: 'gebruikersaanpasbaar' }
     enabled:            { en: 'enabled', nl: 'geactiveerd' }
