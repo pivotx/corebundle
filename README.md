@@ -1,7 +1,7 @@
 PivotX 4
 ========
 
-Welcome to the PivotX installation.
+Welcome to the PivotX Readme file.
 
 
 
@@ -109,7 +109,7 @@ Run Assetic Dump
 
 ### Done!
 
-Run your browser and go to http://YOURSITE/pivotx/en/
+Start your browser and go to http://YOURSITE/pivotx/en/
 
 
 ### Installing PivotX CoreBundle and BackendBundle from Github

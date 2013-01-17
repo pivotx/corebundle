@@ -35,6 +35,14 @@ class Menu
     }
 
     /**
+     * Don't merge self with items
+     */
+    public function excludeRoot()
+    {
+        $this->merge_self_with_items = false;
+    }
+
+    /**
      */
     public function getDepth()
     {

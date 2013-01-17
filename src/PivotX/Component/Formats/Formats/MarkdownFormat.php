@@ -16,6 +16,12 @@ class MarkdownFormat extends AbstractFormat
      */
     public function format($in, $arguments = array())
     {
-        return new \Twig_Markup(Markdown($in), 'utf-8');
+        static $parser = null;
+
+        if (is_null($parser)) {
+            $parser = new \Markdown_Parser;
+        }
+
+        return new \Twig_Markup($parser->transform($in), 'utf-8');
     }
 }

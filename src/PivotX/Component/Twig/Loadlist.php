@@ -17,26 +17,9 @@ namespace PivotX\Component\Twig;
  */
 class Loadlist extends \Twig_TokenParser
 {
-    protected function convertToViewArguments(\Twig_Node_Expression_Array $array)
-    {
-        $arguments = array();
-
-        foreach(array_chunk($array->getIterator()->getArrayCopy(), 2) as $pair) {
-            if (count($pair) == 2) {
-                $key   = $pair[0]->getAttribute('value');
-                $value = $pair[1]->getAttribute('value');   // @todo support for multiple types
-
-                $arguments[$key] = $value;
-            }
-        }
-
-        return $arguments;
-    }
-
     public function parse(\Twig_Token $token)
     {
         $lineno = $token->getLine();
-        $arguments = array();
 
         $listexpr = $this->parser->getExpressionParser()->parseExpression();
         if ($listexpr->hasAttribute('value')) {
@@ -56,18 +39,16 @@ class Loadlist extends \Twig_TokenParser
             $name = $asexpr->getAttribute('name');
         }
 
-        if ($this->parser->getStream()->test(\Twig_Token::NAME_TYPE, 'with')) {
+        $exclude_root = false;
+        if ($this->parser->getStream()->test(\Twig_Token::NAME_TYPE, 'excludeRoot')) {
             $this->parser->getStream()->next();
-            $withexpr = $this->parser->getExpressionParser()->parseHashExpression();
 
-            $arguments = $this->convertToViewArguments($withexpr);
-
-            //echo '<pre>With:<br/>'; var_dump($arguments); echo '</pre>';
+            $exclude_root = true;
         }
 
         $this->parser->getStream()->expect(\Twig_Token::BLOCK_END_TYPE);
 
-        return new Loadlistnode($name, $list, $arguments, $lineno, $this->getTag());
+        return new Loadlistnode($name, $list, $exclude_root, $lineno, $this->getTag());
     }
 
     public function getTag()

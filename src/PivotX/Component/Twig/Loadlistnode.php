@@ -17,9 +17,9 @@ namespace PivotX\Component\Twig;
  */
 class Loadlistnode extends \Twig_Node
 {
-    public function __construct($name, $list, $arguments, $lineno, $tag = null)
+    public function __construct($name, $list, $exclude_root, $lineno, $tag = null)
     {
-        parent::__construct(array(), array('name' => $name, 'list' => $list, 'with_arguments' => $arguments), $lineno, $tag);
+        parent::__construct(array(), array('name' => $name, 'list' => $list, 'exclude_root' => $exclude_root), $lineno, $tag);
     }
 
     public function compile(\Twig_Compiler $compiler)
@@ -28,17 +28,7 @@ class Loadlistnode extends \Twig_Node
             ->addDebugInfo($this)
             ->write('$context[\''.$this->getAttribute('name').'\'] = ')
             ->write('\PivotX\Component\Lists\Lists::loadList("'.$this->getAttribute('list').'");')
+            ->write('$context[\''.$this->getAttribute('name').'\']->excludeRoot();')
             ;
-
-        /*
-        $with_arguments = $this->getAttribute('with_arguments');
-        if (is_array($with_arguments) && (count($with_arguments) > 0)) {
-            $compiler
-                ->addDebugInfo($this)
-                ->write('$context[\''.$this->getAttribute('name').'\']->addWithArguments('.var_export($with_arguments,true).');')
-                ;
-
-        }
-         */
     }
 }
