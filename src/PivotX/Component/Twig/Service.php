@@ -15,7 +15,7 @@ use PivotX\Component\Webresourcer\Service as WebresourcerService;
 use PivotX\Component\Outputter\Service as OutputterService;
 use PivotX\Component\Siteoptions\Service as SiteoptionsService;
 
-include_once dirname(__FILE__).'/util.php';
+include_once dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/Resources/lib/utilphp/util.php';
 
 /**
  * Twig Query interface

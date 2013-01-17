@@ -42,6 +42,9 @@ class Service
 
         $format = new Formats\AutoFormat('auto', 'PivotX/Core', 'Smart escaping to usable html output.');
         $this->registerFormat($format);
+
+        $format = new Formats\MarkdownFormat('md', 'PivotX/Core', 'Markdown conversion.');
+        $this->registerFormat($format);
     }
 
     public function registerFormat(FormatInterface $format)
