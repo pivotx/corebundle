@@ -107,7 +107,7 @@ class Service
             $this->cache = array($site => array($language => array()));
         }
 
-        // @todo this could be an even very efficient query
+        // @todo this could be an even more efficient query one day
         $translations = $this->doctrine_registry->getRepository($this->entity_class)->findBy(array(
             'sitename' => $site
         ));
@@ -120,7 +120,7 @@ class Service
 
         $tr = array();
         foreach($translations as $translation) {
-            $tr[$translation->getGroupname().'.'.$translation->getName()] = $translation->$method();
+            $tr[$translation->getGroupname().'.'.$translation->getName()] = array($translation->getEncoding(), $translation->$method());
         }
 
         $this->cache[$site][$language] = $tr;
@@ -219,18 +219,32 @@ class Service
     }
 
     /**
+     */
+    private function outputConvert($in, $in_encoding, $output_type)
+    {
+        if ($output_type == 'twig') {
+            if ($in_encoding == 'html/utf-8') {
+                return new \Twig_Markup($in, 'utf-8');
+            }
+        }
+        return $in;
+    }
+
+    /**
      * Translate key to readable text
      *
-     * @param string $key       key to search for
-     * @param array $filter     pivotxrouting filter, if null use latest routematch
-     * @param string $encoding  return a specific encoding, if null use 'raw'
-     * @param array $macros     macros to replace within text
-     * @return string           readable text
+     * @param string $key         key to search for
+     * @param array $filter       pivotxrouting filter, if null use latest routematch
+     * @param string $output_type return in a specific output type
+     *                            - plain   output as-is
+     *                            - twig    output twig-safe
+     * @param array $macros       macros to replace within text
+     * @return string             readable text
      */
-    public function translate($key, $filter = null, $encoding = null, $macros = array())
+    public function translate($key, $filter = null, $output_type = null, $macros = array())
     {
-        if (is_null($encoding)) {
-            $encoding = 'raw';
+        if (is_null($output_type)) {
+            $output_type = 'plain';
         }
 
         list($groupname, $name, $site, $language) = $this->decodeKeyFilter($key, $filter);
@@ -238,11 +252,11 @@ class Service
         $this->initializeCache($site, $language);
         if (isset($this->cache[$site]) && isset($this->cache[$site][$language])) {
             if (isset($this->cache[$site][$language][$key])) {
-                $readable_text = $this->cache[$site][$language][$key];
+                list($encoding, $readable_text) = $this->cache[$site][$language][$key];
                 if (is_array($macros) && (count($macros) > 0)) {
                     $readable_text = strtr($readable_text, $macros);
                 }
-                return $readable_text;
+                return $this->outputConvert($readable_text, $encoding, $output_type);
             }
         }
 
@@ -261,9 +275,11 @@ class Service
             );
         }
 
-        $method = 'getText'.ucfirst($language);
+        $method   = 'getText'.ucfirst($language);
+        $encoding = 'utf-8';
         if (method_exists($translationtext,$method)) {
             $readable_text = $translationtext->$method();
+            $encoding      = $translationtext->getEncoding();
         }
         else {
             $readable_text = $key;
@@ -273,7 +289,7 @@ class Service
             $readable_text = strtr($readable_text, $macros);
         }
 
-        return $readable_text;
+        return $this->outputConvert($readable_text, $encoding, $output_type);
     }
 
     /**

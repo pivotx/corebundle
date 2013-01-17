@@ -27,44 +27,48 @@ class Routing
         $pattern = $name . '/' . '{slug}';
         $public  = $this->translations->translate($name.'.common.singular_slug',  'site='.$site.'&language='.$language).'/{slug}';
         $view    = '';
-        $routes[] = array(
-            'filter' => array(
-                'target' => $target,
-                'site' => $site,
-                'language' => $language
-            ),
-            'pattern' => $pattern,
-            'public' => $public,
-            'defaults' => array(
-                '_controller' => 'CoreBundle:DefaultFront:showEntityBySlug',
-                '_entity' => $name,
-                //'_view' => $view
-            ),
-            'requirements' => array(
-                'slug' => '[a-z]+[a-z0-9-]*'
-            )
-        );
+        if ($public != '') {
+            $routes[] = array(
+                'filter' => array(
+                    'target' => $target,
+                    'site' => $site,
+                    'language' => $language
+                ),
+                'pattern' => $pattern,
+                'public' => $public,
+                'defaults' => array(
+                    '_controller' => 'CoreBundle:DefaultFront:showEntityBySlug',
+                    '_entity' => $name,
+                    //'_view' => $view
+                ),
+                'requirements' => array(
+                    'slug' => '[a-z]+[a-z0-9-]*'
+                )
+            );
+        }
 
         $pattern = $name . '/' . '{id}';
         $public  = $this->translations->translate($name.'.common.singular_slug', 'site='.$site.'&language='.$language).'/{id}';
         $view    = '';
-        $routes[] = array(
-            'filter' => array(
-                'target' => $target,
-                'site' => $site,
-                'language' => $language
-            ),
-            'pattern' => $pattern,
-            'public' => $public,
-            'defaults' => array(
-                '_controller' => 'CoreBundle:DefaultFront:showEntityById',
-                '_entity' => $name,
-                //'_view' => $view
-            ),
-            'requirements' => array(
-                'id' => '[0-9]+'
-            )
-        );
+        if ($public != '') {
+            $routes[] = array(
+                'filter' => array(
+                    'target' => $target,
+                    'site' => $site,
+                    'language' => $language
+                ),
+                'pattern' => $pattern,
+                'public' => $public,
+                'defaults' => array(
+                    '_controller' => 'CoreBundle:DefaultFront:showEntityById',
+                    '_entity' => $name,
+                    //'_view' => $view
+                ),
+                'requirements' => array(
+                    'id' => '[0-9]+'
+                )
+            );
+        }
 
         return $routes;
     }
@@ -149,7 +153,8 @@ class Routing
             );
 
             $keys = explode("\n", $this->siteoptions->getValue('routing.keys', '', $site));
-            if (!in_array('routing.entity.'.$name, $keys)) {
+            if ((!in_array('routing.entity.'.$name, $keys)) &&
+                (!in_array('!routing.entity.'.$name, $keys))) {
                 $keys[] = 'routing.entity.'.$name;
 
                 $this->siteoptions->set(

@@ -327,8 +327,13 @@ class Entities
 
                 if (isset($translations[$entity])) {
                     foreach($translations[$entity] as $key => $terms) {
+                        $encoding = 'utf-8';
+                        if (isset($terms['encoding'])) {
+                            $encoding = $terms['encoding'];
+                        }
+
                         $texts = $this->convertTermsToLanguageTexts($terms, $languages);
-                        $this->translation_service->suggestTexts($entity, $key, 'pivotx-backend', 'utf-8', $texts);
+                        $this->translation_service->suggestTexts($entity, $key, 'pivotx-backend', $encoding, $texts);
                     }
 
                     /*
@@ -354,8 +359,13 @@ class Entities
         $translations = \Symfony\Component\Yaml\Yaml::parse($filename);
         foreach($translations as $group => $values) {
             foreach($values as $key => $terms) {
+                $encoding = 'utf-8';
+                if (isset($terms['encoding'])) {
+                    $encoding = $terms['encoding'];
+                }
+
                 $texts = $this->convertTermsToLanguageTexts($terms, $languages);
-                $this->translation_service->suggestTexts($group, $key, 'pivotx-backend', 'utf-8', $texts);
+                $this->translation_service->suggestTexts($group, $key, 'pivotx-backend', $encoding, $texts);
             }
         }
 

@@ -125,13 +125,13 @@ class Service extends \Twig_Extension
      */
     public function getTranslate($key, $macros = array())
     {
-        $sitename = null;
-        $encoding = 'utf-8';
+        $sitename    = null;
+        $output_type = 'twig';
 
         if (is_array($key)) {
             $key = implode('', $key);
         }
-        return $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $encoding, $macros);
+        return $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $output_type, $macros);
     }
 
     /**
@@ -139,14 +139,14 @@ class Service extends \Twig_Extension
      */
     public function getDebugTranslate($key, $macros = array())
     {
-        $sitename = null;
-        $encoding = 'utf-8';
+        $sitename    = null;
+        $output_type = 'twig';
 
         if (is_array($key)) {
             $key = implode('', $key);
         }
         $class_automagic = ($this->pivotx_translations->isTranslatedAutomagically(mb_strtolower($key), $sitename)) ? '' : ' automagic';
-        $text = $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $encoding, $macros);
+        $text = $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $output_type, $macros);
         $text = new \Twig_Markup('<span class="pivotx-is-translated'.$class_automagic.'" title="'.htmlspecialchars($key).'">'.$text.'</span>', 'utf-8');
 
         return $text;

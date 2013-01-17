@@ -140,6 +140,16 @@ class Route
     }
 
     /**
+     * Get the url
+     *
+     * @param string The url
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
      * Set the url
      *
      * This method implements a fluent interface.
@@ -215,6 +225,16 @@ class Route
         $this->requirements = $requirements;
 
         return $this;
+    }
+
+    /**
+     * Get requirements
+     *
+     * @return array The requirements
+     */
+    public function getRequirements()
+    {
+        return $this->requirements;
     }
 
     /**

@@ -97,7 +97,7 @@ table:
 config:
     check.require-attention:    { en: 'Require attention.', nl: 'Aandacht nodig.' }
     check.entities.false:       { en: 'Ok.', nl: 'Ok.' }
-    check.entities.true:        { en: 'Run the command-line setup.', nl: 'Doe de command-line setup.' }
+    check.entities.true:        { encoding: 'html/utf-8', en: 'Run the command-line setup.<br/><code>php app/console pivotx:setup</code>', nl: 'Doe de command-line setup.<br/><code>php app/console pivotx:setup</code>' }
 
 entities:
     message.entity-is-fixed:    { en: 'Cannot be edited by this backend.', nl: 'Kan niet bewerkt worden door de backend.' }

@@ -121,6 +121,12 @@ sites:
         singular_title: { en: 'entry', nl: 'bericht' }
         singular_slug:  { en: 'entry', nl: 'bericht' }
 
+    post:
+        plural_title:   { en: 'posts', nl: 'berichten' }
+        plural_slug:    { en: 'posts', nl: 'berichten' }
+        singular_title: { en: 'post', nl: 'bericht' }
+        singular_slug:  { en: 'post', nl: 'bericht' }
+
     category:
         plural_title:   { en: 'categories', nl: 'categorieen' }
         plural_slug:    { en: 'categories', nl: 'categorieen' }
@@ -138,4 +144,16 @@ sites:
         plural_slug:    { en: 'chapters', nl: 'hoofdstukken' }
         singular_title: { en: 'chapter', nl: 'hoofdstuk' }
         singular_slug:  { en: 'chapter', nl: 'hoofdstuk' }
+
+    comment:
+        plural_title:   { en: 'comments', nl: 'opmerkingen' }
+        plural_slug:    { en: 'comments', nl: 'opmerkingen' }
+        singular_title: { en: 'comment', nl: 'opmerking' }
+        singular_slug:  { en: 'comment', nl: 'opmerking' }
+
+    review:
+        plural_title:   { en: 'reviews', nl: 'beoordelingen' }
+        plural_slug:    { en: 'reviews', nl: 'beoordelingen' }
+        singular_title: { en: 'review', nl: 'beoordeling' }
+        singular_slug:  { en: 'review', nl: 'beoordeling' }
 

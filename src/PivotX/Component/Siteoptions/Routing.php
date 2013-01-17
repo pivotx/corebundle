@@ -95,10 +95,12 @@ class Routing
 
         $keys = explode("\n", $this->siteoptions->getValue('routing.keys', '', $site));
         foreach($keys as $key) {
-            $routes = array_merge(
-                $routes,
-                $this->siteoptions->getValue($key, array(), $site)
-            );
+            if (substr($key, 0, 1) != '!') {
+                $routes = array_merge(
+                    $routes,
+                    $this->siteoptions->getValue($key, array(), $site)
+                );
+            }
         }
 
         return $routes;
