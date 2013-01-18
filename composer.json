@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "symfony/framework-standard-edition": ""
+        "symfony/framework-standard-edition": "dev"
     },
     "autoload": {
         "psr-0": {
