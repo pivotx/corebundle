@@ -255,7 +255,6 @@ class SetupCommand extends ContainerAwareCommand
         }
 
         $siteoption_service->set('config.entities', json_encode($config_ents), 'application/json', false, false, 'all');
-        $siteoption_service->set('config.check.entities', 0, 'x-value/boolean', false, false, 'all');
 
         if ($require_doctrine_update) {
             /**
@@ -294,7 +293,33 @@ class SetupCommand extends ContainerAwareCommand
         $translation_service->commitTrans();
 
         $siteoption_service = $this->getContainer()->get('pivotx.siteoptions');
-        $siteoption_service->set('config.check.any', 0, 'x-value/boolean', false, false, 'all');
+        $siteoption_service->set('config.check.entities', 0, 'x-value/boolean', false, false, 'all');
+
+        return true;
+    }
+
+    /**
+     * Update config.check.any to the proper value.
+     */
+    protected function updateConfigCheck($input, $output, &$messages)
+    {
+
+        $siteoption_service = $this->getContainer()->get('pivotx.siteoptions');
+
+        $so_checks = $siteoptions_service->findSiteOptions('all', 'config.check');
+        $checks    = array();
+        $any_value = 0;
+        foreach($so_checks as $so_check) {
+            if ($so_check->getName() == 'any') {
+                continue;
+            }
+            if ($so_check->getUnpackedValue() == true) {
+                $any_value = 1;
+                break;
+            }
+        }
+
+        $siteoption_service->set('config.check.any', $any_value, 'x-value/boolean', false, false, 'all');
 
         return true;
     }
@@ -340,6 +365,11 @@ class SetupCommand extends ContainerAwareCommand
 
         if (!$this->updateHardEntities($input, $output, $messages)) {
             $output->writeln('Setup aborted. Hard-entities could not be updated.');
+            return;
+        }
+
+        if (!$this->updateConfigCheck($input, $output, $messages)) {
+            $output->writeln('Setup aborted. Configuration check failed.');
             return;
         }
 

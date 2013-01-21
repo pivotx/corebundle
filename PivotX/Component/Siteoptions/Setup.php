@@ -44,14 +44,12 @@ class Setup
     /**
      * Add all missing backend options
      *
-     * @return boolean    true if some translations have been added
+     * @param string $site  options site to set
+     * @return boolean      true if some translations have been added
      */
-    public function updateBackendOptions()
+    private function updateOptions($site)
     {
-        $added_translations = true;
-        $languages          = array('nl', 'en');
-
-        $filename = $this->getSiteoptionsSuggestionsFilename('backend');
+        $filename = $this->getSiteoptionsSuggestionsFilename($site)
         $siteoptions = \Symfony\Component\Yaml\Yaml::parse($filename);
 
         foreach($siteoptions as $group => $values) {
@@ -85,10 +83,21 @@ class Setup
                         break;
                 }
 
-                $this->siteoptions_service->suggestValue($group, $key, 'pivotx-backend', $value, $mediatype, $autoload, $human_editable);
+                $this->siteoptions_service->suggestValue($group, $key, $site, $value, $mediatype, $autoload, $human_editable);
             }
         }
 
         return true;
+    }
+
+    /**
+     * Add all missing backend options
+     *
+     * @return boolean    true if some translations have been added
+     */
+    public function updateBackendOptions()
+    {
+        $this->updateOptions('pivotx-backend');
+        $this->updateOptions('all');
     }
 }

@@ -1,0 +1,3 @@
+config.check:
+    any:            { value: true, mediatype: 'x-value/boolean', autoload: false, human_editable: false }
+    sites:          { value: true, mediatype: 'x-value/boolean', autoload: false, human_editable: false }
