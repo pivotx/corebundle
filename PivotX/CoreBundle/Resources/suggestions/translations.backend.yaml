@@ -98,6 +98,7 @@ config:
     check.require-attention:    { en: 'Require attention.', nl: 'Aandacht nodig.' }
     check.entities.false:       { en: 'Ok.', nl: 'Ok.' }
     check.entities.true:        { encoding: 'html/utf-8', en: 'Run the command-line setup.<br/><code>php app/console pivotx:setup</code>', nl: 'Doe de command-line setup.<br/><code>php app/console pivotx:setup</code>' }
+    check.sites.true:           { encoding: 'html/utf-8', en: 'Please start the site configuration.<br/>Go to [Development] &gt; [Site]', nl: 'Doe eerste de site-configuratie.<br/>Ga naar [Development] &gt; [Site]' }
 
 entities:
     message.entity-is-fixed:    { en: 'Cannot be edited by this backend.', nl: 'Kan niet bewerkt worden door de backend.' }

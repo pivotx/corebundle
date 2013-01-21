@@ -8,3 +8,7 @@ translations:
 themes:
     active:         { value: '@BackendBundle/Webresources/themes/backend/theme.json', autoload: true, human_editable: true }
     debug:          { value: true, mediatype: 'x-value/boolean', autoload: true, human_editable: true }
+
+config.check:
+    any:            { value: true, mediatype: 'x-value/boolean', autoload: false, human_editable: false }
+    sites:          { value: true, mediatype: 'x-value/boolean', autoload: false, human_editable: false }
