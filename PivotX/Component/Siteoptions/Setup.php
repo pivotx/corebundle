@@ -18,19 +18,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Setup
 {
-    private $doctrine;
     private $siteoptions_service;
 
     /**
      * Constructor.
-     *
-     * @param RegistryInterface $registry A RegistryInterface instance
      */
-    public function __construct(Registry $doctrine, $siteoptions_service)
+    public function __construct($siteoptions_service)
     {
-        //echo 'PivotX Doctrine Warmer'."\n";
-
-        $this->doctrine = $doctrine;
         $this->siteoptions_service = $siteoptions_service;
     }
 
@@ -91,13 +85,33 @@ class Setup
     }
 
     /**
-     * Add all missing backend options
+     * Add all missing options
      *
      * @return boolean    true if some translations have been added
      */
-    public function updateBackendOptions()
+    public function updateAllOptions()
     {
         $this->updateOptions('pivotx-backend');
         $this->updateOptions('all');
+    }
+
+    /**
+     */
+    public function updateConfigCheck()
+    {
+        $so_checks = $this->siteoptions_service->findSiteOptions('all', 'config.check');
+        $checks    = array();
+        $any_value = 0;
+        foreach($so_checks as $so_check) {
+            if ($so_check->getName() == 'any') {
+                continue;
+            }
+            if ($so_check->getUnpackedValue() == true) {
+                $any_value = 1;
+                break;
+            }
+        }
+
+        $this->siteoptions_service->set('config.check.any', $any_value, 'x-value/boolean', false, false, 'all');
     }
 }

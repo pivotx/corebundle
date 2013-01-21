@@ -51,13 +51,12 @@ class SetupCommand extends ContainerAwareCommand
      */
     protected function updateSiteoptions($input, $output, &$messages)
     {
-        $doctrine = $this->getContainer()->get('doctrine');
         $siteoptions_service = $this->getContainer()->get('pivotx.siteoptions');
 
         $siteoptions_service->beginTrans();
 
-        $setup = new \PivotX\Component\Siteoptions\Setup($doctrine, $siteoptions_service);
-        $setup->updateBackendOptions();
+        $setup = new \PivotX\Component\Siteoptions\Setup($siteoptions_service);
+        $setup->updateAllOptions();
 
         $siteoptions_service->commitTrans();
 
@@ -303,22 +302,10 @@ class SetupCommand extends ContainerAwareCommand
      */
     protected function updateConfigCheck($input, $output, &$messages)
     {
-        $siteoption_service = $this->getContainer()->get('pivotx.siteoptions');
+        $siteoptions_service = $this->getContainer()->get('pivotx.siteoptions');
 
-        $so_checks = $siteoption_service->findSiteOptions('all', 'config.check');
-        $checks    = array();
-        $any_value = 0;
-        foreach($so_checks as $so_check) {
-            if ($so_check->getName() == 'any') {
-                continue;
-            }
-            if ($so_check->getUnpackedValue() == true) {
-                $any_value = 1;
-                break;
-            }
-        }
-
-        $siteoption_service->set('config.check.any', $any_value, 'x-value/boolean', false, false, 'all');
+        $setup = new \PivotX\Component\Siteoptions\Setup($siteoptions_service);
+        $setup->updateConfigCheck();
 
         return true;
     }
