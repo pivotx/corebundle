@@ -190,7 +190,7 @@ class SetupCommand extends ContainerAwareCommand
                 $user->setEnabled(true);
                 $user->addRole('ROLE_SUPER_ADMIN');
                 $user->setEmail($email);
-                $user->setPasswd($password);
+                $user->setPasswd($new_password);
 
                 $em->persist($user);
 
