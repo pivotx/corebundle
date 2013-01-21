@@ -299,7 +299,7 @@ class Entities
      */
     private function getTranslationSuggestionsFilename($name)
     {
-        return dirname(dirname(dirname(dirname(__FILE__)))).'/Resources/suggestions/translations.'.$name.'.yaml';
+        return dirname(dirname(dirname(dirname(__FILE__)))).'/PivotX/CoreBundle/Resources/suggestions/translations.'.$name.'.yaml';
     }
 
     /**

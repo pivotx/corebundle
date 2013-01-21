@@ -1,10 +1,10 @@
 
 webresources:
-    directory:      { value: [ '@BackendBundle/Resources/lib' ], autoload: true, human_editable: true, mediatype: 'application/json' }
+    directory:      { value: [ '@BackendBundle/../../Resources/lib' ], autoload: true, human_editable: true, mediatype: 'application/json' }
 
 translations:
     debug:          { value: false, mediatype: 'x-value/boolean', autoload: true, human_editable: true }
 
 themes:
-    active:         { value: '@BackendBundle/Resources/themes/backend/theme.json', autoload: true, human_editable: true }
+    active:         { value: '@BackendBundle/../../Resources/themes/backend/theme.json', autoload: true, human_editable: true }
     debug:          { value: true, mediatype: 'x-value/boolean', autoload: true, human_editable: true }
