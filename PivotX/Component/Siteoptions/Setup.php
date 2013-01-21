@@ -38,7 +38,7 @@ class Setup
      */
     private function getSiteoptionsSuggestionsFilename($name)
     {
-        return dirname(dirname(dirname(dirname(__FILE__)))).'/Resources/suggestions/siteoptions.'.$name.'.yaml';
+        return dirname(dirname(dirname(dirname(__FILE__)))).'/PivotX/CoreBundle/Resources/suggestions/siteoptions.'.$name.'.yaml';
     }
 
     /**
