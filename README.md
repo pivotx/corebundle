@@ -27,7 +27,7 @@ Next go to your new Symfony root:
 
     composer.phar config repositories.pxcore vcs /2kdata/git/002/pivotx4_corebundle/
     composer.phar config repositories.pxback vcs /2kdata/git/002/pivotx4_backendbundle/
-    composer.phar require -v --dev pivotx/corebundle:dev-master pivotx/backendbundle:dev-master
+    composer.phar require -v pivotx/corebundle:dev-master pivotx/backendbundle:dev-master
 
 
 ### Installing PivotX CoreBundle and BackendBundle 
