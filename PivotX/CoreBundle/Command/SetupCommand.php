@@ -254,9 +254,7 @@ class SetupCommand extends ContainerAwareCommand
             }
         }
 
-        $siteoption = $siteoption_service->getSiteOption('config.entities', 'all');
-        $siteoption->setUnpackedValue($config_ents);
-
+        $siteoption_service->set('config.entities', json_encode($config_ents), 'application/json', false, false, 'all');
         $siteoption_service->set('config.check.entities', 0, 'x-value/boolean', false, false, 'all');
 
         if ($require_doctrine_update) {
