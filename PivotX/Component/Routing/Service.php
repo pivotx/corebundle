@@ -106,7 +106,6 @@ class Service
     {
         if (!isset($config['targets']) || !is_array($config['targets'])) {
             if ($strict) {
-                echo '<pre>'; var_dump($config); echo '</pre>';
                 // @todo throw exception
                 $this->logger->err('No targets defined in route configuration.');
                 return false;
