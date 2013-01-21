@@ -49,7 +49,7 @@ class Setup
      */
     private function updateOptions($site)
     {
-        $filename = $this->getSiteoptionsSuggestionsFilename($site)
+        $filename = $this->getSiteoptionsSuggestionsFilename($site);
         $siteoptions = \Symfony\Component\Yaml\Yaml::parse($filename);
 
         foreach($siteoptions as $group => $values) {
