@@ -177,12 +177,17 @@ class Service
             'autoload' => true
         );
 
-        $siteoptions = $this->doctrine_registry->getRepository($this->entity_class)->findBy($arguments);
+        try {
+            $siteoptions = $this->doctrine_registry->getRepository($this->entity_class)->findBy($arguments);
 
-        foreach($siteoptions as $siteoption) {
-            $cachekey = $this->getCacheKey($siteoption->getGroupname(), $siteoption->getName(), $siteoption->getSitename());
+            foreach($siteoptions as $siteoption) {
+                $cachekey = $this->getCacheKey($siteoption->getGroupname(), $siteoption->getName(), $siteoption->getSitename());
 
-            $this->cache[$cachekey] = $siteoption;
+                $this->cache[$cachekey] = $siteoption;
+            }
+        }
+        catch (\Doctrine\DBAL\DBALException $exception) {
+            return false;
         }
 
         return true;
