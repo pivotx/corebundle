@@ -22,6 +22,29 @@ class SetupCommand extends ContainerAwareCommand
     }
 
     /**
+     * Check install
+     *
+     * @todo this just checks if the autoloaded siteoptions are loaded
+     */
+    protected function checkInstall($input, $output, &$messages)
+    {
+        $siteoptions_service = $this->getContainer()->get('pivotx.siteoptions');
+
+        if (!$siteoptions_service->isCacheInitted()) {
+            $output->writeln('The site has not yet been properly installed.');
+            $output->writeln('');
+            $output->writeln('Configure the database, run the command below and run this setup again.');
+            $output->writeln('');
+            $output->writeln('php app/console doctrine:schema:update --force');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Update siteoptions
      *
      * @return boolean  true, if update successful
      */
@@ -295,6 +318,11 @@ class SetupCommand extends ContainerAwareCommand
         $output->writeln('');
 
         $messages = array();
+
+        if (!$this->checkInstall($input, $output, $messages)) {
+            // checkInstall how outputted exactly wat was wrong
+            return;
+        }
 
         if (!$this->updateSiteoptions($input, $output, $messages)) {
             $output->writeln('Setup aborted. Options could not be updated.');

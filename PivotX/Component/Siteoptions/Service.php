@@ -32,6 +32,7 @@ class Service
     private $in_transaction = false;
 
     // siteoptions cache: a simple read-only cache
+    private $cache_initted = false;
     private $cache = false;
     private $cache_hits = 0;
     private $cache_misses = 0;
@@ -177,6 +178,8 @@ class Service
             'autoload' => true
         );
 
+        $this->cache_initted = false;
+
         try {
             $siteoptions = $this->doctrine_registry->getRepository($this->entity_class)->findBy($arguments);
 
@@ -185,12 +188,22 @@ class Service
 
                 $this->cache[$cachekey] = $siteoption;
             }
+
+            $this->cache_initted = true;
         }
         catch (\Doctrine\DBAL\DBALException $exception) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Return true if the cache has been initted
+     */
+    public function isCacheInitted()
+    {
+        return $this->cache_initted;
     }
 
     /**
