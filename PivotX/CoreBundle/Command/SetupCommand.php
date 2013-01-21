@@ -182,7 +182,9 @@ class SetupCommand extends ContainerAwareCommand
 
                 $factory  = $this->getContainer()->get('security.encoder_factory');
                 $encoder  = $factory->getEncoder($user);
-                $password = $encoder->encodePassword($new_password, $user->getSalt());
+
+                // setting the encoder
+                $user->setEncoderFactory_passwd($encoder);
 
                 $user->initNewCrudRecord();
                 $user->setEnabled(true);
