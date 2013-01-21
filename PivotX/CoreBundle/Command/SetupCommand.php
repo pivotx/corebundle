@@ -303,10 +303,9 @@ class SetupCommand extends ContainerAwareCommand
      */
     protected function updateConfigCheck($input, $output, &$messages)
     {
-
         $siteoption_service = $this->getContainer()->get('pivotx.siteoptions');
 
-        $so_checks = $siteoptions_service->findSiteOptions('all', 'config.check');
+        $so_checks = $siteoption_service->findSiteOptions('all', 'config.check');
         $checks    = array();
         $any_value = 0;
         foreach($so_checks as $so_check) {
