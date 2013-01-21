@@ -32,10 +32,11 @@ class SetupCommand extends ContainerAwareCommand
 
         if (!$siteoptions_service->isCacheInitted()) {
             $output->writeln('The site has not yet been properly installed.');
-            $output->writeln('');
             $output->writeln('Configure the database, run the command below and run this setup again.');
             $output->writeln('');
             $output->writeln('php app/console doctrine:schema:update --force');
+            $output->writeln('');
+            $output->writeln('If you are seeing this message again it probably means the database has still not been created.');
 
             return false;
         }
