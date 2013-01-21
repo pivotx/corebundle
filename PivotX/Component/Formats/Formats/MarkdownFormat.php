@@ -7,7 +7,7 @@ namespace PivotX\Component\Formats\Formats;
 
 use \PivotX\Component\Formats\AbstractFormat;
 
-include_once dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))).'/Resources/lib/php_markdown_1.0.1p/markdown.php';
+include_once dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/Resources/lib/php_markdown_1.0.1p/markdown.php';
 
 class MarkdownFormat extends AbstractFormat
 {
