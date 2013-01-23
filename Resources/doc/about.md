@@ -31,3 +31,95 @@ PivotX has been designed from the ground up to deliver a great experience for th
     Automatic routing, crud editors and translations are all added by default and can be overwritten if needed. PivotX adds many
     Symfony **services** which can be used by your own code or where you can add your own stuff into.
 
+
+
+### Services and API
+
+Every service has benefits for all groups, but for clarity they are seperated by group.
+
+#### for content editors
+
+*   Activities.
+
+    Activities keep track of all actions inside the CMS. If someone logs in, changes a record, it
+    all gets collected. Depending on the importance or size these records gets cleaned as well.
+
+*   Translations.
+
+    It's easy for the developers of the site to add every piece of text as a 'translatable' code
+    inside the Twig templates (or PHP for that matter). This means that you basically easily change
+    every text on the site.
+
+#### for front-end designers
+
+*   Lists.
+
+    **Lists** can be ordinary lists which can be used inside your templates, but you also use them
+    to make the main menu or even the complete sitemap. You can create new lists, include
+    other lists inside those lists, add dynamic lists portions (for instance the latest 3 news items)
+    and add them easily inside your templates.
+
+    For instance: <code>{% loadList 'mainmenu' as menu %}</code>
+
+    @todo there is no backend interface yet
+
+*   Twig Views.
+
+    **Views** are basically pre-defined queries which have a very simple Twig-snippet and are very easy 
+    to configure.
+    
+    For instance: <code>{% loadView 'Entry/findLatestByModified' as entries limit 5 %}</code>
+
+    See [Development] -> [Views]
+
+*   Twig Formats.
+
+    **Formats** are Twig-filters that can be configured inside the backend.
+
+    For instance: <code>{{ entry.datemodified|formatas('date/long') }}</code>
+
+    @todo not yet
+
+    See [Development] -> [Formats]
+
+*   Web Debug Toolbar.
+
+    By default we add a simple Collector to the standard Symfony toolbar. This shows exactly
+    which templates get loaded.
+
+*   Webresourcer.
+
+    As developers we want total control over our stylesheets and scripts but we don't want the
+    hassle of manually maintaining dependencies and/or proper loading order. We just want
+    to use something, fill in some stuff (like api-keys or other config options) and then
+    include it in our website. 
+    This service can automatically minifies code, include it in the right spot inside your
+    HTML. Disable certain resources when developing (@todo not yet).
+
+    @todo later we will also be able to update resources and even go back when the updates
+    didn't work as expected
+
+#### for developers
+
+*   Outputter.
+
+    This is the low-level version of webresources. You can use this to dynamically inject 
+    code in the HTML in certain locations (headStart, afterTitle, headEnd, bodyStart, bodyEnd).
+
+*   Siteoptions.
+
+    We have a simple service to store and retrieve site options and values. You can store values
+    of any type (text, json, xml, etc), mark them as human editable, auto-load them at every
+    request and organise them into groups. PivotX uses them when something has to be dynamic
+    or is dynamic by nature.
+
+*   Doctrine features.
+
+    Based on your configuration we add and maintain code inside your entities and models.
+    You can fixate this or not use it at all if required, but it's purpose is to lessen
+    the boilerplate code you would otherwise most likely would have to write.
+
+*   Front-end services.
+
+    Every service has been built as a PHP service first. So you can easily use and expand
+    everything mentioned above.

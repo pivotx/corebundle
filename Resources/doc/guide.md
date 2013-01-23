@@ -129,7 +129,7 @@ For each combination of sites, languages and targets you can have
 different URL's if you want to.
 
 Domain/url's aliases are supported and can even be automatically
-corrected if you want it (@todo correction is on the wishlist).
+corrected if you want that (@todo correction is on the wishlist).
 
 It's possible to automatically redirect URL's to the proper
 canonical URL's. All outgoing URL's are also normalized.
@@ -138,7 +138,8 @@ Just like in Symfony, routes have requirements and defaults. The
 difference in PivotX-routing is the way URL's are build for developers.
 PivotX has a concept of a 'Reference'.
 
-Go to [Development] -> [Routing] to view the routing table. 
+To view all the routes for the currently selected site go to:
+[Development] -> [Routing]
 
 ##### Reference
 
@@ -149,6 +150,6 @@ than that. For instance in Twig:
 
     {{ ref('_page/frontpage') }}                  creates a public url to the frontpage in the current language
     {{ ref('(language=nl)?_page/frontpage') }}    creates a public url to the Dutch frontpage
-    {{ ref('(target=mobile)?_page/frontpage') }}  creates a public url to the mobile frontpage
-    {{ ref('(t=mobile&l=nl)?_page/frontpage') }}  creates a public url to the Dutch mobile frontpage using shortcuts
+    {{ ref('(target=mobile)?_page/frontpage') }}  creates a public url to the mobile frontpage in current language
+    {{ ref('(t=mobile&l=nl)?_page/frontpage') }}  creates a public url to the Dutch mobile frontpage using shorthands
 

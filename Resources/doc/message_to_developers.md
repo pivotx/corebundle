@@ -8,6 +8,9 @@ Whilst we tried using as much of the features of the existing frameworks. We fou
 we were not smart enough to implement it or we had very specific feature set in mind which was easier to re-invent for the moment.
 As this CMS matures we would like to contribute more to all the projects so that we can integrate them properly in a future version.
 
+The current code is full of **@todo** marking with a description of what is still supposed to be done about it. This doesn't mean 'the rest 
+is finished', but it does give priority or leave hints on what should be done.
+
 
 To all developers
 -----------------
@@ -46,6 +49,10 @@ Assetic
 We struggled to use this, but ultimately we stopped using it and build something we required. It's still on our wish list to actually use.
 We wanted to build a 'web resource package system', where all dependencies between the resources are managed and the ultimate
 control of the packages is in the backend. Our system is not as fast or as smart as assetic at this time.
+
+An importance difference at the moment is the fact that you don't have to run a command-line command to have it work in a production site.
+Because of this, it is currently too slow for actual production use, but it will be when we will release a version 1.0.
+Or when we get assetic working with our 'no command-line command' requirement.
 
 
 Doctrine
