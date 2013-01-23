@@ -144,7 +144,7 @@
         </service>
 
         <service id="data_collector.template" class="%pivotx.webdebug.template.class%">
-            <tag name="data_collector"  template="CoreBundle:Collector:Template" id="template" />
+            <tag name="data_collector"  template="CoreBundle:Collector:Template" id="template" priority="15" />
         </service>
     </services>
 
