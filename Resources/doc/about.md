@@ -42,12 +42,12 @@ Every service has benefits for all groups, but for clarity they are seperated by
 *   Activities.
 
     Activities keep track of all actions inside the CMS. If someone logs in, changes a record, it
-    all gets collected. Depending on the importance or size these records gets cleaned as well.
+    all gets collected. Depending on the importance or size the log gets automatically trimmed.
 
 *   Translations.
 
     It's easy for the developers of the site to add every piece of text as a 'translatable' code
-    inside the Twig templates (or PHP for that matter). This means that you basically easily change
+    inside the Twig templates (or PHP for that matter). This means that you can basically easily change
     every text on the site.
 
 #### for front-end designers
@@ -59,7 +59,7 @@ Every service has benefits for all groups, but for clarity they are seperated by
     other lists inside those lists, add dynamic lists portions (for instance the latest 3 news items)
     and add them easily inside your templates.
 
-    For instance: <code>{% loadList 'mainmenu' as menu %}</code>
+    For instance to load a list: <code>{% loadList 'mainmenu' as menu %}</code>
 
     @todo there is no backend interface yet
 
@@ -68,7 +68,7 @@ Every service has benefits for all groups, but for clarity they are seperated by
     **Views** are basically pre-defined queries which have a very simple Twig-snippet and are very easy 
     to configure.
     
-    For instance: <code>{% loadView 'Entry/findLatestByModified' as entries limit 5 %}</code>
+    For instance to load a view: <code>{% loadView 'Entry/findLatestByModified' as entries limit 5 %}</code>
 
     See [Development] -> [Views]
 
