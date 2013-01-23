@@ -44,6 +44,9 @@
 
         <!-- doctrine subscriber -->
         <parameter key="pivotx.doctrine.subscriber.class">PivotX\Doctrine\Subscriber\Subscriber</parameter>
+
+        <!-- template datacollector -->
+        <parameter key="pivotx.webdebug.template.class">PivotX\Component\Webdebug\TemplateDataCollector</parameter>
     </parameters>
 
     <services>
@@ -138,6 +141,10 @@
 
         <service id="pivotx.subscriber" class="%pivotx.doctrine.subscriber.class%">
             <tag name="doctrine.event_subscriber" />
+        </service>
+
+        <service id="data_collector.template" class="%pivotx.webdebug.template.class%">
+            <tag name="data_collector"  template="CoreBundle:Collector:Template" id="template" />
         </service>
     </services>
 

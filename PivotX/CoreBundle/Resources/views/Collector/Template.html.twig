@@ -1,0 +1,37 @@
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    {# the web debug toolbar content #}
+
+    {% set icon %}
+        <span>
+            <img width="13" height="28" alt="Templates" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAcBAMAAABITyhxAAAAJ1BMVEXNzc3///////////////////////8/Pz////////////+NjY0/Pz9lMO+OAAAADHRSTlMAABAgMDhAWXCvv9e8JUuyAAAAQ0lEQVQI12MQBAMBBmLpMwoMDAw6BxjOOABpHyCdAKRzsNDp5eXl1KBh5oHBAYY9YHoDQ+cqIFjZwGCaBgSpBrjcCwCZgkUHKKvX+wAAAABJRU5ErkJggg=="/>
+            <span>{{ collector.firsttemplate.template }}</span>
+        </span>
+    {% endset %}
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>Template</b>
+            <span>{{ collector.firsttemplate.template }}</span><br/>
+        {% for template in collector.templates %}
+            <br/>
+            <span>- {{ template.template }}</span>
+        {% endfor %}
+        </div>
+    {% endset %}
+    {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': false } %}
+{% endblock %}
+
+{% block head %}
+    {# if the web profiler panel needs some specific JS or CSS files #}
+{% endblock %}
+
+{% block menu %}
+    {# the menu content #}
+{% endblock %}
+
+{% block panel %}
+    {# the panel content #}
+
+    panel
+{% endblock %}

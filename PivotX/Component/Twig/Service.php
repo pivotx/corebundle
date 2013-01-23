@@ -51,6 +51,10 @@ class Service extends \Twig_Extension
     public function initRuntime(\Twig_Environment $environment)
     {
         $this->environment = $environment;
+
+        // we hack a loader between the regular loader
+        $loader = $this->environment->getLoader();
+        $this->environment->setLoader(new WebdebugLoader($loader));
     }
 
     public function getName()
