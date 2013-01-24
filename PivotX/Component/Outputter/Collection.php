@@ -99,6 +99,16 @@ class Collection
         $type_contents  = array();
         foreach($in_outputs as $output) {
             if (!$output->allowConcat()) {
+                if (count($type_contents) > 0) {
+                    $new_output = new Output($type_contents, $previous_type);
+                    if ($previous_debug) {
+                        $new_output->allowDebugging();
+                    }
+                    $out_outputs[] = $new_output;
+                    $type_contents = array();
+                    $previous_type = false;
+                }
+
                 $out_outputs[] = $output;
                 continue;
             }
