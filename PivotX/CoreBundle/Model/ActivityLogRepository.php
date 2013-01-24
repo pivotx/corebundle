@@ -16,7 +16,7 @@ class ActivityLogRepository extends \PivotX\Doctrine\Repository\AutoEntityReposi
     /**
      * Find all records as used by the Crud
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:20:27
+     * @PivotX\UpdateDate     2013-01-24 15:21:14
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -36,7 +36,7 @@ class ActivityLogRepository extends \PivotX\Doctrine\Repository\AutoEntityReposi
 
         $builder  = new \Doctrine\Common\Collections\ExpressionBuilder;
 
-		if (!is_null($site)) {
+		if ((!is_null($site)) && ($site != '')) {
 			$criteria->andWhere($builder->eq('sitename', $site));
 		}
 
@@ -67,7 +67,7 @@ class ActivityLogRepository extends \PivotX\Doctrine\Repository\AutoEntityReposi
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:20:27
+     * @PivotX\UpdateDate     2013-01-24 15:21:14
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

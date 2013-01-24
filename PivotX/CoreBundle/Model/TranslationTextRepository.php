@@ -49,7 +49,7 @@ class TranslationTextRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find all records as used by the Crud
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:20:27
+     * @PivotX\UpdateDate     2013-01-24 15:21:14
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -69,7 +69,7 @@ class TranslationTextRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
 
         $builder  = new \Doctrine\Common\Collections\ExpressionBuilder;
 
-		if (!is_null($site)) {
+		if ((!is_null($site)) && ($site != '')) {
 			$criteria->andWhere($builder->eq('sitename', $site));
 		}
 
@@ -100,7 +100,7 @@ class TranslationTextRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:20:27
+     * @PivotX\UpdateDate     2013-01-24 15:21:14
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */

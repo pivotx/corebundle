@@ -108,7 +108,7 @@ class ObjectRepository extends \PivotX\Doctrine\Entity\AbstractEntityRepository
         $and_wheres = '';
         if (isset($config['site_only']) && ($config['site_only'] == true)) {
             $add_args    = '$site = null, ';
-            $and_wheres .= "\t\tif (!is_null(\$site)) {\n";
+            $and_wheres .= "\t\tif ((!is_null(\$site)) && (\$site != '')) {\n";
             $and_wheres .= "\t\t\t" . '$criteria->andWhere($builder->eq(\'sitename\', $site));' . "\n";
             $and_wheres .= "\t\t}\n";
         }

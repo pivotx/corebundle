@@ -78,7 +78,7 @@ class Routing
      */
     public function getSites()
     {
-        $_sites = explode("\n", $this->siteoptions->getValue('config.sites', array(), 'all'));
+        $_sites = explode("\n", $this->siteoptions->getValue('config.sites', '', 'all'));
 
         $sites = array();
         foreach($_sites as $site) {
