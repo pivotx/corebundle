@@ -18,7 +18,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
      * @param integer $limit      limit the number of results
      * @param integer $offset     first result to return
      * @return object             Criteria object
-     * @PivotX\UpdateDate     2013-01-14 14:18:46
+     * @PivotX\UpdateDate     2013-01-24 14:09:13
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -55,7 +55,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
 
     /**
      * Find lastest by Modified 
-     * @PivotX\UpdateDate     2013-01-14 14:18:46
+     * @PivotX\UpdateDate     2013-01-24 14:09:13
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -74,7 +74,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
 
     /**
      * Find by Modified between 2 dates (the former is inclusive, the latter exclusive)
-     * @PivotX\UpdateDate     2013-01-14 14:18:46
+     * @PivotX\UpdateDate     2013-01-24 14:09:13
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -117,7 +117,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find by Modified in a specific year
      * 
-     * @PivotX\UpdateDate     2013-01-14 14:18:46
+     * @PivotX\UpdateDate     2013-01-24 14:09:13
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -135,7 +135,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find by Modified in a specific year/month
      * 
-     * @PivotX\UpdateDate     2013-01-14 14:18:46
+     * @PivotX\UpdateDate     2013-01-24 14:09:13
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -159,7 +159,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find by Modified in a specific year relative to the current year
      * 
-     * @PivotX\UpdateDate     2013-01-14 14:18:46
+     * @PivotX\UpdateDate     2013-01-24 14:09:13
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -176,7 +176,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find by Modified in a specific year/month relative to the current year/month
      * 
-     * @PivotX\UpdateDate     2013-01-14 14:18:46
+     * @PivotX\UpdateDate     2013-01-24 14:09:13
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -198,9 +198,57 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     }
 
     /**
+     * Find all records as used by the Crud
+     * 
+     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\AutoUpdateCode code will be updated by PivotX
+     * @author                PivotX Generator
+     */
+    public function findCrudAll($_criteria = null, $order_by = null, $limit = null, $offset = null)
+    {
+        if (is_null($_criteria)) {
+            $criteria = new \Doctrine\Common\Collections\Criteria;
+        }
+        else if ($_criteria instanceof \Doctrine\Common\Collections\Criteria) {
+            $criteria = $_criteria;
+        }
+        else {
+            $criteria = new \Doctrine\Common\Collections\Criteria;
+
+            // @todo do something with $_criteria
+        }
+
+        $builder  = new \Doctrine\Common\Collections\ExpressionBuilder;
+
+
+        if (is_array($order_by)) {
+            $criteria->orderBy($order_by);
+        }
+        else {
+			$criteria->orderBy(array (   'date_modified' => \Doctrine\Common\Collections\Criteria::DESC ));
+        }
+
+        if (!is_null($limit)) {
+            $criteria->setMaxResults($limit);
+        }
+        if (!is_null($offset)) {
+            $criteria->setFirstResult($offset);
+        }
+
+        // CurrentSite only
+        /*
+        if (is_null($first_expression)) {
+            $criteria->andWhere($last_expression);
+        }
+        */
+
+        return $this->matching($criteria);
+    }
+
+    /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2013-01-14 14:18:46
+     * @PivotX\UpdateDate     2013-01-24 14:09:13
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -223,6 +271,9 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
 		$service->registerView($view);
 		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findByModifiedOnRelativeMonth', array('year'=>null, 'month'=>null, 'no_of_months'=>1), $prefix.'/findByModifiedOnRelativeMonth', 'Find "genericresources" by "Modified" based on year/month relative to the current year/month', 'PivotX/Core', array($prefix, 'returnMore'));
 		$view->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on year/month relative to the current year/month.</p><h4>Available arguments</h4><dl><dt>year</dt><dd>Year to add or substract to the current year. When unspecified defaults to <em>+1</em> (next year).</dd><dd>Arguments example: <code>{ 'year': +1 }</code></dd><dt>month</dt><dd>Month to add or substract to the current month. When unspecified defaults to <em>+1</em> (next month).</dd><dd>Arguments example: <code>{ 'month': +1 }</code></dd><dt>no_of_months</dt><dd>Number of months to return. When unspecified defaults to <em>1</em>.</dd><dd>Arguments example: <code>{ 'no_of_months': 1 }</code></dd></dl>");
+		$service->registerView($view);
+		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findCrudAll', array(), $prefix.'/findCrudAll', 'Find all records for the Crud table', 'PivotX/Core', array($prefix, 'returnMore'));
+		$view->setLongDescription("<h4>Description</h4><p>Find all records for the Crud table.</p>");
 		$service->registerView($view);
 
     }

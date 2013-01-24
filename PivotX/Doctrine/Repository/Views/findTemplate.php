@@ -19,6 +19,14 @@ class findTemplate extends AbstractView
         $this->method_arguments = $arguments;
     }
 
+    public function hasMethodArgument($name)
+    {
+        if (array_key_exists($name, $this->method_arguments)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      */
     public function getDefaultPhpExample()

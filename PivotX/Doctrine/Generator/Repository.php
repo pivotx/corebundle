@@ -71,7 +71,9 @@ THEEND;
                 $field_generators[] = array($generator, null, null);
 
                 foreach($fields as $field) {
-                    $field_generators[] = array($generator, $field[0], $field[1]);
+                    if (!is_null($field[0]) || !is_null($field[1])) {
+                        $field_generators[] = array($generator, $field[0], $field[1]);
+                    }
                 }
             }
             else {
@@ -86,7 +88,6 @@ THEEND;
         if (!class_exists($classname)) {
             return $code;
         }
-
 
         // add methods and code as returned by the feature configurations
 
@@ -138,7 +139,11 @@ THEEND;
                     $add_methods[$name] = $method_code;
                 }
             }
-            $generated_views_code .= $generator->getViewsForEntity($config);
+
+            if (!is_null($config)) {
+                // just once, only when config is not null
+                $generated_views_code .= $generator->getViewsForEntity($config);
+            }
         }
 
         $default_comment = Code::getDefaultComment();

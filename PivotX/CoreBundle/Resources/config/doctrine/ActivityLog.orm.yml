@@ -84,3 +84,7 @@ PivotX\CoreBundle\Entity\ActivityLog:
         name: user_id
         referencedColumnName: id
       fetch: EXTRA_LAZY
+  auto_entity:
+    pivotx_crud:
+      site_only:    true
+      order_by:     { 'date_logged': 'desc', 'id': 'desc' }

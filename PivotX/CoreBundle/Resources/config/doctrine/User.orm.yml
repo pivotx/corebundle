@@ -116,3 +116,5 @@ PivotX\CoreBundle\Entity\User:
       remove-fields: [ 'passwd', 'passwd_salt' ]
     genericable:
       title:         'email'
+    pivotx_crud:
+      order_by:     { 'level': 'desc', 'email': 'asc' }

@@ -93,3 +93,6 @@ PivotX\CoreBundle\Entity\TranslationText:
       limits:
         age:     31
         records: 1000
+    pivotx_crud:
+      site_only:    true
+      order_by:     { 'sitename': 'asc', 'groupname': 'asc', 'name': 'asc' }

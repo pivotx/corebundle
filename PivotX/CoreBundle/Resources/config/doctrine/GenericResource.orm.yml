@@ -84,3 +84,5 @@ PivotX\CoreBundle\Entity\GenericResource:
       fields:
         - name:     'Modified'
           field:    'date_modified'
+    pivotx_crud:
+      order_by:     { 'date_modified': 'desc' }

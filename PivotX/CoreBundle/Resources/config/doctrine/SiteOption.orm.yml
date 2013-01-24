@@ -93,3 +93,6 @@ PivotX\CoreBundle\Entity\SiteOption:
       limits:
         age:     365
         records: 100
+    pivotx_crud:
+      site_only:    true
+      order_by:     { 'sitename': 'asc', 'groupname': 'asc', 'name': 'asc' }
