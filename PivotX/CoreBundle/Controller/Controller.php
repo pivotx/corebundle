@@ -121,19 +121,33 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $webresourcer->addWebresourcesFromDirectory($directory);
         }
 
-        $webresource = $webresourcer->addWebresource(new DirectoryWebresource($theme_json));
-        if ($siteoptions->getValue('themes.debug', false)) {
-            $webresource->allowDebugging();
+
+        try {
+            $webresource = $webresourcer->addWebresource(new DirectoryWebresource($theme_json));
+            if ($siteoptions->getValue('themes.debug', false)) {
+                $webresource->allowDebugging();
+            }
+            $webresourcer->activateWebresource($webresource->getIdentifier());
+
+            // finalization
+
+            $webresourcer->finalizeWebresources($outputter, $allow_debugging);
+            $groups = $outputter->finalizeAllOutputs($site, $allow_debugging ? 'debug' : 'production');
+            $this->get('pivotx.siteoptions')->set('outputter.groups.'.($allow_debugging?'debug':'production'), json_encode($groups), 'application/json', true, false, $site);
         }
-        $webresourcer->activateWebresource($webresource->getIdentifier());
-
-
-
-        // finalization
-
-        $webresourcer->finalizeWebresources($outputter, $allow_debugging);
-        $groups = $outputter->finalizeAllOutputs($site, $allow_debugging ? 'debug' : 'production');
-        $this->get('pivotx.siteoptions')->set('outputter.groups.'.($allow_debugging?'debug':'production'), json_encode($groups), 'application/json', true, false, $site);
+        catch (\InvalidArgumentException $e) {
+            $this->get('pivotx.activity')
+                ->administrativeMessage(
+                    null,
+                    'Unable to load theme file <strong>:theme</strong>',
+                    array(
+                        'theme' => $theme_json
+                    )
+                )
+                ->mostImportant()
+                ->log()
+                ;
+        }
 
         return $webresourcer;
     }
@@ -154,9 +168,42 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $this->buildWebresources($site, true);
         }
 
-        $path = dirname($this->get('pivotx.siteoptions')->getValue('themes.active', null, $site));
-        $realpath = $this->get('kernel')->locateResource($path);
-        $this->get('twig.loader')->addPath($realpath . '/twig');
+        $theme_json = $this->get('pivotx.siteoptions')->getValue('themes.active', null, $site);
+        if (!is_null($theme_json)) {
+            $path = dirname($theme_json);
+            try {
+                $realpath = $this->get('kernel')->locateResource($path);
+                if (is_dir($realpath) && is_dir($realpath.'/twig')) {
+                    $this->get('twig.loader')->addPath($realpath . '/twig');
+                }
+                else {
+                    $this->get('pivotx.activity')
+                        ->administrativeMessage(
+                            null,
+                            'Cannot find twig templates at <strong>:twig</strong>',
+                            array(
+                                'twig' => $path.'/twig'
+                            )
+                        )
+                        ->mostImportant()
+                        ->log()
+                        ;
+                }
+            }
+            catch (\InvalidArgumentException $e) {
+                $this->get('pivotx.activity')
+                    ->administrativeMessage(
+                        null,
+                        'Unable to load theme <strong>:path</strong>',
+                        array(
+                            'path' => $path
+                        )
+                    )
+                    ->mostImportant()
+                    ->log()
+                    ;
+            }
+        }
 
         if (!is_null($sw)) {
             $sw->stop();
