@@ -96,6 +96,7 @@ class Setup
     }
 
     /**
+     * Verify all checks and set or reset the master check value.
      */
     public function updateConfigCheck()
     {

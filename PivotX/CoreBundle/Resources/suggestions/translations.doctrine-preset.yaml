@@ -102,6 +102,10 @@ user:
     plural_title:       { en: 'users', nl: 'gebruikers' }
     singular_title:     { en: 'user', nl: 'gebruiker' }
 
+activitylog:
+    plural_title:       { en: 'activities', nl: 'activiteiten' }
+    singular_title:     { en: 'activity', nl: 'activiteit' }
+
 sites:
     item:
         plural_title:   { en: 'items', nl: 'items' }

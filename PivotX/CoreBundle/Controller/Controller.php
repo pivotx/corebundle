@@ -105,13 +105,12 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $stopwatch = $this->container->get('stopwatch');
         }
 
-        $path = $siteoptions->getValue('themes.path', null, $site);
-        $path = '@BackendBundle/Webresources/themes/backend';
-
-        if (is_null($path)) {
+        $theme_json = $siteoptions->getValue('themes.active', null, $site);
+        if (is_null($theme_json)) {
             // cannot continue, nothing configured
             return null;
         }
+        $theme_path = dirname($theme_json);
 
 
         $webresourcer = new \PivotX\Component\Webresourcer\Service($logger, $kernel);
@@ -122,7 +121,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $webresourcer->addWebresourcesFromDirectory($directory);
         }
 
-        $webresource = $webresourcer->addWebresource(new DirectoryWebresource($path.'/theme.json'));
+        $webresource = $webresourcer->addWebresource(new DirectoryWebresource($theme_json));
         if ($siteoptions->getValue('themes.debug', false)) {
             $webresource->allowDebugging();
         }
@@ -155,8 +154,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $this->buildWebresources($site, true);
         }
 
-        $path = $this->get('pivotx.siteoptions')->getValue('themes.path', null, $site);
-        $path = '@BackendBundle/Webresources/themes/backend';
+        $path = dirname($this->get('pivotx.siteoptions')->getValue('themes.active', null, $site));
         $realpath = $this->get('kernel')->locateResource($path);
         $this->get('twig.loader')->addPath($realpath . '/twig');
 
@@ -170,6 +168,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
     public function render($view, array $parameters = array(), Response $response = null)
     {
         static $run_once = false;
+        static $stop_response = false;
 
         // @note could be better
         if ($run_once === false) {
@@ -178,8 +177,14 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $once_response = $this->runOnce();
 
             if ((!is_null($once_response)) && ($once_response instanceof Response)) {
+                $stop_response = $once_response;
                 return $once_response;
             }
+        }
+
+        // don't understand, but sometimes we get here when were supposed to stop already
+        if ($stop_response !== false) {
+            return $stop_response;
         }
 
         if (count($parameters) == 0) {
