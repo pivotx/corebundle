@@ -130,7 +130,7 @@ class Collection
     /**
      * Finalize webresources to an outputter
      */
-    public function finalize($outputter)
+    public function finalize($outputter, $force_debugging = false)
     {
         // filter resources
         $webresources = array();
@@ -169,7 +169,7 @@ class Collection
 
         // output them
         foreach($webresources as $webresource) {
-            $webresource->finalizeOutput($outputter);
+            $webresource->finalizeOutput($outputter, $force_debugging);
         }
 
         return true;

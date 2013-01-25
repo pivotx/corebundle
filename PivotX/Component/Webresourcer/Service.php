@@ -30,15 +30,13 @@ class Service
     private $logger;
     private $webresources;
     private $kernelservice;
-    private $outputterservice;
     private $collection;
 
 
-    public function __construct(LoggerInterface $logger = null, \AppKernel $kernelservice, OutputterService $outputterservice)
+    public function __construct(LoggerInterface $logger = null, \AppKernel $kernelservice)
     {
-        $this->logger           = $logger;
-        $this->kernelservice    = $kernelservice;
-        $this->outputterservice = $outputterservice;
+        $this->logger        = $logger;
+        $this->kernelservice = $kernelservice;
 
         DirectoryWebresource::setKernelService($this->kernelservice);
 
@@ -88,8 +86,8 @@ class Service
      * 
      * @param boolean $force_debugging   if debugging is forced
      */
-    public function finalizeWebresources($force_debugging = false)
+    public function finalizeWebresources($outputter, $allow_debugging = false)
     {
-        return $this->collection->finalize($this->outputterservice, $force_debugging);
+        return $this->collection->finalize($outputter, $allow_debugging);
     }
 }

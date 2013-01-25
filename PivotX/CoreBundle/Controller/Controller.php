@@ -5,6 +5,7 @@ namespace PivotX\CoreBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use PivotX\Component\Referencer\Reference;
+use PivotX\Component\Webresourcer\DirectoryWebresource;
 
 
 class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
@@ -87,10 +88,81 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         return null;
     }
 
+    /**
+     * Build the webresources
+     */
+    protected function buildWebresources($site, $allow_debugging = false)
+    {
+        $kernel       = $this->get('kernel');
+        $siteoptions  = $this->get('pivotx.siteoptions');
+        $routing      = $this->get('pivotx.routing');
+        $logger       = null;
+        $stopwatch    = null;
+        if ($this->container->has('logger')) {
+            $logger = $this->container->get('logger');
+        }
+        if ($this->container->has('stopwatch')) {
+            $stopwatch = $this->container->get('stopwatch');
+        }
+
+        $path = $siteoptions->getValue('themes.path', null, $site);
+        $path = '@BackendBundle/Webresources/themes/backend';
+
+        if (is_null($path)) {
+            // cannot continue, nothing configured
+            return null;
+        }
+
+
+        $webresourcer = new \PivotX\Component\Webresourcer\Service($logger, $kernel);
+        $outputter    = new \PivotX\Component\Outputter\Service($logger, $kernel, $routing, $stopwatch);
+
+        $directories = $siteoptions->getValue('webresources.directory', array(), $site);
+        foreach($directories as $directory) {
+            $webresourcer->addWebresourcesFromDirectory($directory);
+        }
+
+        $webresource = $webresourcer->addWebresource(new DirectoryWebresource($path.'/theme.json'));
+        if ($siteoptions->getValue('themes.debug', false)) {
+            $webresource->allowDebugging();
+        }
+        $webresourcer->activateWebresource($webresource->getIdentifier());
+
+
+
+        // finalization
+
+        $webresourcer->finalizeWebresources($outputter, $allow_debugging);
+        $groups = $outputter->finalizeAllOutputs($site, $allow_debugging ? 'debug' : 'production');
+        $this->get('pivotx.siteoptions')->set('outputter.groups.'.($allow_debugging?'debug':'production'), json_encode($groups), 'application/json', true, false, $site);
+
+        return $webresourcer;
+    }
+
     protected function runOnce()
     {
-        $webresourcer = $this->container->get('pivotx.webresourcer');
-        $webresourcer->finalizeWebresources();
+        $stopwatch = $this->container->get('debug.stopwatch', \Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE);
+        $sw        = null;
+        if (!is_null($stopwatch)) {
+            $sw = $stopwatch->start('core runonce', 'controller');
+        }
+
+        $request = $this->getRequest();
+        $site    = $request->attributes->get('_site', null);
+
+
+        if ($this->get('kernel')->isDebug()) {
+            $this->buildWebresources($site, true);
+        }
+
+        $path = $this->get('pivotx.siteoptions')->getValue('themes.path', null, $site);
+        $path = '@BackendBundle/Webresources/themes/backend';
+        $realpath = $this->get('kernel')->locateResource($path);
+        $this->get('twig.loader')->addPath($realpath . '/twig');
+
+        if (!is_null($sw)) {
+            $sw->stop();
+        }
 
         return null;
     }

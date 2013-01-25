@@ -43,11 +43,13 @@ class Collection
      * @param string $group   webresource group to return
      * @return string         html of the resources
      */
-    public function getGroup($group)
+    public function getGroup($group, $temp_directory = null, $site = null, $version = null)
     {
         $html = '';
 
-        $temp_directory = $this->output_directory;
+        if (is_null($temp_directory)) {
+            $temp_directory = $this->output_directory;
+        }
 
         if (isset($this->groups[$group])) {
             // @todo only works when included in HTML (and in the html part)
@@ -59,7 +61,7 @@ class Collection
 
             $groupoutput = '';
             foreach($outputs as $output) {
-                $groupoutput .= $output->getHtml($temp_directory, $this->routing_service);
+                $groupoutput .= $output->getHtml($temp_directory, $this->routing_service, $site, $version);
             }
 
             $html .= $groupoutput;
@@ -68,7 +70,7 @@ class Collection
             $html .= "\t\t".  '<!-- /output group: ['.$group.'] -->'."\n";
         }
 
-        return new \Twig_Markup($html, 'utf-8');
+        return $html;
     }
 
     public function add($group, Output $output)

@@ -26,6 +26,8 @@ class Output
     protected $type;
     protected $debuggable = false;
     protected $routing_service = false;
+    protected $site = null;
+    protected $version = null;
 
     private static $last_source_directories = false;
     private static $active_temp_directory = false;
@@ -110,17 +112,33 @@ class Output
         $dirname  = dirname($name_suggestion);
         $basename = pathinfo($name_suggestion, PATHINFO_FILENAME);
 
-        if (preg_match('#(.+)(/src|app|web/)(.+)#', $dirname, $match)) {
+        if (preg_match('#(.+)(/src|app|web|vendor/)(.+)#', $dirname, $match)) {
             $dirname = $match[3];
         }
-        $dirname = str_replace('/PivotX/', '/', $dirname);
+        if (preg_match('#(.+)(/themes|lib/)(.+)#', $dirname, $match)) {
+            $dirname = $match[3];
+        }
+
+        $dirname = str_replace('pivotx/', '/', $dirname);
+        $dirname = str_replace('backendbundle/', '/', $dirname);
+        $dirname = str_replace('corebundle/', '/', $dirname);
+        $dirname = str_replace('/Webresources/', '/', $dirname);
         $dirname = str_replace('/Resources/', '/', $dirname);
-        $dirname = str_replace('Bundle', '', $dirname);
         $dirname = substr($dirname, 0, 40);
         $dirname = trim(preg_replace('|[^a-zA-Z0-9+]|', ' ', $dirname));
         $dirname = str_replace(' ', '_', $dirname);
 
         return $dirname.'_'.$basename.'.'.$extension;
+    }
+
+    /**
+     * Get the url prefix for a cache file
+     *
+     * @return string cache url to use
+     */
+    protected function getCachePrefix()
+    {
+        return '/outputter/'.$this->site.'/'.$this->version;
     }
 
     /**
@@ -131,7 +149,7 @@ class Output
      */
     protected function getCacheUrl($filename)
     {
-        return $this->routing_service->buildUrl('(language=none)@_cwr/'.$filename);
+        return $this->getCachePrefix().'/'.$filename;
     }
 
     /**
@@ -312,7 +330,7 @@ class Output
                             $first_src = $src;
                         }
                         // @todo ugly, we assume the url has 'cwr/' in it..
-                        $src  = preg_replace('|(.*)cwr/(.+)|', '\\2', $src);
+                        $src  = preg_replace('#(.*)(cwr|outputter/[^/]+/[^/]+)/(.+)#', '\\3', $src);
                         $file = $temp_directory . '/' . $src;
 
                         $data .= file_get_contents($file) . "\n";
@@ -384,7 +402,7 @@ class Output
                 $first_href = $hrefs[0];
                 foreach($hrefs as $href) {
                     // @todo ugly, we assume the url has 'cwr/' in it..
-                    $href  = preg_replace('|(.*)cwr/(.+)|', '\\2', $href);
+                    $href = preg_replace('#(.*)(cwr|outputter/[^/]+/[^/]+)/(.+)#', '\\3', $href);
                     $file = $temp_directory . '/' . $href;
 
                     $data .= file_get_contents($file) . "\n";
@@ -484,12 +502,15 @@ class Output
      *
      * @return string    html valid output
      */
-    public function getHtml($temp_directory, $routing_service)
+    public function getHtml($temp_directory, $routing_service, $site, $version)
     {
         $output = '';
 
         $this->routing_service       = $routing_service;
         self::$active_temp_directory = $temp_directory;
+
+        $this->site    = $site;
+        $this->version = $version;
 
         switch ($this->type) {
             case 'text/javascript':

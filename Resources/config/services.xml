@@ -33,12 +33,6 @@
         <!-- activity -->
         <parameter key="pivotx.activity.class">PivotX\Component\Activity\Service</parameter>
 
-        <!-- outputter -->
-        <parameter key="pivotx.outputter.class">PivotX\Component\Outputter\Service</parameter>
-
-        <!-- webresourcer -->
-        <parameter key="pivotx.webresourcer.class">PivotX\Component\Webresourcer\Service</parameter>
-
         <!-- lists -->
         <parameter key="pivotx.lists.class">PivotX\Component\Lists\Service</parameter>
 
@@ -93,30 +87,16 @@
 
         <service id="twig.extension.pivotx" class="%pivotx.twig.class%" public="false">
             <tag name="twig.extension" />
+            <argument type="service" id="kernel" />
             <argument type="service" id="pivotx.routing" />
             <argument type="service" id="pivotx.translations" />
             <argument type="service" id="pivotx.formats" />
-            <argument type="service" id="pivotx.webresourcer" />
-            <argument type="service" id="pivotx.outputter" />
             <argument type="service" id="pivotx.siteoptions" />
         </service>
 
         <service id="pivotx.activity" class="%pivotx.activity.class%" public="true">
             <argument type="service" id="doctrine" />
             <argument type="service" id="session" on-invalid="ignore" />
-        </service>
-
-        <service id="pivotx.outputter" class="%pivotx.outputter.class%" public="true">
-            <argument type="service" id="logger" on-invalid="ignore" />
-            <argument type="service" id="kernel" />
-            <argument type="service" id="pivotx.routing" />
-            <argument type="service" id="debug.stopwatch" on-invalid="ignore" />
-        </service>
-
-        <service id="pivotx.webresourcer" class="%pivotx.webresourcer.class%" public="true">
-            <argument type="service" id="logger" on-invalid="ignore" />
-            <argument type="service" id="kernel" />
-            <argument type="service" id="pivotx.outputter" />
         </service>
 
         <service id="pivotx.lists" class="%pivotx.lists.class%" public="true">

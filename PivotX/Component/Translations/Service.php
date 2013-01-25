@@ -198,8 +198,11 @@ class Service
     }
 
     /**
+     * Has the translation been automatic and not pre-defined?
+     *
      * @param string $key       key to search for
      * @param array $filter     pivotxrouting filter, if null use latest routematch
+     * @return boolean          true if magically translated
      */
     public function isTranslatedAutomagically($key, $filter = null)
     {
@@ -259,7 +262,6 @@ class Service
                 return $this->outputConvert($readable_text, $encoding, $output_type);
             }
         }
-
 
         $translationtext = $this->findEntity($groupname, $name, $site);
 

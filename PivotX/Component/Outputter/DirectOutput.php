@@ -47,33 +47,39 @@ class DirectOutput extends Output
 
     /**
      */
-    public function getHtml($temp_directory, $routing_service)
+    public function getHtml($temp_directory, $routing_service, $site, $version)
     {
         $output = '';
 
+        $this->site    = $site;
+        $this->version = $version;
+
+        $content = $this->content;
+        $content = str_replace('%cache_prefix%', $this->getCachePrefix(), $content);
+
         switch ($this->type) {
             case 'text/javascript':
-                $output .= '<script type="text/javascript">'."\n".$this->content."\n</script>\n";
+                $output .= '<script type="text/javascript">'."\n".$content."\n</script>\n";
                 break;
 
             case 'text/x-javascript-src':
-                $output .= '<script type="text/javascript" src="'.$this->content.'"></script>'."\n";
+                $output .= '<script type="text/javascript" src="'.$content.'"></script>'."\n";
                 break;
 
             case 'text/css':
-                $output .= '<style type="text/css">'."\n".$this->content."\n</style>\n";
+                $output .= '<style type="text/css">'."\n".$content."\n</style>\n";
                 break;
 
             case 'text/x-css-href':
-                $output .= '<link rel="stylesheet" type="text/css" href="'.$this->content.'" />';
+                $output .= '<link rel="stylesheet" type="text/css" href="'.$content.'" />';
                 break;
 
             case 'text/x-less-href':
-                $output .= '<link rel="stylesheet" type="text/less" href="'.$this->content.'" />';
+                $output .= '<link rel="stylesheet" type="text/less" href="'.$content.'" />';
                 break;
 
             case 'text/html':
-                $output .= $this->content;
+                $output .= $content;
                 break;
         }
 

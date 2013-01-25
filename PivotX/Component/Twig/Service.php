@@ -27,22 +27,20 @@ include_once dirname(dirname(dirname(dirname(__FILE__)))).'/Resources/lib/utilph
 class Service extends \Twig_Extension
 {
     protected $environment = false;
+    protected $kernel = false;
     protected $pivotx_routing = false;
     protected $pivotx_translations = false;
     protected $pivotx_formats = false;
-    protected $pivotx_webresourcer = false;
-    protected $pivotx_outputter = false;
     protected $pivotx_siteoptions = false;
 
     /**
      */
-    public function __construct(RoutingService $pivotx_routing, TranslationsService $pivotx_translations, FormatsService $pivotx_formats, WebresourcerService $pivotx_webresourcer, OutputterService $pivotx_outputter, SiteoptionsService $pivotx_siteoptions)
+    public function __construct(\AppKernel $kernel, RoutingService $pivotx_routing, TranslationsService $pivotx_translations, FormatsService $pivotx_formats, SiteoptionsService $pivotx_siteoptions)
     {
+        $this->kernel              = $kernel;
         $this->pivotx_routing      = $pivotx_routing;
         $this->pivotx_translations = $pivotx_translations;
         $this->pivotx_formats      = $pivotx_formats;
-        $this->pivotx_webresourcer = $pivotx_webresourcer;
-        $this->pivotx_outputter    = $pivotx_outputter;
         $this->pivotx_siteoptions  = $pivotx_siteoptions;
     }
 
@@ -247,7 +245,34 @@ class Service extends \Twig_Extension
      */
     public function getOutputter($group)
     {
-        return $this->pivotx_outputter->getOutputs($group);
+        static $groups = null;
+
+        // not ideal: determining the current site
+        $site       = 'unknown-route';
+        $routematch = $this->pivotx_routing->getLatestRouteMatch();
+        if (!is_null($routematch)) {
+            $attributes = $routematch->getAttributes();
+            if (isset($attributes['_site'])) {
+                $site = $attributes['_site'];
+            }
+        }
+
+        if (is_null($groups)) {
+            $key = 'outputter.groups.';
+            if ($this->kernel->isDebug()) {
+                $key .= 'debug';
+            }
+            else {
+                $key .= 'production';
+            }
+            $groups = $this->pivotx_siteoptions->getValue($key, array(), $site);
+        }
+
+        if (isset($groups[$group])) {
+            return new \Twig_Markup($groups[$group], 'utf-8');
+        }
+
+        return '';
     }
 
     /**

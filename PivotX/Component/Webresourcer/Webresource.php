@@ -217,9 +217,9 @@ class Webresource
      * Finalize all the outputs
      *
      * @param OutputterService $outputterservice   service to output to
-     * @param boolean $force_debugging             if debugging is forced
+     * @param boolean $allow_debugging             if debugging is forced
      */
-    public function finalizeOutput(OutputterService $outputterservice, $force_debugging = false)
+    public function finalizeOutput(OutputterService $outputterservice, $allow_debugging = false)
     {
         if ($this->variant !== false) {
             $variant = $this->variant;
@@ -232,7 +232,7 @@ class Webresource
             foreach($this->variants[$variant] as $group => $outputs) {
                 if (count($outputs) > 0) {
                     foreach($outputs as $output) {
-                        if (($this->debuggable) || ($force_debugging)) {
+                        if (($this->debuggable) && ($allow_debugging)) {
                             $output->allowDebugging();
                         }
                         $outputterservice->addOutput($group, $output);
