@@ -7,6 +7,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class CoreBundle extends Bundle
 {
+    const VERSION = '4.0.0';
+
     public function boot()
     {
         //echo "Boot bundle..\n";
