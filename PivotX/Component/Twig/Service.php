@@ -118,7 +118,7 @@ class Service extends \Twig_Extension
         }
 
         $sw = null;
-        if (!is_null($this->kernel->getContainer()->get('debug.stopwatch'))) {
+        if ($this->kernel->getContainer()->has('debug.stopwatch')) {
             $sw = $this->kernel->getContainer()->get('debug.stopwatch')->start('getReference', 'twigService');
         }
 
@@ -145,7 +145,7 @@ class Service extends \Twig_Extension
         }
 
         $sw = null;
-        if (!is_null($this->kernel->getContainer()->get('debug.stopwatch'))) {
+        if ($this->kernel->getContainer()->has('debug.stopwatch')) {
             $sw = $this->kernel->getContainer()->get('debug.stopwatch')->start('getTranslate', 'twigService');
         }
 

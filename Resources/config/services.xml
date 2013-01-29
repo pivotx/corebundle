@@ -111,7 +111,7 @@
             <argument type="service" id="pivotx.routing" />
             <argument type="service" id="pivotx.translations" />
             <argument type="service" id="security.context" />
-            <argument type="service" id="debug.stopwatch" />
+            <argument type="service" id="debug.stopwatch" on-invalid="ignore" />
         </service>
 
         <!--

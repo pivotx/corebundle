@@ -11,6 +11,7 @@ namespace PivotX\Component\Translations;
 use PivotX\Component\Routing\Service as RoutingService;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use PivotX\CoreBundle\Entity\TranslationText;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * PivotX Translation Service
@@ -37,7 +38,7 @@ class Service
      */
     private $in_transaction = false;
 
-    public function __construct(RoutingService $pivotx_routing, Registry $doctrine_registry, $kernel)
+    public function __construct(RoutingService $pivotx_routing, Registry $doctrine_registry, Kernel $kernel)
     {
         $this->pivotx_routing    = $pivotx_routing;
         $this->doctrine_registry = $doctrine_registry;
@@ -259,7 +260,7 @@ class Service
         list($groupname, $name, $site, $language) = $this->decodeKeyFilter($key, $filter);
 
         $sw = null;
-        if (!is_null($this->kernel->getContainer()->get('debug.stopwatch'))) {
+        if ($this->kernel->getContainer()->has('debug.stopwatch')) {
             $sw = $this->kernel->getContainer()->get('debug.stopwatch')->start('initializeCache', 'translateService');
         }
         $this->initializeCache($site, $language);

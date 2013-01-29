@@ -30,7 +30,7 @@ class Lists
     {
     }
 
-    public static function setServices(Service $lists_service, LoggerInterface $logger, SecurityContext $security_context, Stopwatch $stopwatch)
+    public static function setServices(Service $lists_service, LoggerInterface $logger, SecurityContext $security_context, Stopwatch $stopwatch = null)
     {
         self::$lists_service    = $lists_service;
         self::$logger           = $logger;
