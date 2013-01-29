@@ -25,6 +25,7 @@ class Service
     private $doctrine_registry = false;
     private $entity_manager = false;
     private $entity_class = false;
+    private $kernel = false;
 
     /**
      * Local code cache
@@ -36,16 +37,22 @@ class Service
      */
     private $in_transaction = false;
 
-    public function __construct(RoutingService $pivotx_routing, Registry $doctrine_registry)
+    public function __construct(RoutingService $pivotx_routing, Registry $doctrine_registry, $kernel)
     {
         $this->pivotx_routing    = $pivotx_routing;
         $this->doctrine_registry = $doctrine_registry;
+        $this->kernel            = $kernel;
 
         $this->entity_manager = $this->doctrine_registry->getEntityManager();
 
         $this->determineEntityClass();
 
         $this->cache = array();
+
+        $cacheDir = $this->kernel->getCacheDir();
+        if (is_file($cacheDir.'/translations.php')) {
+            $this->cache = require($cacheDir.'/translations.php');
+        }
     }
 
     /**
@@ -101,13 +108,12 @@ class Service
             if (isset($this->cache[$site][$language])) {
                 return;
             }
-            $this->cache[$site] = array($language => array());
+            $this->cache[$site][$language] = array();
         }
         else {
             $this->cache = array($site => array($language => array()));
         }
 
-        // @todo this could be an even more efficient query one day
         $translations = $this->doctrine_registry->getRepository($this->entity_class)->findBy(array(
             'sitename' => $site
         ));
@@ -252,7 +258,15 @@ class Service
 
         list($groupname, $name, $site, $language) = $this->decodeKeyFilter($key, $filter);
 
+        $sw = null;
+        if (!is_null($this->kernel->getContainer()->get('debug.stopwatch'))) {
+            $sw = $this->kernel->getContainer()->get('debug.stopwatch')->start('initializeCache', 'translateService');
+        }
         $this->initializeCache($site, $language);
+        if (!is_null($sw)) {
+            $sw->stop();
+        }
+
         if (isset($this->cache[$site]) && isset($this->cache[$site][$language])) {
             if (isset($this->cache[$site][$language][$key])) {
                 list($encoding, $readable_text) = $this->cache[$site][$language][$key];

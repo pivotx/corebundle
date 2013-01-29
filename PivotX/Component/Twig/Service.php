@@ -117,7 +117,17 @@ class Service extends \Twig_Extension
             $text = implode('', $text);
         }
 
+        $sw = null;
+        if (!is_null($this->kernel->getContainer()->get('debug.stopwatch'))) {
+            $sw = $this->kernel->getContainer()->get('debug.stopwatch')->start('getReference', 'twigService');
+        }
+
         $url = $this->pivotx_routing->buildUrl($text, $arguments, $options);
+
+        if (!is_null($sw)) {
+            $sw->stop();
+        }
+
 
         return $url;
     }
@@ -133,7 +143,19 @@ class Service extends \Twig_Extension
         if (is_array($key)) {
             $key = implode('', $key);
         }
-        return $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $output_type, $macros);
+
+        $sw = null;
+        if (!is_null($this->kernel->getContainer()->get('debug.stopwatch'))) {
+            $sw = $this->kernel->getContainer()->get('debug.stopwatch')->start('getTranslate', 'twigService');
+        }
+
+        $text = $this->pivotx_translations->translate(mb_strtolower($key), $sitename, $output_type, $macros);
+
+        if (!is_null($sw)) {
+            $sw->stop();
+        }
+
+        return $text;
     }
 
     /**

@@ -12,6 +12,7 @@ use PivotX\Component\Siteoptions\Service as SiteoptionsService;
 use PivotX\Component\Routing\Service as RoutingService;
 use PivotX\Component\Translations\Service as TranslationsService;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpKernel\Debug\Stopwatch;
 
 /**
  * PivotX Lists Service
@@ -27,14 +28,15 @@ class Service
 
     private $lists;
 
-    public function __construct(LoggerInterface $logger = null, SiteoptionsService $siteoptions, RoutingService $routing, TranslationsService $translations, SecurityContext $security_context)
+    public function __construct(LoggerInterface $logger = null, SiteoptionsService $siteoptions, RoutingService $routing, TranslationsService $translations, SecurityContext $security_context, Stopwatch $stopwatch = null)
     {
         $this->logger      = $logger;
         $this->siteoptions = $siteoptions;
+        $this->stopwatch   = $stopwatch;
 
         // @todo remove this when we have another solution
         // inject ourselves and the logger into the Lists singleton
-        \PivotX\Component\Lists\Lists::setServices($this, $logger, $security_context);
+        \PivotX\Component\Lists\Lists::setServices($this, $logger, $security_context, $stopwatch);
 
         //\PivotX\Component\Lists\PxItem::setTranslationsService($translations);
         RouteItem::setRoutingService($routing);

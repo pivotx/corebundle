@@ -7,6 +7,8 @@
 
 namespace PivotX\Component\Lists;
 
+use Symfony\Component\HttpKernel\Debug\Stopwatch;
+
 
 /**
  * PivotX Menu
@@ -21,12 +23,15 @@ class Menu
     private $depth;
     private $merge_self_with_items;
     private $security_context;
+    private $stopwatch;
 
-    public function __construct(ItemInterface $item, $depth = 0, $security_context = null)
+    public function __construct(ItemInterface $item, $depth = 0, $security_context = null, Stopwatch $stopwatch = null)
     {
         $this->item  = $item;
         $this->depth = $depth;
+
         $this->security_context = $security_context;
+        $this->stopwatch        = $stopwatch;
 
         $this->merge_self_with_items = false;
         if ($depth == 0) {
@@ -121,7 +126,14 @@ class Menu
             $items[0]->setForcedItem();
         }
 
+        $sw = null;
+        if (!is_null($this->stopwatch)) {
+            $sw = $this->stopwatch->start('menu.getItems', 'lists');
+        }
         $items = array_merge($items, $this->getActualItems($this->item, 'menu'));
+        if (!is_null($sw)) {
+            $sw->stop();
+        }
 
         return $items;
     }
@@ -170,7 +182,14 @@ class Menu
     {
         $crumbs = array();
 
+        $sw = null;
+        if (!is_null($this->stopwatch)) {
+            $sw = $this->stopwatch->start('menu.getBreadcrumbs', 'lists');
+        }
         $crumbs = array_merge($crumbs, $this->getActualBreadcrumbs($this->item));
+        if (!is_null($sw)) {
+            $sw->stop();
+        }
 
         if (count($crumbs) > 0) {
             $crumbs[count($crumbs)-1]->setLast();
