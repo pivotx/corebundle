@@ -165,8 +165,9 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 
 
         if ($this->get('kernel')->isDebug()) {
-            // on my machine this is 80-100ms
-            $this->buildWebresources($site, true);
+            if ($this->get('pivotx.siteoptions')->getValue('themes.debug', false)) {
+                $this->buildWebresources($site, true);
+            }
         }
 
         $theme_json = $this->get('pivotx.siteoptions')->getValue('themes.active', null, $site);

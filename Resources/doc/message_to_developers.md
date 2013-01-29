@@ -1,3 +1,7 @@
+<!-- 910 Message to developers
+
+     Expected audience: Developers
+-->
 
 
 Message to the Symfony 2, Doctrine and other developers
