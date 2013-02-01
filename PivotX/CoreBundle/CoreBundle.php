@@ -14,39 +14,6 @@ class CoreBundle extends Bundle
         //echo "Boot bundle..\n";
 
         try {
-            $views_service = $this->container->get('pivotx.views');
-
-            //$service->load($fname);
-
-
-            // add all Views from all Doctrine repositories
-
-            $doctrine_service = $this->container->get('doctrine');
-            foreach ($doctrine_service->getEntityManagers() as $em) {
-                $classes = $em->getMetadataFactory()->getAllMetadata();
-                foreach($classes as $class) {
-                    //echo "Class: ".$class->name."<br/>\n";
-
-                    $parts = explode('\\', $class->name);
-                    $name  = end($parts);
-
-                    $repository = $doctrine_service->getRepository($class->name);
-                    if (is_object($repository)) {
-                        //echo 'Repository: '.get_class($repository)."<br/>\n";
-                        if (method_exists($repository,'addDefaultViews')) {
-                            //echo "Adding defaults<br/>\n";
-                            $repository->addDefaultViews($views_service,$name);
-                        }
-                    }
-
-                    if (method_exists($class->name, 'setActivityService')) {
-                        $cl = $class->name;
-                        $cl::setActivityService($this->container->get('pivotx.activity'));
-                    }
-                }
-            }
-
-
             // initialise the internal siteoptions cache
             // @todo someday this should be cachewarmed
 

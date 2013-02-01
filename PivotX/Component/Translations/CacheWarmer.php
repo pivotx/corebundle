@@ -63,6 +63,6 @@ class CacheWarmer extends BaseCacheWarmer
      */
     public function isOptional()
     {
-        return true;
+        return false;
     }
 }

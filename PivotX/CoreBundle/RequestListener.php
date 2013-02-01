@@ -78,7 +78,7 @@ class RequestListener
         }
 
         $uri = $request->getUri();
-        $uri = preg_replace('|app(_dev)?[.]php/|','',$uri);
+        $uri = preg_replace('|app(_[a-z]+)?[.]php/|','',$uri);
 
         $routematch = $this->routesetup->matchUrl($uri);
 

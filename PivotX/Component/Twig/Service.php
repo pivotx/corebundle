@@ -53,6 +53,8 @@ class Service extends \Twig_Extension
         // we hack a loader between the regular loader
         $loader = $this->environment->getLoader();
         $this->environment->setLoader(new WebdebugLoader($loader));
+
+        //$this->environment->disableAutoReload();
     }
 
     public function getName()

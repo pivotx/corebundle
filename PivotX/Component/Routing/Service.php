@@ -29,6 +29,11 @@ class Service
     private $routesetup;
     private $latest_routematch;
 
+    private $count_buildurls = 0;
+    private $time_buildurls  = 0;
+    private $count_matchurls = 0;
+
+
     public function __construct(LoggerInterface $logger = null, $file = false)
     {
         $this->logger     = $logger;
@@ -252,6 +257,9 @@ class Service
      */
     public function buildUrl($text, $arguments = array(), $options = array())
     {
+        $start = microtime(true);
+        $this->count_buildurls++;
+
         if (!isset($options['absolute'])) {
             $options['absolute'] = false;
         }
@@ -277,13 +285,20 @@ class Service
         }
 
         if (is_null($url)) {
+            $this->time_buildurls += microtime(true) - $start;
             return null;
         }
 
-        // @todo we created absolute url's for too easy
-        // @todo for now we insert app_dev.php when the current URI has it
-        if (strpos($_SERVER['REQUEST_URI'],'app_dev.php')) {
-            $url = str_replace('twokings.eu/','twokings.eu/app_dev.php/',$url);
+        // we insert app_*.php when the current URI has it
+        // @todo we should not use $_SERVER
+        if (preg_match('|(app_[a-z]+.php/)(.*)|', $_SERVER['REQUEST_URI'], $match)) {
+            $url = preg_replace('|(https?://[^/]+/)(.*)|','\\1'.$match[1].'\\2', $url);
+        }
+
+        // we created absolute url's for too easy, we at least remote the host now
+        // @todo we should not use $_SERVER
+        if (preg_match('|^https?://'.$_SERVER['HTTP_HOST'].'(.+)|', $url, $match)) {
+            $url = $match[1];
         }
 
         //$this->logger->info('Text "'.$text.'", url "'.$url.'"');
@@ -308,11 +323,18 @@ class Service
             }
         }
 
+        $this->time_buildurls += microtime(true) - $start;
+
         return $url;
     }
 
     public function getRouteSetup()
     {
         return $this->routesetup;
+    }
+
+    public function logPerformance($logger)
+    {
+        $logger->info('Routing statistics: build-urls='.$this->count_buildurls.' ('.$this->time_buildurls.' ms)');
     }
 }

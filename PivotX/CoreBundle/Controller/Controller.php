@@ -152,6 +152,41 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         return $webresourcer;
     }
 
+    /**
+     * We make this as late as possible
+     *
+     * @todo rewrite this to only load relevant view when requested
+     */
+    protected function loadRepositoryViews()
+    {
+        $views_service    = $this->container->get('pivotx.views');
+        $doctrine_service = $this->get('doctrine');
+
+        foreach ($doctrine_service->getEntityManagers() as $em) {
+            $classes = $em->getMetadataFactory()->getAllMetadata();
+            foreach($classes as $class) {
+                //echo "Class: ".$class->name."<br/>\n";
+
+                $parts = explode('\\', $class->name);
+                $name  = end($parts);
+
+                $repository = $doctrine_service->getRepository($class->name);
+                if (is_object($repository)) {
+                    //echo 'Repository: '.get_class($repository)."<br/>\n";
+                    if (method_exists($repository,'addDefaultViews')) {
+                        //echo "Adding defaults<br/>\n";
+                        $repository->addDefaultViews($views_service,$name);
+                    }
+                }
+
+                if (method_exists($class->name, 'setActivityService')) {
+                    $cl = $class->name;
+                    $cl::setActivityService($this->get('pivotx.activity'));
+                }
+            }
+        }
+    }
+
     protected function runOnce()
     {
         $stopwatch = $this->container->get('debug.stopwatch', \Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE);
@@ -163,6 +198,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         $request = $this->getRequest();
         $site    = $request->attributes->get('_site', null);
 
+        $this->loadRepositoryViews();
 
         if ($this->get('kernel')->isDebug()) {
             if ($this->get('pivotx.siteoptions')->getValue('themes.debug', false)) {
@@ -260,6 +296,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
                     $actual_response = parent::render($_view, $parameters, $response);
 
                     $this->get('pivotx.siteoptions')->logCachePerformance();
+                    $this->get('pivotx.routing')->logPerformance($this->get('logger'));
 
                     return $actual_response;
                 }
@@ -272,6 +309,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         $actual_response = parent::render($view, $parameters, $response);
 
         $this->get('pivotx.siteoptions')->logCachePerformance();
+        $this->get('pivotx.routing')->logPerformance($this->get('logger'));
 
         return $actual_response;
     }
