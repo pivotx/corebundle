@@ -66,6 +66,8 @@ abstract class AbstractEntityRepository implements EntityRepository
     {
         $code = '';
 
+        $code .= "\t\t".'$repository = $this;'."\n";
+
         foreach($views as $view) {
             $name = $view[0];
             $args = $view[1];
@@ -74,9 +76,24 @@ abstract class AbstractEntityRepository implements EntityRepository
 
             $long = str_replace('"', '\\"', $long);
 
+            /*
+            // add view directly
             $code .= "\t\t".'$view = new \\PivotX\\Doctrine\\Repository\\Views\\findTemplate($this, \''.$name.'\', '.$args.', $prefix.\'/'.$name.'\', \''.$desc.'\', \'PivotX/Core\', array($prefix, \'returnMore\'));'."\n";
             $code .= "\t\t".'$view->setLongDescription("'.$long.'");'."\n";
             $code .= "\t\t".'$service->registerView($view);'."\n";
+             */
+
+            // add view through proxy
+            $code .= <<<THEEND
+
+        \$view = new \\PivotX\\Component\\Views\\ViewProxy(\$prefix.'/$name', function() use (\$prefix, \$repository) {
+            \$pview = new \\PivotX\Doctrine\\Repository\\Views\\findTemplate(\$repository, '$name', $args, \$prefix.'/$name', '$desc', 'PivotX/Core', array(\$prefix, 'returnMore'));
+            \$pview->setLongDescription("$long");
+            return \$pview;
+        });
+        \$service->registerView(\$view);
+
+THEEND;
         }
 
         return $code;

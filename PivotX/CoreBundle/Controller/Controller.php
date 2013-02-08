@@ -89,6 +89,34 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
     }
 
     /**
+     * Extract theme file from configuration
+     */
+    protected function getThemeFile($site, $target)
+    {
+        $theme_json = null;
+
+        if ($site == 'pivotx-backend') {
+            $theme_json = $this->get('pivotx.siteoptions')->getValue('themes.active', null, $site);
+        }
+        else {
+            $_targets = $this->get('pivotx.siteoptions')->getValue('routing.targets', array(), $site);
+            foreach($_targets as $_target) {
+                if ($_target['name'] == $target) {
+                    $theme_json = $_target['bundle'];
+                    if ($_target['theme'] == '') {
+                        $theme_json .= '/Resources/theme/theme.json';
+                    }
+                    else {
+                        $theme_json .= '/' . $_target['theme'];
+                    }
+                }
+            }
+        }
+
+        return $theme_json;
+    }
+
+    /**
      * Build the webresources
      */
     protected function buildWebresources($site, $target, $allow_debugging = false)
@@ -105,25 +133,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $stopwatch = $this->container->get('stopwatch');
         }
 
-        $theme_json = null;
-        if ($site == 'pivotx-backend') {
-            $theme_json = $siteoptions->getValue('themes.active', null, $site);
-        }
-        else {
-            $_targets = $this->get('pivotx.siteoptions')->getValue('routing.targets', array(), $site);
-            foreach($_targets as $_target) {
-                if ($_target['name'] == $target) {
-                    // @AcmeDemoBundle/Resources/theme/theme.json 
-                    $theme_json = $_target['bundle'];
-                    if ($_target['theme'] == '') {
-                        $theme_json .= '/Resources/theme/theme.json';
-                    }
-                    else {
-                        $theme_json .= '/' . $_target['theme'];
-                    }
-                }
-            }
-        }
+        $theme_json = $this->getThemeFile($site, $target);
 
         if (is_null($theme_json)) {
             // will not continue, nothing configured
@@ -164,7 +174,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
                         'theme' => $theme_json
                     )
                 )
-                ->mostImportant()
+                ->averageImportant()
                 ->log()
                 ;
         }
@@ -184,13 +194,14 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         $site    = $request->attributes->get('_site', null);
         $target  = $request->attributes->get('_target', null);
 
+        // @note this is the time killer in the runOnce() function
         if ($this->get('kernel')->isDebug()) {
             if ($this->get('pivotx.siteoptions')->getValue('themes.debug', false)) {
                 $this->buildWebresources($site, $target, true);
             }
         }
 
-        $theme_json = $this->get('pivotx.siteoptions')->getValue('themes.active', null, $site);
+        $theme_json = $this->getThemeFile($site, $target);
         if (!is_null($theme_json)) {
             $path = dirname($theme_json);
             try {

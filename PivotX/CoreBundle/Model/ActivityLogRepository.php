@@ -7,8 +7,12 @@ class ActivityLogRepository extends \PivotX\Doctrine\Repository\AutoEntityReposi
 {
     public function addDefaultViews(\PivotX\Component\Views\Service $service, $prefix)
     {
-        $findAll = new \PivotX\Component\Activity\Views\findLatest($this, $prefix.'/findLatest');
-        $service->registerView($findAll);
+        $repository = $this;
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findLatest', function() use ($repository,$prefix) {
+            return new \PivotX\Component\Activity\Views\findLatest($repository, $prefix.'/findLatest');
+        });
+        $service->registerView($view);
 
         return parent::addDefaultViews($service, $prefix);
     }
@@ -16,7 +20,7 @@ class ActivityLogRepository extends \PivotX\Doctrine\Repository\AutoEntityReposi
     /**
      * Find all records as used by the Crud
      * 
-     * @PivotX\UpdateDate     2013-01-24 15:21:14
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -67,15 +71,20 @@ class ActivityLogRepository extends \PivotX\Doctrine\Repository\AutoEntityReposi
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2013-01-24 15:21:14
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
     public function addGeneratedViews(\PivotX\Component\Views\Service $service, $prefix)
     {
-		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findCrudAll', array('site' => null), $prefix.'/findCrudAll', 'Find all records for the Crud table', 'PivotX/Core', array($prefix, 'returnMore'));
-		$view->setLongDescription("<h4>Description</h4><p>Find all records for the Crud table.</p><h4>Available arguments</h4><dl><dt>site</dt><dd>Site to restrict results by. When unspecified defaults to <strong>no restriction</strong>.</dd></dl>");
-		$service->registerView($view);
+		$repository = $this;
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findCrudAll', function() use ($prefix, $repository) {
+            $pview = new \PivotX\Doctrine\Repository\Views\findTemplate($repository, 'findCrudAll', array('site' => null), $prefix.'/findCrudAll', 'Find all records for the Crud table', 'PivotX/Core', array($prefix, 'returnMore'));
+            $pview->setLongDescription("<h4>Description</h4><p>Find all records for the Crud table.</p><h4>Available arguments</h4><dl><dt>site</dt><dd>Site to restrict results by. When unspecified defaults to <strong>no restriction</strong>.</dd></dl>");
+            return $pview;
+        });
+        $service->registerView($view);
 
     }
 }

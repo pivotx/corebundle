@@ -645,7 +645,7 @@ class Suggestions
         $entity_name = strtolower($entity_name);
 
         // @todo wrong..
-        $fname = dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/Resources/suggestions/translations.doctrine-preset.yaml';
+        $fname = dirname(dirname(dirname(__FILE__))).'/CoreBundle/Resources/suggestions/translations.doctrine-preset.yaml';
 
         $suggestions = Yaml::parse($fname);
 

@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * PivotX Activity Service
+ * 
+ * Used for logging of various PivotX activities.
  *
  * @author Marcel Wouters <marcel@twokings.nl>
  *
@@ -32,11 +34,17 @@ class Service
 
     private $last_log = null;
 
+
+    // authorisation levels
+
     const LEVEL_SITE = 100;
     const LEVEL_EDITORIAL = 200;
     const LEVEL_ADMINISTRATIVE = 500;
     const LEVEL_SECURITY = 800;
     const LEVEL_TECHNICAL = 900;
+
+
+    // importance levels
 
     // not important means we delete it after a mininum time (say 7 days)
     const IMPORTANCE_NOT = 100;
@@ -49,6 +57,31 @@ class Service
 
     // most important means we don't delete it ever (automatically anyway) (say forever)
     const IMPORTANCE_MOST = 999;
+
+
+    // defined some standard policies
+
+    private $trim_policies = array(
+        'less' => array(
+            self::IMPORTANCE_NOT     => array( 'days' =>     3, 'items' =>   100 ),
+            self::IMPORTANCE_AVERAGE => array( 'days' =>    15, 'items' =>   500 ),
+            self::IMPORTANCE_VERY    => array( 'days' =>    61, 'items' =>   500 ),
+            self::IMPORTANCE_MOST    => array( 'days' =>   182, 'items' =>  1000 )
+        ),
+        'regular' => array(
+            self::IMPORTANCE_NOT     => array( 'days' =>     7, 'items' =>   100 ),
+            self::IMPORTANCE_AVERAGE => array( 'days' =>    31, 'items' =>   500 ),
+            self::IMPORTANCE_VERY    => array( 'days' =>   365, 'items' =>  1000 ),
+            self::IMPORTANCE_MOST    => array( 'days' => false, 'items' => false )
+        ),
+        'more' => array(
+            self::IMPORTANCE_NOT     => array( 'days' =>    14, 'items' =>   500 ),
+            self::IMPORTANCE_AVERAGE => array( 'days' =>    62, 'items' =>  1000 ),
+            self::IMPORTANCE_VERY    => array( 'days' =>   730, 'items' =>  2000 ),
+            self::IMPORTANCE_MOST    => array( 'days' => false, 'items' => false )
+        ),
+    );
+
 
     /**
      * Constructor
@@ -226,7 +259,12 @@ class Service
     /**
      * Creates a loggable message
      *
-     * Important!
+     * Create a special message for the Loggable feature. This stores previous
+     * version of objects into the database.
+     *
+     * The importance is MOST and will therefore be trimmed with the usual
+     * "most-policy". However there is a special trim that is also applied.
+     * See SiteadminController::trimLoggableActivitiesAction()
      */
     public function createLoggableMessage($classname, $id, $entity = null)
     {
@@ -312,10 +350,14 @@ class Service
         return $this->setImportance(self::IMPORTANCE_MOST);
     }
 
-    public function test()
-    {
-        $activity = $this->get('pivotx_activity');
 
-        $activity->siteMessage(null, 'Somebody logged in!')->log();
+    /**
+     */
+    public function getTrimPolicy($name)
+    {
+        if (!isset($this->trim_policies[$name])) {
+            $name = 'normal';
+        }
+        return $this->trim_policies[$name];
     }
 }

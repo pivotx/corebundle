@@ -47,6 +47,13 @@ class Service
         $this->views[] = $view;
     }
 
+    private function realizeView($index)
+    {
+        if ($this->views[$index] instanceof ViewProxy) {
+            $this->views[$index] = $this->views[$index]->createRealView();
+        }
+    }
+
     /**
      * Find a specific view
      *
@@ -55,17 +62,21 @@ class Service
      */
     public function findView($name)
     {
-        foreach($this->views as $view) {
-            if ($view->getName() == $name) {
-                return clone $view;
+        for($i=0; $i < count($this->views); $i++) {
+            if ($this->views[$i]->getName() == $name) {
+                $this->realizeView($i);
+                return clone $this->views[$i];
             }
         }
 
         return null;
     }
 
-    public function getRegisteredViews()
+    public function getRegisteredViews($realize = true)
     {
+        for($i=0; $i < count($this->views); $i++) {
+            $this->realizeView($i);
+        }
         return $this->views;
     }
 }

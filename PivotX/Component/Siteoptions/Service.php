@@ -68,7 +68,7 @@ class Service
     /**
      * Commit 'transaction'
      *
-     * This actually just disabled our 'transaction' and
+     * This actually just disables our 'transaction' and
      * flushes Doctrine
      */
     public function commitTrans()

@@ -18,7 +18,7 @@ class UserRepository extends \PivotX\Doctrine\Repository\AutoEntityRepository
     /**
      * Find all records as used by the Crud
      * 
-     * @PivotX\UpdateDate     2013-01-24 13:41:44
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -66,15 +66,20 @@ class UserRepository extends \PivotX\Doctrine\Repository\AutoEntityRepository
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2013-01-24 13:41:44
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
     public function addGeneratedViews(\PivotX\Component\Views\Service $service, $prefix)
     {
-		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findCrudAll', array(), $prefix.'/findCrudAll', 'Find all records for the Crud table', 'PivotX/Core', array($prefix, 'returnMore'));
-		$view->setLongDescription("<h4>Description</h4><p>Find all records for the Crud table.</p>");
-		$service->registerView($view);
+		$repository = $this;
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findCrudAll', function() use ($prefix, $repository) {
+            $pview = new \PivotX\Doctrine\Repository\Views\findTemplate($repository, 'findCrudAll', array(), $prefix.'/findCrudAll', 'Find all records for the Crud table', 'PivotX/Core', array($prefix, 'returnMore'));
+            $pview->setLongDescription("<h4>Description</h4><p>Find all records for the Crud table.</p>");
+            return $pview;
+        });
+        $service->registerView($view);
 
     }
 }

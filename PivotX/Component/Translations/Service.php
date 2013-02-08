@@ -78,7 +78,22 @@ class Service
     public function commitTrans()
     {
         $this->in_transaction = false;
+
+        $this->flushCaches();
+    }
+
+    /**
+     * Flush the caches
+     *
+     * Flush the entityManager buffer
+     * Warmup the translation cache
+     */
+    private function flushCaches()
+    {
         $this->entity_manager->flush();
+
+        $cachewarmer = new \PivotX\Component\Translations\CacheWarmer($this->doctrine_registry);
+        $cachewarmer->warmUp($this->kernel->getCacheDir());
     }
 
     /**
@@ -233,7 +248,7 @@ class Service
     private function outputConvert($in, $in_encoding, $output_type)
     {
         if ($output_type == 'twig') {
-            if ($in_encoding == 'html/utf-8') {
+            if ($in_encoding == 'utf-8/html') {
                 return new \Twig_Markup($in, 'utf-8');
             }
         }
@@ -338,7 +353,7 @@ class Service
         $this->entity_manager->persist($translationtext);
 
         if (!$this->in_transaction) {
-            $this->entity_manager->flush();
+            $this->flushCaches();
         }
     }
 

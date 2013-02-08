@@ -87,24 +87,24 @@ any:
     technical_context:  { en: 'technical context', nl: 'technische context' }
 
 translationtext:
-    plural_title:       { en: 'translations', nl: 'vertalingen' }
-    singular_title:     { en: 'translation', nl: 'vertaling' }
+    common.plural_title:       { en: 'translations', nl: 'vertalingen' }
+    common.singular_title:     { en: 'translation', nl: 'vertaling' }
 
 siteoption:
-    plural_title:       { en: 'site options', nl: 'site instellingen' }
-    singular_title:     { en: 'site option', nl: 'site instelling' }
+    common.plural_title:       { en: 'site options', nl: 'site instellingen' }
+    common.singular_title:     { en: 'site option', nl: 'site instelling' }
 
 genericresource:
-    plural_title:       { en: 'resources', nl: 'bronmaterialen' }
-    singular_title:     { en: 'resource', nl: 'bronmateriaal' }
+    common.plural_title:       { en: 'resources', nl: 'bronmaterialen' }
+    common.singular_title:     { en: 'resource', nl: 'bronmateriaal' }
 
 user:
-    plural_title:       { en: 'users', nl: 'gebruikers' }
-    singular_title:     { en: 'user', nl: 'gebruiker' }
+    common.plural_title:       { en: 'users', nl: 'gebruikers' }
+    common.singular_title:     { en: 'user', nl: 'gebruiker' }
 
 activitylog:
-    plural_title:       { en: 'activities', nl: 'activiteiten' }
-    singular_title:     { en: 'activity', nl: 'activiteit' }
+    common.plural_title:       { en: 'activities', nl: 'activiteiten' }
+    common.singular_title:     { en: 'activity', nl: 'activiteit' }
 
 sites:
     item:

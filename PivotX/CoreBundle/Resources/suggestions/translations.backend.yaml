@@ -93,13 +93,19 @@ table:
     widget.selection-information:           { en: 'Selection', nl: 'Selectie' }
     widget.editsequencebutton:              { en: 'Edit in sequence', nl: 'Bewerk in volgorde' }
     widget.deleteselectionbutton:           { en: 'Delete', nl: 'Verwijder' }
+    widget.selected-count-0:                { encoding: 'utf-8/html', en: 'You have <span class="count">no</span> selected :items', nl: 'Er zijn <span class="count">geen</span> geselecteerde :items' }
+    widget.selected-count-1:                { encoding: 'utf-8/html', en: 'You have <span class="badge badge-info count">:count</span> selected :item', nl: 'Er is <span class="badge badge-info count">:count</span> geselecteerd :item' }
+    widget.selected-count-n:                { encoding: 'utf-8/html', en: 'You have <span class="badge badge-info count">:count</span> selected :items', nl: 'Er zijn <span class="badge badge-info count">:count</span> geselecteerde :items' }
+    widget.invisible-count-0:               { encoding: 'utf-8/html', en: '', nl: '' }
+    widget.invisible-count-1:               { encoding: 'utf-8/html', en: ', with <span class="badge count">:count</span> :item hidden', nl: ', met <span class="badge count">:count</span> :item verborgen' }
+    widget.invisible-count-n:               { encoding: 'utf-8/html', en: ', with <span class="badge count">:count</span> :items hidden', nl: ', met <span class="badge count">:count</span> :items verborgen' }
 
 config:
     check.require-attention:    { en: 'Require attention.', nl: 'Aandacht nodig.' }
     check.entities.false:       { en: 'Ok.', nl: 'Ok.' }
-    check.entities.true:        { encoding: 'html/utf-8', en: 'Run the command-line setup.<br/><code>php app/console pivotx:setup</code>', nl: 'Doe de command-line setup.<br/><code>php app/console pivotx:setup</code>' }
+    check.entities.true:        { encoding: 'utf-8/html', en: 'Run the command-line setup.<br/><code>php app/console pivotx:setup</code>', nl: 'Doe de command-line setup.<br/><code>php app/console pivotx:setup</code>' }
     check.sites.false:          { en: 'Ok.', nl: 'Ok.' }
-    check.sites.true:           { encoding: 'html/utf-8', en: 'Please start the site configuration.<br/>Go to [Development] &gt; [Site]', nl: 'Doe eerste de site-configuratie.<br/>Ga naar [Development] &gt; [Site]' }
+    check.sites.true:           { encoding: 'utf-8/html', en: 'Please start the site configuration.<br/>Go to [Development] &gt; [Site]', nl: 'Doe eerste de site-configuratie.<br/>Ga naar [Development] &gt; [Site]' }
 
 entities:
     message.entity-is-fixed:    { en: 'Cannot be edited by this backend.', nl: 'Kan niet bewerkt worden door de backend.' }

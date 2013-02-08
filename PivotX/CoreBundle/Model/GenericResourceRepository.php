@@ -18,7 +18,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
      * @param integer $limit      limit the number of results
      * @param integer $offset     first result to return
      * @return object             Criteria object
-     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -55,7 +55,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
 
     /**
      * Find lastest by Modified 
-     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -74,7 +74,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
 
     /**
      * Find by Modified between 2 dates (the former is inclusive, the latter exclusive)
-     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -117,7 +117,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find by Modified in a specific year
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -135,7 +135,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find by Modified in a specific year/month
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -159,7 +159,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find by Modified in a specific year relative to the current year
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -176,7 +176,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find by Modified in a specific year/month relative to the current year/month
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -200,7 +200,7 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Find all records as used by the Crud
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -248,33 +248,63 @@ class GenericResourceRepository extends \PivotX\Doctrine\Repository\AutoEntityRe
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2013-01-24 14:09:13
+     * @PivotX\UpdateDate     2013-02-08 14:20:45
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
     public function addGeneratedViews(\PivotX\Component\Views\Service $service, $prefix)
     {
-		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findLatestByModified', array(), $prefix.'/findLatestByModified', 'Find latest "genericresources" by "Modified" ', 'PivotX/Core', array($prefix, 'returnMore'));
-		$view->setLongDescription("<h4>Description</h4><p>Find latest \"genericresources\" by \"Modified\" .</p>");
-		$service->registerView($view);
-		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findByModifiedBetweenDates', array('date_first'=>null, 'date_last'=>null), $prefix.'/findByModifiedBetweenDates', 'Find "genericresources" by "Modified" based on 2 dates', 'PivotX/Core', array($prefix, 'returnMore'));
-		$view->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on 2 dates.</p><h4>Available arguments</h4><dl><dt>date_first</dt><dd>First date to search for, this date is inclusive. When unspecified defaults to <strong>no</strong> start date.</dd><dd>Arguments example: <code>{ 'date_first': '2012-07-01' }</code></dd><dt>date_last</dt><dd>Last date to search for, this date is exclusive. When unspecified defaults to <strong>no</strong> end date.</dd><dd>Arguments example: <code>{ 'date_last': '2012-07-01' }</code></dd></dl>");
-		$service->registerView($view);
-		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findByModifiedOnYear', array('year'=>null, 'no_of_years'=>1), $prefix.'/findByModifiedOnYear', 'Find "genericresources" by "Modified" based on year', 'PivotX/Core', array($prefix, 'returnMore'));
-		$view->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on year.</p><h4>Available arguments</h4><dl><dt>year</dt><dd>Year to find. When unspecified defaults to <em>current year</em>.</dd><dd>Arguments example: <code>{ 'year': 2012 }</code></dd><dt>no_of_years</dt><dd>Number of years to return. When unspecified defaults to <em>1</em>.</dd><dd>Arguments example: <code>{ 'no_of_years': 1 }</code></dd></dl>");
-		$service->registerView($view);
-		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findByModifiedOnMonth', array('year'=>null, 'month'=>null, 'no_of_months'=>1), $prefix.'/findByModifiedOnMonth', 'Find "genericresources" by "Modified" based on year/month', 'PivotX/Core', array($prefix, 'returnMore'));
-		$view->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on year/month.</p><h4>Available arguments</h4><dl><dt>year</dt><dd>Year to find. When unspecified defaults to <em>current year</em>.</dd><dd>Arguments example: <code>{ 'year': 2012 }</code></dd><dt>month</dt><dd>Month to find. When unspecified defaults to <em>current month</em>.</dd><dd>Arguments example: <code>{ 'month': 1 }</code></dd><dt>no_of_months</dt><dd>Number of months to return. When unspecified defaults to <em>1</em>.</dd><dd>Arguments example: <code>{ 'no_of_months': 1 }</code></dd></dl>");
-		$service->registerView($view);
-		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findByModifiedOnRelativeYear', array('year'=>null, 'no_of_years'=>1), $prefix.'/findByModifiedOnRelativeYear', 'Find "genericresources" by "Modified" based on year relative to the current year', 'PivotX/Core', array($prefix, 'returnMore'));
-		$view->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on year relative to the current year.</p><h4>Available arguments</h4><dl><dt>year</dt><dd>Year to add or substract to the current year. When unspecified defaults to <em>+1</em> (next year).</dd><dd>Arguments example: <code>{ 'year': +1 }</code></dd><dt>no_of_years</dt><dd>Number of years to return. When unspecified defaults to <em>1</em>.</dd><dd>Arguments example: <code>{ 'no_of_years': 1 }</code></dd></dl>");
-		$service->registerView($view);
-		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findByModifiedOnRelativeMonth', array('year'=>null, 'month'=>null, 'no_of_months'=>1), $prefix.'/findByModifiedOnRelativeMonth', 'Find "genericresources" by "Modified" based on year/month relative to the current year/month', 'PivotX/Core', array($prefix, 'returnMore'));
-		$view->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on year/month relative to the current year/month.</p><h4>Available arguments</h4><dl><dt>year</dt><dd>Year to add or substract to the current year. When unspecified defaults to <em>+1</em> (next year).</dd><dd>Arguments example: <code>{ 'year': +1 }</code></dd><dt>month</dt><dd>Month to add or substract to the current month. When unspecified defaults to <em>+1</em> (next month).</dd><dd>Arguments example: <code>{ 'month': +1 }</code></dd><dt>no_of_months</dt><dd>Number of months to return. When unspecified defaults to <em>1</em>.</dd><dd>Arguments example: <code>{ 'no_of_months': 1 }</code></dd></dl>");
-		$service->registerView($view);
-		$view = new \PivotX\Doctrine\Repository\Views\findTemplate($this, 'findCrudAll', array(), $prefix.'/findCrudAll', 'Find all records for the Crud table', 'PivotX/Core', array($prefix, 'returnMore'));
-		$view->setLongDescription("<h4>Description</h4><p>Find all records for the Crud table.</p>");
-		$service->registerView($view);
+		$repository = $this;
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findLatestByModified', function() use ($prefix, $repository) {
+            $pview = new \PivotX\Doctrine\Repository\Views\findTemplate($repository, 'findLatestByModified', array(), $prefix.'/findLatestByModified', 'Find latest "genericresources" by "Modified" ', 'PivotX/Core', array($prefix, 'returnMore'));
+            $pview->setLongDescription("<h4>Description</h4><p>Find latest \"genericresources\" by \"Modified\" .</p>");
+            return $pview;
+        });
+        $service->registerView($view);
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findByModifiedBetweenDates', function() use ($prefix, $repository) {
+            $pview = new \PivotX\Doctrine\Repository\Views\findTemplate($repository, 'findByModifiedBetweenDates', array('date_first'=>null, 'date_last'=>null), $prefix.'/findByModifiedBetweenDates', 'Find "genericresources" by "Modified" based on 2 dates', 'PivotX/Core', array($prefix, 'returnMore'));
+            $pview->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on 2 dates.</p><h4>Available arguments</h4><dl><dt>date_first</dt><dd>First date to search for, this date is inclusive. When unspecified defaults to <strong>no</strong> start date.</dd><dd>Arguments example: <code>{ 'date_first': '2012-07-01' }</code></dd><dt>date_last</dt><dd>Last date to search for, this date is exclusive. When unspecified defaults to <strong>no</strong> end date.</dd><dd>Arguments example: <code>{ 'date_last': '2012-07-01' }</code></dd></dl>");
+            return $pview;
+        });
+        $service->registerView($view);
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findByModifiedOnYear', function() use ($prefix, $repository) {
+            $pview = new \PivotX\Doctrine\Repository\Views\findTemplate($repository, 'findByModifiedOnYear', array('year'=>null, 'no_of_years'=>1), $prefix.'/findByModifiedOnYear', 'Find "genericresources" by "Modified" based on year', 'PivotX/Core', array($prefix, 'returnMore'));
+            $pview->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on year.</p><h4>Available arguments</h4><dl><dt>year</dt><dd>Year to find. When unspecified defaults to <em>current year</em>.</dd><dd>Arguments example: <code>{ 'year': 2012 }</code></dd><dt>no_of_years</dt><dd>Number of years to return. When unspecified defaults to <em>1</em>.</dd><dd>Arguments example: <code>{ 'no_of_years': 1 }</code></dd></dl>");
+            return $pview;
+        });
+        $service->registerView($view);
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findByModifiedOnMonth', function() use ($prefix, $repository) {
+            $pview = new \PivotX\Doctrine\Repository\Views\findTemplate($repository, 'findByModifiedOnMonth', array('year'=>null, 'month'=>null, 'no_of_months'=>1), $prefix.'/findByModifiedOnMonth', 'Find "genericresources" by "Modified" based on year/month', 'PivotX/Core', array($prefix, 'returnMore'));
+            $pview->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on year/month.</p><h4>Available arguments</h4><dl><dt>year</dt><dd>Year to find. When unspecified defaults to <em>current year</em>.</dd><dd>Arguments example: <code>{ 'year': 2012 }</code></dd><dt>month</dt><dd>Month to find. When unspecified defaults to <em>current month</em>.</dd><dd>Arguments example: <code>{ 'month': 1 }</code></dd><dt>no_of_months</dt><dd>Number of months to return. When unspecified defaults to <em>1</em>.</dd><dd>Arguments example: <code>{ 'no_of_months': 1 }</code></dd></dl>");
+            return $pview;
+        });
+        $service->registerView($view);
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findByModifiedOnRelativeYear', function() use ($prefix, $repository) {
+            $pview = new \PivotX\Doctrine\Repository\Views\findTemplate($repository, 'findByModifiedOnRelativeYear', array('year'=>null, 'no_of_years'=>1), $prefix.'/findByModifiedOnRelativeYear', 'Find "genericresources" by "Modified" based on year relative to the current year', 'PivotX/Core', array($prefix, 'returnMore'));
+            $pview->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on year relative to the current year.</p><h4>Available arguments</h4><dl><dt>year</dt><dd>Year to add or substract to the current year. When unspecified defaults to <em>+1</em> (next year).</dd><dd>Arguments example: <code>{ 'year': +1 }</code></dd><dt>no_of_years</dt><dd>Number of years to return. When unspecified defaults to <em>1</em>.</dd><dd>Arguments example: <code>{ 'no_of_years': 1 }</code></dd></dl>");
+            return $pview;
+        });
+        $service->registerView($view);
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findByModifiedOnRelativeMonth', function() use ($prefix, $repository) {
+            $pview = new \PivotX\Doctrine\Repository\Views\findTemplate($repository, 'findByModifiedOnRelativeMonth', array('year'=>null, 'month'=>null, 'no_of_months'=>1), $prefix.'/findByModifiedOnRelativeMonth', 'Find "genericresources" by "Modified" based on year/month relative to the current year/month', 'PivotX/Core', array($prefix, 'returnMore'));
+            $pview->setLongDescription("<h4>Description</h4><p>Find \"genericresources\" by \"Modified\" based on year/month relative to the current year/month.</p><h4>Available arguments</h4><dl><dt>year</dt><dd>Year to add or substract to the current year. When unspecified defaults to <em>+1</em> (next year).</dd><dd>Arguments example: <code>{ 'year': +1 }</code></dd><dt>month</dt><dd>Month to add or substract to the current month. When unspecified defaults to <em>+1</em> (next month).</dd><dd>Arguments example: <code>{ 'month': +1 }</code></dd><dt>no_of_months</dt><dd>Number of months to return. When unspecified defaults to <em>1</em>.</dd><dd>Arguments example: <code>{ 'no_of_months': 1 }</code></dd></dl>");
+            return $pview;
+        });
+        $service->registerView($view);
+		$repository = $this;
+
+        $view = new \PivotX\Component\Views\ViewProxy($prefix.'/findCrudAll', function() use ($prefix, $repository) {
+            $pview = new \PivotX\Doctrine\Repository\Views\findTemplate($repository, 'findCrudAll', array(), $prefix.'/findCrudAll', 'Find all records for the Crud table', 'PivotX/Core', array($prefix, 'returnMore'));
+            $pview->setLongDescription("<h4>Description</h4><p>Find all records for the Crud table.</p>");
+            return $pview;
+        });
+        $service->registerView($view);
 
     }
 }
