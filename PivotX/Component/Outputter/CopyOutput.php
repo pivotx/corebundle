@@ -45,7 +45,7 @@ class CopyOutput extends Output
         return false;
     }
 
-    public function getHtml($temp_directory, $routing_service, $site, $version)
+    public function getHtml($temp_directory, $routing_service, $site, $target, $version)
     {
         $src_dir     = $this->source . '/';
         $dest_dir    = $temp_directory . '/' . $this->destination;

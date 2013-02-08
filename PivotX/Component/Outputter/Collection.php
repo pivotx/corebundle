@@ -43,7 +43,7 @@ class Collection
      * @param string $group   webresource group to return
      * @return string         html of the resources
      */
-    public function getGroup($group, $temp_directory = null, $site = null, $version = null)
+    public function getGroup($group, $temp_directory = null, $site = null, $target = null, $version = null)
     {
         $html = '';
 
@@ -61,7 +61,7 @@ class Collection
 
             $groupoutput = '';
             foreach($outputs as $output) {
-                $groupoutput .= $output->getHtml($temp_directory, $this->routing_service, $site, $version);
+                $groupoutput .= $output->getHtml($temp_directory, $this->routing_service, $site, $target, $version);
             }
 
             $html .= $groupoutput;

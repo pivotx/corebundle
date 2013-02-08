@@ -47,11 +47,12 @@ class DirectOutput extends Output
 
     /**
      */
-    public function getHtml($temp_directory, $routing_service, $site, $version)
+    public function getHtml($temp_directory, $routing_service, $site, $target, $version)
     {
         $output = '';
 
         $this->site    = $site;
+        $this->target  = $target;
         $this->version = $version;
 
         $content = $this->content;

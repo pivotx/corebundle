@@ -27,6 +27,7 @@ class Output
     protected $debuggable = false;
     protected $routing_service = false;
     protected $site = null;
+    protected $target = null;
     protected $version = null;
 
     private static $last_source_directories = false;
@@ -138,7 +139,7 @@ class Output
      */
     protected function getCachePrefix()
     {
-        return '/outputter/'.$this->site.'/'.$this->version;
+        return '/outputter/'.$this->site.'/'.$this->target.'/'.$this->version;
     }
 
     /**
@@ -329,11 +330,13 @@ class Output
                         if ($first_src === false) {
                             $first_src = $src;
                         }
-                        // @todo ugly, we assume the url has 'cwr/' in it..
-                        $src  = preg_replace('#(.*)(cwr|outputter/[^/]+/[^/]+)/(.+)#', '\\3', $src);
+                        // @todo ugly, we assume the url has 'outputter/' in it..
+                        $src  = preg_replace('#(.*)(outputter/[^/]+/[^/]+/[^/]+)/(.+)#', '\\3', $src);
                         $file = $temp_directory . '/' . $src;
 
-                        $data .= file_get_contents($file) . "\n";
+                        if (file_exists($file)) {
+                            $data .= file_get_contents($file) . "\n";
+                        }
                     }
                 }
                 $data = $this->rewriteJavascriptUrlFilter($data);
@@ -401,11 +404,13 @@ class Output
                 $data = '';
                 $first_href = $hrefs[0];
                 foreach($hrefs as $href) {
-                    // @todo ugly, we assume the url has 'cwr/' in it..
-                    $href = preg_replace('#(.*)(cwr|outputter/[^/]+/[^/]+)/(.+)#', '\\3', $href);
+                    // @todo ugly, we assume the url has 'outputter/' in it..
+                    $href = preg_replace('#(.*)(outputter/[^/]+/[^/]+/[^/]+)/(.+)#', '\\3', $href);
                     $file = $temp_directory . '/' . $href;
 
-                    $data .= file_get_contents($file) . "\n";
+                    if (file_exists($file)) {
+                        $data .= file_get_contents($file) . "\n";
+                    }
                 }
                 $href = $this->prepareCacheFile($data, 'css', $temp_directory, '/merged/'.basename($first_href));
                 $content = '<link rel="stylesheet" type="text/css" href="'.$href.'" />'."\n";
@@ -502,7 +507,7 @@ class Output
      *
      * @return string    html valid output
      */
-    public function getHtml($temp_directory, $routing_service, $site, $version)
+    public function getHtml($temp_directory, $routing_service, $site, $target, $version)
     {
         $output = '';
 
@@ -510,6 +515,7 @@ class Output
         self::$active_temp_directory = $temp_directory;
 
         $this->site    = $site;
+        $this->target  = $target;
         $this->version = $version;
 
         switch ($this->type) {

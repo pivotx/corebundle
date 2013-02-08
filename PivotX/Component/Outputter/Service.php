@@ -50,7 +50,7 @@ class Service
         return $directory;
     }
 
-    protected function getPublicDirectory($site = 'none', $version = null)
+    protected function getPublicDirectory($site = 'none', $target = 'none', $version = null)
     {
         $directory = dirname($this->kernel->getRootDir()).'/web/outputter';
         if (!is_dir($directory)) {
@@ -60,6 +60,14 @@ class Service
 
         if (!is_null($site)) {
             $directory .= '/' . $site;
+            if (!is_dir($directory)) {
+                @mkdir($directory, 0777);
+                @chmod($directory, 0777);
+            }
+        }
+
+        if (!is_null($target)) {
+            $directory .= '/' . $target;
             if (!is_dir($directory)) {
                 @mkdir($directory, 0777);
                 @chmod($directory, 0777);
@@ -80,7 +88,7 @@ class Service
     /**
      * Finalize all outputs and return the actual output for the html
      */
-    public function finalizeAllOutputs($site, $version = null)
+    public function finalizeAllOutputs($site, $target, $version = null)
     {
         $groups = array(
             Collection::HEAD_START,
@@ -94,9 +102,9 @@ class Service
             $sw = $this->stopwatch->start('get all output', 'outputter');
         }
 
-        $directory = $this->getPublicDirectory($site, $version);
+        $directory = $this->getPublicDirectory($site, $target, $version);
         foreach($groups as $group) {
-            $html = $this->collection->getGroup($group, $directory, $site, $version);
+            $html = $this->collection->getGroup($group, $directory, $site, $target, $version);
 
             $data[$group] = $html;
         }

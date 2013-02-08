@@ -91,7 +91,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
     /**
      * Build the webresources
      */
-    protected function buildWebresources($site, $allow_debugging = false)
+    protected function buildWebresources($site, $target, $allow_debugging = false)
     {
         $kernel       = $this->get('kernel');
         $siteoptions  = $this->get('pivotx.siteoptions');
@@ -105,13 +105,34 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $stopwatch = $this->container->get('stopwatch');
         }
 
-        $theme_json = $siteoptions->getValue('themes.active', null, $site);
+        $theme_json = null;
+        if ($site == 'pivotx-backend') {
+            $theme_json = $siteoptions->getValue('themes.active', null, $site);
+        }
+        else {
+            $_targets = $this->get('pivotx.siteoptions')->getValue('routing.targets', array(), $site);
+            foreach($_targets as $_target) {
+                if ($_target['name'] == $target) {
+                    // @AcmeDemoBundle/Resources/theme/theme.json 
+                    $theme_json = $_target['bundle'];
+                    if ($_target['theme'] == '') {
+                        $theme_json .= '/Resources/theme/theme.json';
+                    }
+                    else {
+                        $theme_json .= '/' . $_target['theme'];
+                    }
+                }
+            }
+        }
+
         if (is_null($theme_json)) {
-            // cannot continue, nothing configured
+            // will not continue, nothing configured
+
+            $this->get('pivotx.siteoptions')->set('outputter.groups.'.($allow_debugging?'debug':'production'), json_encode(array()), 'application/json', true, false, $site);
+
             return null;
         }
         $theme_path = dirname($theme_json);
-
 
         $webresourcer = new \PivotX\Component\Webresourcer\Service($logger, $kernel);
         $outputter    = new \PivotX\Component\Outputter\Service($logger, $kernel, $routing, $stopwatch);
@@ -130,9 +151,8 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
             $webresourcer->activateWebresource($webresource->getIdentifier());
 
             // finalization
-
             $webresourcer->finalizeWebresources($outputter, $allow_debugging);
-            $groups = $outputter->finalizeAllOutputs($site, $allow_debugging ? 'debug' : 'production');
+            $groups = $outputter->finalizeAllOutputs($site, $target, $allow_debugging ? 'debug' : 'production');
             $this->get('pivotx.siteoptions')->set('outputter.groups.'.($allow_debugging?'debug':'production'), json_encode($groups), 'application/json', true, false, $site);
         }
         catch (\InvalidArgumentException $e) {
@@ -162,10 +182,11 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 
         $request = $this->getRequest();
         $site    = $request->attributes->get('_site', null);
+        $target  = $request->attributes->get('_target', null);
 
         if ($this->get('kernel')->isDebug()) {
             if ($this->get('pivotx.siteoptions')->getValue('themes.debug', false)) {
-                $this->buildWebresources($site, true);
+                $this->buildWebresources($site, $target, true);
             }
         }
 
