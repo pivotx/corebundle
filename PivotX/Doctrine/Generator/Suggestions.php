@@ -306,6 +306,18 @@ class Suggestions
 
         // @todo features should not be hardcoded
         $this->features = array(
+            'genericable' => array(
+                'type' => 'genericable',
+                'description' => 'Provide a generic interface to a logical "title" and a "description" for this record',
+                'orm' => array(
+                    'auto_entity' => array(
+                        'genericable' => array(
+                            'title' => '',
+                            'description' => '',
+                        )
+                    )
+                )
+            ),
             'timesliceable' => array(
                 'type' => 'timesliceable',
                 'description' => 'Select entities based on a date or date range',
