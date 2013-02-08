@@ -44,6 +44,11 @@ class GenericResourceController extends \Symfony\Bundle\FrameworkBundle\Controll
                     // just return
                     break;
             }
+
+            // caching information (@todo make this more cache friendly)
+
+            $headers['cache-control'] = 'public, max-age=31536000';
+            //$headers['last-modified'] = date('r', filemtime($file));
         }
 
         return new Response($content, $code, $headers);

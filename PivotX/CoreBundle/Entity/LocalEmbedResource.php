@@ -11,6 +11,8 @@ class LocalEmbedResource extends EmbedResource
     protected $filename;
     protected $filesize;
 
+    static protected $routing_service = null;
+
     /**
      * Set fileid
      *
@@ -106,7 +108,7 @@ class LocalEmbedResource extends EmbedResource
     }
 
     /**
-     * Move file from quarantaie to actual directory
+     * Move file from quarantaine to actual directory
      */
     public function moveFile($tmp_name, $from_quarantaine = true)
     {
@@ -201,10 +203,14 @@ class LocalEmbedResource extends EmbedResource
             $src_opts = sprintf('%dx%d/%s', $width, $height, $scaleMethod);
         }
 
-        // @todo fix the src!
-        //$src  = $this->getRealFilename();
-        $src  = '/resource/'.$src_opts.'/'.$this->publicid;
-        $alt  = '';
+        $reference = '_resource/'.$src_opts.'/'.$this->publicid;
+        $src       = self::$routing_service->buildUrl($reference);
+        $alt       = '';
+
+        // @todo something if file is missing?
+        if (!file_exists($this->getRealFilename())) {
+            $src .= '/missing';
+        }
 
         if (!is_null($this->getTitle())) {
             $alt = htmlspecialchars($this->getTitle());
@@ -389,6 +395,14 @@ class LocalEmbedResource extends EmbedResource
                 $this->updateMetaInfo();
             }
         }
+    }
+
+    /**
+     * Set the routingservice
+     */
+    public static function setRoutingService($service)
+    {
+        self::$routing_service = $service;
     }
 
     /**

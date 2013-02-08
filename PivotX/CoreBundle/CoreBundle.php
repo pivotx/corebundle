@@ -31,6 +31,8 @@ class CoreBundle extends Bundle
                     }
                 }
             }
+
+            $this->loadRepositoryViews($this->container);
         }
         catch (\InvalidArgumentException $e) {
         }
@@ -39,5 +41,51 @@ class CoreBundle extends Bundle
     public function shutdown()
     {
         //echo "Shutdown bundle..\n";
+    }
+
+
+    /**
+     * We make this as late as possible
+     *
+     * @todo rewrite this to only load relevant view when requested
+     */
+    protected function loadRepositoryViews($container)
+    {
+        static $loaded = false;
+
+        if ($loaded === false) {
+            $loaded = true;
+
+            $views_service    = $container->get('pivotx.views');
+            $doctrine_service = $container->get('doctrine');
+
+            foreach ($doctrine_service->getEntityManagers() as $em) {
+                $classes = $em->getMetadataFactory()->getAllMetadata();
+                foreach($classes as $class) {
+                    //echo "Class: ".$class->name."<br/>\n";
+
+                    $parts = explode('\\', $class->name);
+                    $name  = end($parts);
+
+                    $repository = $doctrine_service->getRepository($class->name);
+                    if (is_object($repository)) {
+                        //echo 'Repository: '.get_class($repository)."<br/>\n";
+                        if (method_exists($repository,'addDefaultViews')) {
+                            //echo "Adding defaults<br/>\n";
+                            $repository->addDefaultViews($views_service,$name);
+                        }
+                    }
+
+                    if (method_exists($class->name, 'setActivityService')) {
+                        $cl = $class->name;
+                        $cl::setActivityService($this->container->get('pivotx.activity'));
+                    }
+                    if (method_exists($class->name, 'setRoutingService')) {
+                        $cl = $class->name;
+                        $cl::setRoutingService($this->container->get('pivotx.routing'));
+                    }
+                }
+            }
+        }
     }
 }
