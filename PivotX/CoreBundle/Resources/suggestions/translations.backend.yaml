@@ -108,5 +108,8 @@ config:
     check.sites.true:           { encoding: 'utf-8/html', en: 'Please start the site configuration.<br/>Go to [Development] &gt; [Site]', nl: 'Doe eerste de site-configuratie.<br/>Ga naar [Development] &gt; [Site]' }
 
 entities:
-    message.entity-is-fixed:    { en: 'Cannot be edited by this backend.', nl: 'Kan niet bewerkt worden door de backend.' }
-    message.entity-is-deleted:  { en: 'Entity has been deleted. Update the configuration.', nl: 'Entiteit is verwijderd. Update de configuratie.' }
+    message.entity-is-unmanaged:    { en: 'Cannot be edited by this backend.', nl: 'Kan niet bewerkt worden door de backend.' }
+    message.entity-is-deleted:      { en: 'Entity has been deleted. Update the configuration.', nl: 'Entiteit is verwijderd. Update de configuratie.' }
+    managed.full:                   { en: 'Managed entity definition and PivotX configuration', nl: 'PivotX beheert entity definitie als ook PivotX configuratie' }
+    managed.augmented:              { en: 'Unmanaged entity definition, managed PivotX configuration', nl: 'Eigen beheer van entity definitie en PivotX beheert overige configuratie' }
+    managed.ignore:                 { en: 'Unmanaged', nl: 'Onbeheerd' }

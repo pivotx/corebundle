@@ -2,14 +2,14 @@
 
 namespace PivotX\CoreBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller as FwController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use PivotX\Component\Routing\RouteMatch;
 
 
 
-class DebugController extends Controller
+class DebugController extends FwController
 {
     public static function convertArguments(array $arguments, $to_public)
     {

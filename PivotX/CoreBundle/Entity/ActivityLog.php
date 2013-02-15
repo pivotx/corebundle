@@ -215,7 +215,16 @@ class ActivityLog
      */
     public function hasTechnicalContext()
     {
-        return !is_null($this->technical_context);
+        if (is_null($this->technical_context)) {
+            return false;
+        }
+        if (is_array($this->technical_context) && (count($this->technical_context) == 0)) {
+            return false;
+        }
+        if (is_string($this->technical_context) && ($this->technical_context == '')) {
+            return false;
+        }
+        return true;
     }
 
     /**

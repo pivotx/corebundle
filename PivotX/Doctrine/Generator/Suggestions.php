@@ -23,9 +23,10 @@ class Suggestions
             'entity.id' => array(
                 'type_description' => 'record identifier',
                 'description' => 'Identity field for the record',
-                'unique' => true,
                 'orm' => array(
+                    'type' => 'integer',
                     'id' => true,
+                    'unique' => true,
                     'generator' => array(
                         'strategy' => 'IDENTITY'
                     )
@@ -107,7 +108,7 @@ class Suggestions
                 )
             ),
             'html.boolean' => array(
-                'type_description' => 'decimal',
+                'type_description' => 'boolean',
                 'description' => 'Boolean field.',
                 'orm' => array(
                     'type' => 'boolean',
@@ -204,11 +205,24 @@ class Suggestions
                 'type_description' => 'integer',
                 'description' => 'Structurable parent field',
                 'orm' => array(
-                    'type' => 'integer', // @todo foreign key
+                    'type' => 'integer', // @todo foreign key to self
                     'nullable' => true,
                     'auto_entity' => array(
                         'structurable' => array(
                             'kind' => 'parent'
+                        )
+                    )
+                )
+            ),
+            'feature.structurable.locked' => array(
+                'type_description' => 'boolean',
+                'description' => 'Structurable locked field',
+                'orm' => array(
+                    'type' => 'boolean',
+                    'nullable' => false,
+                    'auto_entity' => array(
+                        'structurable' => array(
+                            'kind' => 'locked'
                         )
                     )
                 )
@@ -292,6 +306,7 @@ class Suggestions
                 'needs' => 'relation',
                 'relation' => array(
                     'type' => 'manyToOne',
+                    'targetEntity' => false,
                 )
             ),
             'relation.any.many-to-many' => array(
@@ -300,6 +315,7 @@ class Suggestions
                 'needs' => 'relation',
                 'relation' => array(
                     'type' => 'manyToMany',
+                    'targetEntity' => false,
                 )
             ),
         );
@@ -487,12 +503,12 @@ class Suggestions
              * Ex. unordered categories, tags
              */
             'minimal-taxonomy' => array(
-                'description' => 'Minimal taxonomy: minimal-fields, publish date, slug, title.',
+                'description' => 'Minimal taxonomy: minimal-fields, publish state, slug, title.',
                 'fields' => array(
                     array( 'name' => 'id',               'type' => 'entity.id' ),
                     array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
                     array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
-                    array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'publish_state',    'type' => 'feature.publishable.state' ),
                     array( 'name' => 'title',            'type' => 'html.text' ),
                     array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
                 )
@@ -509,7 +525,7 @@ class Suggestions
                     array( 'name' => 'id',               'type' => 'entity.id' ),
                     array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
                     array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
-                    array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
+                    array( 'name' => 'publish_state',    'type' => 'feature.publishable.state' ),
                     array( 'name' => 'order_number',     'type' => 'feature.structurable.order' ),
                     array( 'name' => 'title',            'type' => 'html.text' ),
                     array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
@@ -527,8 +543,8 @@ class Suggestions
                     array( 'name' => 'id',               'type' => 'entity.id' ),
                     array( 'name' => 'date_created',     'type' => 'feature.timestampable.create' ),
                     array( 'name' => 'date_modified',    'type' => 'feature.timestampable.update' ),
-                    array( 'name' => 'date_publication', 'type' => 'feature.publishable.publish' ),
-                    array( 'name' => 'parent_id',        'type' => 'relation.any.many-to-one',    'relation' => 'self.id' ),
+                    array( 'name' => 'publish_state',    'type' => 'feature.publishable.state' ),
+                    array( 'name' => 'parent_id',        'type' => 'feature.structurable.parent' ),
                     array( 'name' => 'order_number',     'type' => 'feature.structurable.order' ),
                     array( 'name' => 'title',            'type' => 'html.text' ),
                     array( 'name' => 'slug',             'type' => 'feature.sluggable.slug',      'arguments' => '%title%' ),
@@ -559,27 +575,34 @@ class Suggestions
         return $entities;
     }
 
-    public function getOrmFieldFromType($type)
+    public function getOrmFieldFromType($type, $partial_definition = null)
     {
+        $orm = null;
         if (isset($this->types[$type])) {
             if (isset($this->types[$type]['orm'])) {
-                return $this->types[$type]['orm'];
+                $orm = $this->types[$type]['orm'];
             }
         }
 
-        return null;
+        if (!is_null($orm)) {
+            if (in_array($type, array('relation.any.many-to-one', 'relation.any.many-to-many')) && (is_null($partial_definition) && $partial_definition->getTargetEntity() != '')) {
+                $orm['relation']['targetEntity'] = $partial_definition['relation'];
+            }
+        }
+
+        return $orm;
     }
 
     public function getRelationFromDefinition($definition)
     {
-        $type = $definition['type'];
+        $type = $definition->getPivotXType();
 
         if (isset($this->types[$type])) {
             if (isset($this->types[$type]['relation'])) {
                 $relation = $this->types[$type]['relation'];
-                $relation['id'] = $definition['name'];
+                $relation['id'] = $definition->getName();
                 if (!isset($relation['targetEntity'])) {
-                    $relation['targetEntity'] = $definition['relation'];
+                    $relation['targetEntity'] = $definition->getTargetEntity();
                 }
                 return $relation;
             }
@@ -588,19 +611,24 @@ class Suggestions
         return null;
     }
 
-    public function getTwigFieldFromType($type)
+    public function getTwigFieldFromType($type, $partial_field = array())
     {
         $field = array(
             'type_description' => false,
-            'nullable' => false,
-            'unique' => false,
-            'editor' => false
+            'orm' => array(
+                'unique' => false,
+                'nullable' => false,
+            )
         );
 
         if (isset($this->types[$type])) {
             foreach($this->types[$type] as $k => $v) {
                 $field[$k] = $v;
             }
+        }
+
+        if (in_array($type, array('relation.any.many-to-one', 'relation.any.many-to-many')) && isset($partial_field['relation'])) {
+            $field['relation']['targetEntity'] = $partial_field['relation'];
         }
 
         return $field;
@@ -639,15 +667,30 @@ class Suggestions
         return $feature;
     }
 
-    public function getEntity($type)
+    public function getEntity($type, $name)
     {
         if (!isset($this->entities[$type])) {
             return null;
         }
 
-        $entity = $this->entities[$type];
+        $entity = new EntityRepresentation($name);
+        $entity->setManaged('full');
 
-        unset($entity['description']);
+        foreach($this->entities[$type]['fields'] as $field) {
+            $field_representation = new FieldRepresentation($field['name']);
+
+            $field_representation->setState('new');
+            $field_representation->setPivotXType($field['type']);
+            if (isset($field['relation'])) {
+                // @todo check for self.id
+                $field_representation->setTargetEntity($field['relation']);
+            }
+            if (isset($field['arguments'])) {
+                $field_representation->setArguments($field['arguments']);
+            }
+
+            $entity->addField($field_representation);
+        }
 
         return $entity;
     }
@@ -675,13 +718,12 @@ class Suggestions
 
     public function buildEntity($type, $name, $bundle)
     {
-        $entity = $this->getEntity($type);
+        $entity = $this->getEntity($type, $name);
         if (is_null($entity)) {
             return null;
         }
 
-        $entity['name']   = $name;
-        $entity['bundle'] = $bundle;
+        $entity->setBundle($bundle);
 
         return $entity;
     }

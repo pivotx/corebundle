@@ -7,6 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use PivotX\Doctrine\Generator\Entities;
 use PivotX\Doctrine\Generator\SoftEntity;
+use PivotX\Doctrine\Generator\EntitiesRepresentation;
 use Doctrine\ORM\Tools\DisconnectedClassMetadataFactory;
 
 class SetupCommand extends ContainerAwareCommand
@@ -214,46 +215,44 @@ class SetupCommand extends ContainerAwareCommand
      */
     protected function updateSoftEntities($input, $output, &$messages)
     {
-        $doctrine = $this->getContainer()->get('doctrine');
-        $siteoption_service = $this->getContainer()->get('pivotx.siteoptions');
+        $kernel      = $this->getApplication()->getKernel();
+        $doctrine    = $this->getContainer()->get('doctrine');
+        $siteoptions = $this->getContainer()->get('pivotx.siteoptions');
 
         $require_doctrine_update = false;
 
-        $siteoptions = $siteoption_service->findSiteOptions(null, 'entities.entity');
-        $config_ents = array();
-        foreach($siteoptions as $siteoption) {
-            $config = $siteoption->getUnpackedValue();
+        $er = new EntitiesRepresentation();
+        $er->importDoctrineConfiguration($doctrine, $kernel);
+        $er->importPivotConfiguration($siteoptions);
+        $entities = $er->getEntities();
+        foreach($entities as $entity) {
+            $soft_entity = new SoftEntity($entity, $kernel);
 
-            $entity = new SoftEntity($config, $this->getApplication()->getKernel());
-
-            if (isset($config['delete'])) {
-                if ($entity->deleteYaml()) {
-                    $siteoption_service->clearSiteOptions(null, 'entities.entity', $config['name']);
-
+            if ($entity->getState() == 'deleted') {
+                $siteoptions->clearSiteOptions('all', 'config.entities', $entity->getInternalName());
+                if ($soft_entity->deleteYaml()) {
                     $require_doctrine_update = true;
                     // @todo this update won't actually delete the table
                 }
             }
-            else {
-                $config_ents[] = $config['name'];
-
-                if ($entity->writeYaml()) {
+            else if ($entity->getManaged() != 'ignore') {
+                if ($soft_entity->writeYaml()) {
                     $require_doctrine_update = true;
                 }
 
-                $entity->writeEntityPhp(false);
-                $entity->writeRepositoryPhp(false);
+                $soft_entity->writeEntityPhp(false);
+                $soft_entity->writeRepositoryPhp(false);
 
-                $entity->markChanges();
+                $soft_entity->markChanges();
 
-                $siteoption->setUnpackedValue($entity->getConfig());
+                $json = json_encode($entity->exportPivotConfig());
+                $siteoptions->set('config.entities.'.$entity->getInternalName(), $json, 'application/json', false, false, 'all');
+
                 //
                 // @todo the entity/repository php code has not been updated for the PivotX/Doctrine features
                 //       for now, just run the setup again
             }
         }
-
-        $siteoption_service->set('config.entities', json_encode($config_ents), 'application/json', false, false, 'all');
 
         if ($require_doctrine_update) {
             /**

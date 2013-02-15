@@ -12,19 +12,19 @@ use Symfony\Component\Yaml\Yaml;
  */
 class SoftEntity
 {
-    private $config;
+    private $entity;
     private $kernel;
 
-    public function __construct($config, $kernel)
+    public function __construct($entity, $kernel)
     {
-        $this->config   = $config;
+        $this->entity   = $entity;
         $this->kernel   = $kernel;
     }
 
 
     private function getYamlFilename()
     {
-        $parts    = explode('\\', $this->config['bundle']);
+        $parts    = explode('\\', $this->entity->getBundle());
         $basename = end($parts);
 
         $path = false;
@@ -49,12 +49,12 @@ class SoftEntity
             return null;
         }
 
-        return $path.'doctrine/'.$this->config['name'].'.orm.yml';
+        return $path.'doctrine/'.$this->entity->getName().'.orm.yml';
     }
 
     private function getEntityPhpFilename()
     {
-        $parts    = explode('\\', $this->config['bundle']);
+        $parts    = explode('\\', $this->entity->getBundle());
         $basename = end($parts);
 
         $path = false;
@@ -79,12 +79,12 @@ class SoftEntity
             return null;
         }
 
-        return $path.'Entity/'.$this->config['name'].'.php';
+        return $path.'Entity/'.$this->entity->getName().'.php';
     }
 
     private function getRepositoryPhpFilename()
     {
-        $parts    = explode('\\', $this->config['bundle']);
+        $parts    = explode('\\', $this->entity->getBundle());
         $basename = end($parts);
 
         $path = false;
@@ -109,24 +109,24 @@ class SoftEntity
             return null;
         }
 
-        return $path.'Model/'.$this->config['name'].'Repository.php';
+        return $path.'Model/'.$this->entity->getName().'Repository.php';
     }
 
     private function getBundleNamespace()
     {
-        $parts = explode('\\', $this->config['bundle']);
+        $parts = explode('\\', $this->entity->getBundle());
         array_pop($parts);
         return implode('\\', $parts);
     }
 
     private function getEntityClass()
     {
-        return $this->getBundleNamespace().'\\Entity\\'.$this->config['name'];
+        return $this->getBundleNamespace().'\\Entity\\'.$this->entity->getName();
     }
 
     private function getRepositoryClass()
     {
-        return $this->getBundleNamespace().'\\Model\\'.$this->config['name'].'Repository';
+        return $this->getBundleNamespace().'\\Model\\'.$this->entity->getName().'Repository';
     }
 
     /**
@@ -160,8 +160,9 @@ class SoftEntity
         $yaml_features = array();
         $yaml_relation = array();
 
-        foreach($this->config['fields'] as $definition) {
-            $id = $definition['name'];
+        $field_definitions = $this->entity->getFields();
+        foreach($field_definitions as $field_definition) {
+            $id = $field_definition->getName();
 
             $field = array(
                 'type' => 'integer',
@@ -172,7 +173,7 @@ class SoftEntity
                 'unique' => false
             );
 
-            $orm = $suggestions->getOrmFieldFromType($definition['type']);
+            $orm = $suggestions->getOrmFieldFromType($field_definition->getPivotXType(), $field_definition);
             if (is_array($orm)) {
                 $field = array_merge($field, $orm);
             }
@@ -182,13 +183,14 @@ class SoftEntity
                 $soft_class = $this->getFeatureSoftClass($name);
 
                 if (!is_null($soft_class)) {
-                    $soft = new $soft_class($this->config);
+                    // @todo here
+                    $soft = new $soft_class($this->entity);
 
-                    $field = $soft->modifyOrmField($field, $definition);
+                    $field = $soft->modifyOrmField($field, $field_definition);
                 }
             }
 
-            $relation = $suggestions->getRelationFromDefinition($definition);
+            $relation = $suggestions->getRelationFromDefinition($field_definition);
 
             if (!is_null($relation)) {
                 $id   = $relation['id'];
@@ -206,19 +208,18 @@ class SoftEntity
             }
         }
 
-        if (isset($this->config['features'])) {
-            foreach($this->config['features'] as $definition) {
-                $id = $definition['type'];
+        $features = $this->entity->getFeatures();
+        foreach($features as $definition) {
+            $id = $definition['type'];
 
-                $feature = $definition['orm']['auto_entity'][$id];
+            $feature = $definition['orm']['auto_entity'][$id];
 
-                $yaml_features[$id] = $feature;
-            }
+            $yaml_features[$id] = $feature;
         }
 
         $yaml_entity = array(
             'type' => 'entity',
-            'table' => strtolower($this->config['name']),
+            'table' => strtolower($this->entity->getName()),
             'repositoryClass' => $this->getRepositoryClass(),
             'fields' => $yaml_fields,
             'auto_entity' => $yaml_features
@@ -242,16 +243,18 @@ class SoftEntity
         $suggestions = new Suggestions();
 
         $namespace = $this->getBundleNamespace();
-        $classname = $this->config['name'];
+        $classname = $this->entity->getName();
 
         $properties = '';
         $methods    = '';
-        foreach($this->config['fields'] as $definition) {
-            $name   = $definition['name'];
+        $field_definitions = $this->entity->getFields();
+        foreach($field_definitions as $field_definition) {
+
+            $name   = $field_definition->getName();
             $ucname = str_replace(" ", "", ucwords(strtr($name, "_-", "  ")));
             $type   = 'integer';
 
-            $orm = $suggestions->getOrmFieldFromType($definition['type']);
+            $orm = $suggestions->getOrmFieldFromType($field_definition->getPivotXType(), $field_definition);
             if (is_array($orm) && isset($orm['type'])) {
                 $type = $orm['type'];
             }
@@ -317,7 +320,7 @@ THEEND;
         $suggestions = new Suggestions();
 
         $namespace = $this->getBundleNamespace();
-        $classname = $this->config['name'].'Repository';
+        $classname = $this->entity->getName().'Repository';
 
         $code = <<<THEEND
 <?php
@@ -412,8 +415,9 @@ THEEND;
      */
     public function markChanges()
     {
-        foreach($this->config['fields'] as &$field) {
-            $field['created'] = true;
+        $fields = $this->entity->getFields();
+        foreach($fields as &$field) {
+            $field->setState('normal');
         }
 
         return true;
@@ -422,8 +426,8 @@ THEEND;
     /**
      * Return the updated configuration
      */
-    public function getConfig()
+    public function getEntity()
     {
-        return $this->config;
+        return $this->entity;
     }
 }

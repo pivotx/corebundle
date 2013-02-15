@@ -2,10 +2,10 @@
 
 namespace PivotX\CoreBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller as FwController;
 
 
-class DefaultController extends Controller
+class DefaultController extends FwController
 {
     public function indexAction($name)
     {
