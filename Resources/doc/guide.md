@@ -1,4 +1,4 @@
-<!-- 100 Starter Guide
+<!-- 200 Starter Guide
 
      Expected audience: Any user
 -->
@@ -22,7 +22,7 @@ You will need to answer the following questions:
 *   Will you have a different mobile site and domain?
 *   In which languages will the site be?
 
-Next we will explain how you can add the entities (sometimes called *content-types*)
+Next we will explain how to setup routing and how you can add the entities (sometimes called *content-types*)
 which will drive the content of your website. 
 
 
@@ -161,7 +161,7 @@ Instructions:
     this case it will most likely be suggested.
 
 
-#### Entities
+#### Entities backend
 
 Now that you have defined the entities, you will have the following
 automatically available.
@@ -193,39 +193,15 @@ automatically available.
     have a 'slug route'.
 
 
-#### Routing
+### Routing part deux
 
-// @todo move this //
-By default all added entities get their own routes. This can later be
-customized or even disabled if so required.
+Now that we configured the routing and have added our entities, it is
+time to explain another part of the PivotX routing service.
 
-The routing in PivotX is a bit more complex to set-up but once done
-the rest is pretty simple (at least we think so).
-
-There are 3 variables that determine which hostname/domain and
-path prefix get used for certain routes.
-
-1.  Sites. You can run multiple sites from one installation.
-2.  Languages. Support for multiple languages is built in.
-3.  Targets. You can have different sites for different devices.
-
-For each combination of sites, languages and targets you can have
-different URL's if you want to.
-
-Domain/url's aliases are supported and can even be automatically
-corrected if you want that (@todo correction is on the wishlist).
-
-It's possible to automatically redirect URL's to the proper
-canonical URL's. All outgoing URL's are also normalized.
-
-Just like in Symfony, routes have requirements and defaults. The 
-difference in PivotX-routing is the way URL's are build for developers.
-PivotX has a concept of a 'Reference'.
-
-To view all the routes for the currently selected site go to:
-[Development] -> [Routing]
-
-##### Reference
+The PivotX routing is closely related to the normal Symfony routing but
+with some added features.  
+Unlike in Symfony we don't **bind** names to our routes but 
+for every route we add an _internal route_. We call this a **Reference**.
 
 A reference is an internal link to another page. Just like named routes 
 in Symfony, by using only the references you can completely seperate
@@ -237,6 +213,15 @@ than that. For instance in Twig:
     {{ ref('(target=mobile)?_page/frontpage') }}  creates a public url to the mobile frontpage in current language
     {{ ref('(t=mobile&l=nl)?_page/frontpage') }}  creates a public url to the Dutch mobile frontpage using shorthands
 
+The routing service will convert all these references to nice URL's as configured
+in the backend. The idea is that you will never ever have to change an internal route.
+Also, the routing system is quite smart about dynamic records and is context (theme/url-scheme and language) aware.
+
+    {{ ref('book/1') }}                           might create link as "/book/out-of-mind"
+    {{ ref(['book/',book.id]) }}                  if book.id is 1, it creates the same link
+    {{ ref(['(l=nl)?book/',book.id]) }}           might create link as "/boek/hersenschimmen"
 
 
 ### Theme.json file
+
+@todo Do this..

@@ -55,8 +55,8 @@ We wanted to build a 'web resource package system', where all dependencies betwe
 control of the packages is in the backend. Our system is not as fast or as smart as assetic at this time.
 
 An importance difference at the moment is the fact that you don't have to run a command-line command to have it work in a production site.
-Because of this, it is currently too slow for actual production use, but it will be when we will release a version 1.0.
-Or when we get assetic working with our 'no command-line command' requirement.
+The system has a production and debug mode. In production everything is minimised (all files are concatenated) and in debug mode only files
+you want are minised, all the others are copied so that line-numbers are what you expect them to be.
 
 
 Doctrine
@@ -75,5 +75,5 @@ Symfony 2
 The default routing is hardly used. We wanted a flexible and non-hardcoded way to route requests. Considering multi-lingual and mobile routes we needed a lot of flexibility that
 was configurable in the backend.
 We of course made lots of use of the DependencyInjection and Service Architecture. However we did take some shortcuts which we aim to improve in future versions.
-Also in the beta we dind't make use of CacheWarmers but this is high on our priority list to add.
+Also in the beta we dind't make use of many CacheWarmers but this is high on our priority list to add.
 
