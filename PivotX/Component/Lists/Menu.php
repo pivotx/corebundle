@@ -138,6 +138,34 @@ class Menu
         return $items;
     }
 
+    public function getPreviousAndNext()
+    {
+        $items = $this->getItems();
+        $pandn = array();
+
+        $cnt        = count($items);
+        $active_idx = false;
+        for($idx=0; $idx < $cnt; $idx++) {
+            if ($items[$idx]->isActive()) {
+                $active_idx = $idx;
+                break;
+            }
+        }
+
+        if ($active_idx !== false) {
+            if ($active_idx > 0) {
+                $pandn[] = $items[$active_idx-1];
+                $pandn[count($pandn)-1]->addClass('previous');
+            }
+            if ($active_idx < $cnt-1) {
+                $pandn[] = $items[$active_idx+1];
+                $pandn[count($pandn)-1]->addClass('next');
+            }
+        }
+
+        return $pandn;
+    }
+
     /**
      * Get the actual breadcrumbs
      */

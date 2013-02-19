@@ -20,6 +20,7 @@ class MenuItem
     private $item;
     private $depth;
     private $security_context;
+    private $classes;
 
 
     /**
@@ -33,6 +34,7 @@ class MenuItem
         $this->item             = $item;
         $this->depth            = $depth;
         $this->security_context = $security_context;
+        $this->classes          = array();
     }
 
     /**
@@ -41,6 +43,14 @@ class MenuItem
     public function setForcedItem()
     {
         $this->forced_item = true;
+    }
+
+    /**
+     * Add a class
+     */
+    public function addClass($class)
+    {
+        $this->classes[] = $class;
     }
 
     public function isMenu()
@@ -100,12 +110,16 @@ class MenuItem
         return null;
     }
 
-    public function getClasses()
+    private function _getClasses()
     {
         $classes = array();
 
         if (method_exists($this->item, 'getMenuClasses')) {
             $classes = array_merge($classes, $this->item->getMenuClasses());
+        }
+
+        if (count($this->classes) > 0) {
+            $classes = array_merge($classes, $this->classes);
         }
 
         if ($this->forced_item && (!$this->item->isActive() && $this->item->isActiveByProxy())) {
@@ -115,7 +129,22 @@ class MenuItem
             $classes[] = 'active';
         }
 
-        return implode(' ', $classes);
+        return $classes;
+    }
+
+    public function getClasses()
+    {
+        return implode(' ', $this->_getClasses());
+    }
+
+    public function hasClass($class)
+    {
+        return in_array($class, $this->_getClasses());
+    }
+
+    public function isActive()
+    {
+        return $this->item->isActive();
     }
 
     public function getAttribute($name, $default = null)
