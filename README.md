@@ -33,6 +33,15 @@ Next go to your new Symfony root:
     php composer.phar require -v pivotx/corebundle:dev-master pivotx/backendbundle:dev-master
 
 
+### Adding Bundles to the kernel
+
+Edit app/AppKernel.php
+Add the following to lines to the $bundles array:
+
+    new PivotX\CoreBundle\CoreBundle(),
+    new PivotX\BackendBundle\BackendBundle(),
+
+
 #### Install for Mysql/Pgsql
 
 Modify app/config/parameters.yml and fill in your database configuration.
