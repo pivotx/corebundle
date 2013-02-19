@@ -74,15 +74,15 @@ class Routing
     }
 
     /**
-     * Return all configured sites
+     * Return configured sites
      */
-    public function getSites()
+    private function _getSites($include_pivotx_backend = true)
     {
         $_sites = explode("\n", $this->siteoptions->getValue('config.sites', '', 'all'));
 
         $sites = array();
         foreach($_sites as $site) {
-            if ($site != 'pivotx-backend') {
+            if ($include_pivotx_backend || ($site != 'pivotx-backend')) {
                 $sites[] = $site;
             }
         }
@@ -91,10 +91,34 @@ class Routing
     }
 
     /**
+     * Get only publicly configured sites (all except pivotx-backend)
+     */
+    public function getPublicSites()
+    {
+        return $this->_getSites(false);
+    }
+
+    /**
+     * Get all configured sites including pivotx-backend
+     */
+    public function getAllSites()
+    {
+        return $this->_getSites(true);
+    }
+
+    /**
      * Return all configured languages for a site
      */
     public function getLanguagesForSite($site)
     {
+        if ($site == 'pivotx-backend') {
+            // @todo get this from routing or other fix
+            return array(
+                array('name'=>'en'),
+                array('name'=>'nl')
+            );
+        }
+
         return $this->siteoptions->getValue('routing.languages', array(), $site);
     }
 
@@ -103,6 +127,13 @@ class Routing
      */
     public function getTargetsForSite($site)
     {
+        if ($site == 'pivotx-backend') {
+            // @todo get this from routing or other fix
+            return array(
+                array('name'=>'desktop')
+            );
+        }
+
         return $this->siteoptions->getValue('routing.targets', array(), $site);
     }
 
@@ -140,7 +171,7 @@ class Routing
     {
         $name = strtolower($name);
 
-        $sites = $this->getSites();
+        $sites = $this->getPublicSites();
         foreach($sites as $site) {
             $routes = $this->buildRoutes($site, $name);
 

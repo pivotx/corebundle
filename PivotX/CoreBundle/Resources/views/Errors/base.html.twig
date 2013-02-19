@@ -27,6 +27,12 @@
 
         {% endblock %}
 
+        {% if debug is defined and debug == true %}
+            <h2>This is the routing information:</h2>
+
+            {{ pxdump(routing) }}
+        {% endif %}
+
         {{ outputter('bodyEnd') }}
     </body>
 

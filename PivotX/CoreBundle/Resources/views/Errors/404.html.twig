@@ -4,12 +4,10 @@
 
     <h1>Page not found!</h1>
 
-    <p>We could not find the page you requested.</p>
-
-    {% if debug is defined %}
-        <h2>This is the routing information:</h2>
-
-        {{ pxdump(routing) }}
+    {% if app.session.hasFlash('custom404') %}
+        <p>{{ app.session.flash('custom404') }}</p>
+    {% else %}
+        <p>We could not find the page you requested.</p>
     {% endif %}
 
 {% endblock %}
