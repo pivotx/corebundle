@@ -98,5 +98,5 @@ part of the setup.
 
 You can now continue to the web-setup. Follow the instruction on this page:
 
-http://YOURSITE/pivotx/en/documentation/guide
+http://YOURSITE/pivotx/en/setup
 
