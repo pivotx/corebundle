@@ -43,6 +43,6 @@ A Reference is an internal link to a page. The purpose of the Reference is to de
 only use references and never hard-links. For instance the Twig-reference `{{ ref('page/contact') }}` should work on any site and in any 
 language (assuming the site/language has the page). That way the developers can build templates and not worry about what the actual URL
 will be. Symfony has a similar feature but this PivotX feature also decouples routes from Controller/Actions.
-Another example is `{{ ref('target=mobile@page/contact') }}`. This reference will always link to the contact page on the mobile site, even
+Another example is `{{ ref('(target=mobile)@page/contact') }}`. This reference will always link to the contact page on the mobile site, even
 if the domain is different. In this setup the domain configuration is also decoupled. Multiple sites and multiple language support is also
 included.

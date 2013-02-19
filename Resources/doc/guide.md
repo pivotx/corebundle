@@ -209,9 +209,9 @@ internal routes from public URL's. Only references are a bit smarter
 than that. For instance in Twig:
 
     {{ ref('_page/frontpage') }}                  creates a public url to the frontpage in the current language
-    {{ ref('(language=nl)?_page/frontpage') }}    creates a public url to the Dutch frontpage
-    {{ ref('(target=mobile)?_page/frontpage') }}  creates a public url to the mobile frontpage in current language
-    {{ ref('(t=mobile&l=nl)?_page/frontpage') }}  creates a public url to the Dutch mobile frontpage using shorthands
+    {{ ref('(language=nl)@_page/frontpage') }}    creates a public url to the Dutch frontpage
+    {{ ref('(target=mobile)@_page/frontpage') }}  creates a public url to the mobile frontpage in current language
+    {{ ref('(t=mobile&l=nl)@_page/frontpage') }}  creates a public url to the Dutch mobile frontpage using shorthands
 
 The routing service will convert all these references to nice URL's as configured
 in the backend. The idea is that you will never ever have to change an internal route.
@@ -219,7 +219,7 @@ Also, the routing system is quite smart about dynamic records and is context (th
 
     {{ ref('book/1') }}                           might create link as "/book/out-of-mind"
     {{ ref(['book/',book.id]) }}                  if book.id is 1, it creates the same link
-    {{ ref(['(l=nl)?book/',book.id]) }}           might create link as "/boek/hersenschimmen"
+    {{ ref(['(l=nl)@book/',book.id]) }}           might create link as "/boek/hersenschimmen"
 
 
 ### Theme.json file
