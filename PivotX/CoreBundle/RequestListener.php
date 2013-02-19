@@ -39,10 +39,10 @@ class RequestListener
 
     public function __construct(RouterInterface $router, $httpPort = 80, $httpsPort = 443, LoggerInterface $logger = null, RoutingService $routeservice = null, ActivityService $activityservice = null)
     {
-        $this->router = $router;
-        $this->httpPort = $httpPort;
+        $this->router    = $router;
+        $this->httpPort  = $httpPort;
         $this->httpsPort = $httpsPort;
-        $this->logger = $logger;
+        $this->logger    = $logger;
 
         $this->routeservice    = $routeservice;
         $this->routesetup      = $routeservice->getRouteSetup();

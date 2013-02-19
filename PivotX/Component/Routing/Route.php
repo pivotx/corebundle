@@ -487,7 +487,7 @@ class Route
      */
     public function getRewrite($parent_reference = null)
     {
-        return new Reference($parent_reference,$this->defaults['_rewrite']);
+        return new Reference($parent_reference, $this->defaults['_rewrite']);
     }
 
     /**

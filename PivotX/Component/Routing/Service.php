@@ -16,7 +16,7 @@ use PivotX\Component\Referencer\Reference;
 /**
  * PivotX Routing Service
  *
- * @todo terrible implementation currently!
+ * @todo non-optimised implementation currently
  *
  * @author Marcel Wouters <marcel@twokings.nl>
  *
@@ -54,7 +54,6 @@ class Service
     {
         $this->logger->info('Loading PivotX Routefile '.$fname);
 
-        // @todo this is really wrong
         $config = Yaml::parse($fname);
 
         if (!$this->processArrayConfig($config, true)) {
@@ -226,6 +225,13 @@ class Service
     public function setLatestRouteMatch(RouteMatch $routematch)
     {
         $this->latest_routematch = $routematch;
+
+        /*
+        if (!is_null($this->logger)) {
+            $reference = $routematch->buildReference(null);
+            $this->logger->info('Route matched: ' . $reference->buildTextReference());
+        }
+        //*/
     }
 
     public function getLatestRouteMatch()

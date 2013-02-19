@@ -136,7 +136,7 @@ class Service
 
         $method = 'getText'.ucfirst($language);
         if (!method_exists($this->entity_class, $method)) {
-            $this->logger->warn('Unsupported language "'.$language.'" requested');
+            die('Unsupported language "'.$language.'" requested');
             return;
         }
 
