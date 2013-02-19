@@ -106,6 +106,10 @@ config:
     check.entities.true:        { encoding: 'utf-8/html', en: 'Run the command-line setup.<br/><code>php app/console pivotx:setup</code>', nl: 'Doe de command-line setup.<br/><code>php app/console pivotx:setup</code>' }
     check.sites.false:          { en: 'Ok.', nl: 'Ok.' }
     check.sites.true:           { encoding: 'utf-8/html', en: 'Please start the site configuration.<br/>Go to [Development] &gt; [Site]', nl: 'Doe eerste de site-configuratie.<br/>Ga naar [Development] &gt; [Site]' }
+    check.cache.false:          { en: 'Ok.', nl: 'Ok.' }
+    check.cache.true:           { encoding: 'utf-8/html', en: 'The cache should be cleared.<br/>Use the button above.', nl: 'Leeg de cache.<br/>Gebruik de button hierboven.' }
+    check.translations.false:   { en: 'Ok.', nl: 'Ok.' }
+    check.translations.true:    { encoding: 'utf-8/html', en: 'The translations cache should be reset.<br/>Use the button above.', nl: 'Leeg de vertalingen-cache.<br/>Gebruik de button hierboven.' }
 
 entities:
     message.entity-is-unmanaged:    { en: 'Cannot be edited by this backend.', nl: 'Kan niet bewerkt worden door de backend.' }

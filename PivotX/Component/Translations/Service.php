@@ -324,6 +324,41 @@ class Service
         return $this->outputConvert($readable_text, $encoding, $output_type);
     }
 
+    private function updateTexts($translationtext, $texts)
+    {
+        $changes = false;
+
+        $methods = get_class_methods($translationtext);
+        foreach($methods as $method) {
+            if (strtolower(substr($method, 0, 7)) == 'settext') {
+                $lang    = substr($method, 7);
+                $lowlang = strtolower($lang);
+
+                $getmethod = 'getText'.$lang;
+
+                $curtext = null;
+                if (method_exists($translationtext, $getmethod)) {
+                    $curtext = $translationtext->$getmethod();
+                }
+
+                if (isset($texts[$lowlang])) {
+                    if ((is_null($curtext)) || ($curtext != $texts[$lowlang])) {
+                        $translationtext->$method($texts[$lowlang]);
+                        $changes = true;
+                    }
+                }
+                else {
+                    if (is_null($curtext)) {
+                        $translationtext->$method('');
+                        $changes = true;
+                    }
+                }
+            }
+        }
+
+        return $changes;
+    }
+
     /**
      * Set text for a specific key
      */
@@ -333,22 +368,19 @@ class Service
             $encoding = 'utf-8';
         }
 
-        $translationtext = new $this->entity_class;
+        $translationtext = $this->findEntity($groupname, $name, $site);
+
+        if (is_null($translationtext)) {
+            $translationtext = new $this->entity_class;
+        }
 
         $translationtext->setSitename($site);
         $translationtext->setGroupname($groupname);
         $translationtext->setName($name);
         $translationtext->setEncoding($encoding);
-        /*
-        // @todo when Timestampable works this should be removed
-        $translationtext->setDateCreated(new \DateTime());
-        $translationtext->setDateModified(new \DateTime());
-         */
         $translationtext->setState($state);
 
-        // @todo should auto-detect languages here
-        $translationtext->setTextNl($texts['nl']);
-        $translationtext->setTextEn($texts['en']);
+        $this->updateTexts($translationtext, $texts);
 
         $this->entity_manager->persist($translationtext);
 
@@ -369,8 +401,8 @@ class Service
         }
         else if ($translationtext->getState() > TranslationText::STATE_SUGGESTED) {
             $translationtext->setState(TranslationText::STATE_SUGGESTED);
-            $translationtext->setTextNl($texts['nl']);
-            $translationtext->setTextEn($texts['en']);
+
+            $this->updateTexts($translationtext, $texts);
 
             $this->entity_manager->persist($translationtext);
 
