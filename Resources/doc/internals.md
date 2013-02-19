@@ -18,7 +18,7 @@ you need an interface to the content and the BackendBundle provides a nice versi
 CoreBundle
 ==========
 
-The CoreBundle provides all the services that make PivotX.
+The CoreBundle provides the following Symfony-services that make PivotX:
 
 1.  Routing. We have our own routing component that can route multiple sites, with multiple domains and multiple languages(/countries).
 2.  SiteOptions. Settings stored in the database.
@@ -26,13 +26,14 @@ The CoreBundle provides all the services that make PivotX.
 4.  Formats. Backend-configurable Twig filters.
 5.  Translations. Backend-configurable language texts. 
 6.  Activity. Automatic activity tracking in the backend (and front-end if applicable).
-7.  Outputter. Code-controlled inserts html-code into the templates.
-8.  Webresourcer. Web resource packagemanagement.
-9.  Lists. Create and manage various lists, for menus or other things.
-10. Twig. Integrate various services into the templating.
+7.  Lists. Create and manage various lists, for menus or other things.
+8.  Twig. Integrate various services into the templating.
 
-The bundle also provides various Doctrine helpers and code generators.
+Other services:
 
+1.  Outputter. Code-controlled inserts html-code into the templates.
+2.  Webresourcer. Web resource package management.
+3.  Doctrine code generation and helpers
 
 
 CoreBundle/Routing
