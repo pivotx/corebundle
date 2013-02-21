@@ -28,8 +28,8 @@ Next go to your new Symfony root:
 
 ### Installing PivotX CoreBundle and BackendBundle From Computer
 
-    php composer.phar config repositories.pxcore vcs /2kdata/git/002/pivotx4_corebundle/
-    php composer.phar config repositories.pxback vcs /2kdata/git/002/pivotx4_backendbundle/
+    php composer.phar config repositories.pxcore vcs https://github.com/pivotx/corebundle.git
+    php composer.phar config repositories.pxback vcs https://github.com/pivotx/backendbundle.git
     php composer.phar require -v pivotx/corebundle:dev-master pivotx/backendbundle:dev-master
 
 
