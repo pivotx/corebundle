@@ -103,9 +103,8 @@ part of the setup.
 
 ### Web PivotX web-setup
 
-You can now continue to the web-setup.
-After you go to the link below, you will see unstyled login page, don't worry.
-Just login and the setup will fix the styling issue for you.
+You can now continue to the web-setup. After the login you are directed to
+the next part of the setup.
 
-http://YOURSITE/pivotx/en/setup
+http://YOURSITE/pivotx/setup
 
