@@ -10,6 +10,8 @@ What you do get is a preview how PivotX can be used to structure, build and mana
 There is additional documentation in the Resources/doc directory. You can view this online on github, but it is also available
 in the main menu of your own PivotX install.
 
+PivotX requires PHP and any relational database supported by [Doctrine](http://www.doctrine-project.org/).
+PivotX will be released under the open source [MIT-license](http://opensource.org/licenses/mit-license.php).
 
 
 Installing PivotX using Composer
