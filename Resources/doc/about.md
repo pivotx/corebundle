@@ -8,7 +8,7 @@ About PivotX 4
 ==============
 
 PivotX 4 is an open source content management system especially designed for high-performance and highly configurable websites.
-It is built on top of Symfony 2 because it provides a solid and robust framework to build websites on.
+It is build on top of Symfony 2 because it provides a rock solid foundation.
 
 PivotX has been designed from the ground up to deliver a great experience for the following group of users:
 

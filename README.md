@@ -1,14 +1,21 @@
 PivotX 4
 ========
 
-Welcome to the PivotX Readme file.
+PivotX 4 is an open source content management system especially designed for high-performance and highly configurable websites.
+It is build on top of Symfony 2 because it provides a rock solid foundation.
+
+This release is very much a **PRE-ALPHA** release. Meaning it shouldn't be used to actually build websites yet.
+What you do get is a preview how PivotX can be used to structure, build and manage websites.
+
+There is additional documentation in the Resources/doc directory. You can view this online on github, but it is also available
+in the main menu of your own PivotX install.
 
 
 
 Installing PivotX using Composer
 --------------------------------
 
-This is the recommended and official way to install PivotX.
+This is the recommended way to install PivotX.
 
 
 ### Installing Composer and Symfony
@@ -26,7 +33,7 @@ Next go to your new Symfony root:
     cd path/to/install
 
 
-### Installing PivotX CoreBundle and BackendBundle From Computer
+### Installing PivotX CoreBundle and BackendBundle from Github
 
     php composer.phar config repositories.pxcore vcs https://github.com/pivotx/corebundle.git
     php composer.phar config repositories.pxback vcs https://github.com/pivotx/backendbundle.git
@@ -88,7 +95,7 @@ Run PivotX setup:
     php app/console pivotx:setup
 
 The setup will require you to enter an administrator e-mailaddress and will
-generate a password for you. Remember it!
+generate a password for you. Remember and/or store it!
 
 After this command has finished you will have finished the command-line
 part of the setup.
@@ -97,7 +104,7 @@ part of the setup.
 ### Web PivotX web-setup
 
 You can now continue to the web-setup.
-After you go to the link below, you will see unstyled login page, dont worry.
+After you go to the link below, you will see unstyled login page, don't worry.
 Just login and the setup will fix the styling issue for you.
 
 http://YOURSITE/pivotx/en/setup
