@@ -38,7 +38,6 @@ class UserRepository extends \PivotX\Doctrine\Repository\AutoEntityRepository
 
         $builder  = new \Doctrine\Common\Collections\ExpressionBuilder;
 
-
         if (is_array($order_by)) {
             $criteria->orderBy($order_by);
         }

@@ -72,13 +72,26 @@ THEEND;
         return $this->code_examples;
     }
 
+    private function splitOrderBy($orderBy)
+    {
+        if (!is_array($orderBy)) {
+            $dir = \Doctrine\Common\Collections\Criteria::ASC;
+            if (substr($orderBy, 0, 1) == '!') {
+                $orderBy = substr($orderBy, 1);
+                $dir     = \Doctrine\Common\Collections\Criteria::DESC;
+            }
+            return array($orderBy => $dir);
+        }
+        return $orderBy;
+    }
+
     private function splitArguments()
     {
         $criteria = array();
         $order_by = null;
         foreach($this->arguments as $k => $v) {
             if (in_array($k, array('orderBy'))) {
-                $order_by = $v;
+                $order_by = $this->splitOrderBy($v);
             }
             else {
                 $criteria[$k] = $v;
