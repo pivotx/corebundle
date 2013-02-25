@@ -264,9 +264,13 @@ class Service
      *                            - plain   output as-is
      *                            - twig    output twig-safe
      * @param array $macros       macros to replace within text
+     * @param mixed $auto_suggest if key is not found, do if $auto_suggest is:
+     *                            - true, automatically add a suggestion translation
+     *                            - false, do nothing, just return $key
+     *                            - otherwise, return $auto_suggest
      * @return string             readable text
      */
-    public function translate($key, $filter = null, $output_type = null, $macros = array())
+    public function translate($key, $filter = null, $output_type = null, $macros = array(), $auto_suggest = true)
     {
         if (is_null($output_type)) {
             $output_type = 'plain';
@@ -296,15 +300,20 @@ class Service
         $translationtext = $this->findEntity($groupname, $name, $site);
 
         if (is_null($translationtext)) {
-            $this->setTexts(
-                $groupname, $name, $site,
-                'utf-8',
-                array(
-                    'nl' => $key,
-                    'en' => $key
-                ),
-                TranslationText::STATE_AUTO_TECHNICAL
-            );
+            if ($auto_suggest === true) {
+                $this->setTexts(
+                    $groupname, $name, $site,
+                    'utf-8',
+                    array(
+                        'nl' => $key,
+                        'en' => $key
+                    ),
+                    TranslationText::STATE_AUTO_TECHNICAL
+                );
+            }
+            else if ($auto_suggest !== false) {
+                return $auto_suggest;
+            }
         }
 
         $method   = 'getText'.ucfirst($language);
