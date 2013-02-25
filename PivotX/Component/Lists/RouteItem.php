@@ -93,6 +93,6 @@ class RouteItem extends Item
 
     public function getLink()
     {
-        return self::$routing_service->buildUrl($this->item_reference, null);
+        return self::$routing_service->buildUrl($this->item_reference);
     }
 }

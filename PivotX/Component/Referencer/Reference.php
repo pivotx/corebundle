@@ -207,6 +207,9 @@ class Reference
         if ($this->entity !== false) {
             $this->valid = true;
         }
+        else if (($this->parent !== false) && ($this->parent->getEntity() !== false)) {
+            $this->valid = true;
+        }
 
         return true;
     }
@@ -299,83 +302,6 @@ class Reference
                     $values[$k] = $v;
                 }
             }
-        }
-
-        return $this->processReferenceArray($values);
-    }
-
-    /**
-     * Parse a text reference to internal attributes
-     *
-     * @return boolean     true if text link was syntactically ok
-     */
-    public function setTextReference2($_link)
-    {
-        $link              = $_link;
-        $value_site_target = false;
-        $value             = false;
-        $anchor            = false;
-        $language          = false;
-        $values            = array();
-
-        if (strpos($link,'#') !== false) {
-            list($link,$anchor) = explode('#',$link,2);
-        }
-        if (strpos($link,'@') !== false) {
-            list($value_site_target,$link) = explode('@',$link,2);
-        }
-        if (strpos($link,'?') !== false) {
-            list($link,$query) = explode('?',$link,2);
-            $values['query'] = $query;
-        }
-
-        if ($value_site_target) {
-            if (preg_match('|^([^(]*)([(]([^)]+)[)])$|',$value_site_target,$match)) {
-                $value_site_target = $match[1];
-                if (count($match) > 2) {
-                    $values['language'] = $match[3];
-                }
-            }
-            $value_site = false;
-            $pos = strpos($value_site_target,'/');
-            if ($pos === false) {
-                if ($value_site_target != '') {
-                    $values['value'] = $value_site_target;
-                }
-            }
-            else {
-                $value_site = substr($value_site_target,0,$pos);
-                $values['target'] = substr($value_site_target,$pos+1);
-            }
-            if ($value_site !== false) {
-                $pos = strpos($value_site,':');
-                if ($pos === false) {
-                    $values['site'] = $value_site;
-                }
-                else {
-                    $values['value'] = substr($value_site,0,$pos);
-                    $values['site']  = substr($value_site,$pos+1);
-                }
-            }
-        }
-        if ($link) {
-            $pos = strpos($link,'/');
-            if ($pos === false) {
-                $values['entity'] = $link;
-            }
-            else {
-                $values['entity'] = substr($link,0,$pos);
-                $values['filter'] = substr($link,$pos+1);
-            }
-        }
-        if ($anchor && preg_match('|^([^/?]+)?(/([^?]+))?([?](.+))?|',$anchor,$match)) {
-            if ($match[1] != '') {
-                $values['anchor_entity'] = $match[1];
-            }
-            if ($match[3] != '') {
-                $values['anchor_filter'] = $match[3];
-            }
-            $values['anchor_query']  = $match[5];
         }
 
         return $this->processReferenceArray($values);
@@ -619,54 +545,6 @@ class Reference
         }
         
         $text .= $this->buildLocalTextReference($add_queries);
-
-        return $text;
-    }
-
-    /**
-     * 
-     */
-    public function buildTextReference2()
-    {
-        $text = '';
-
-        if ($this->getValue() != 'link') {
-            $text .= $this->getValue() . ':';
-        }
-
-        if (($this->getSite() !== false) && ($this->getTarget() !== false)) {
-            $text .= $this->getSite() . '/' . $this->getTarget();
-        }
-        else if ($this->getSite() !== false) {
-            $text .= $this->getSite() . '/';
-        }
-        else if ($this->getTarget() !== false) {
-            $text .= '/' . $this->getTarget();
-        }
-
-        if ($this->getLanguage() !== false) {
-            $text .= '('.$this->getLanguage().')';
-        }
-        
-        if ($text != '') {
-            $text .= '@';
-        }
-
-        $text .= $this->getEntity() . '/' . $this->getFilter();
-
-        if ($this->getQuery() !== false) {
-            $text .= '?' . $this->getQuery();
-        }
-
-        if (($this->getAnchorEntity() !== false) && ($this->getAnchorQuery() !== false)) {
-            $text .= '#' . $this->getAnchorEntity() . '/' . $this->getAnchorFilter() . '?' . $this->getAnchorQuery();
-        }
-        else if ($this->getAnchorEntity() !== false) {
-            $text .= '#' . $this->getAnchorEntity() . '/' . $this->getAnchorFilter();
-        }
-        else if ($this->getAnchorQuery() !== false) {
-            $text .= '#?' . $this->getAnchorQuery();
-        }
 
         return $text;
     }
