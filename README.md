@@ -26,9 +26,9 @@ Composer:
 
     curl -s http://getcomposer.org/installer | php
 
-Symfony Standard Edition:
+Symfony Standard Edition (currently 2.1.8):
 
-    php composer.phar create-project symfony/framework-standard-edition path/to/install
+    php composer.phar create-project symfony/framework-standard-edition path/to/install 2.1.8
 
 Next go to your new Symfony root:
 
