@@ -37,9 +37,9 @@ Next go to your new Symfony root:
 
 ### Installing PivotX CoreBundle and BackendBundle from Github
 
-    php composer.phar config repositories.pxcore vcs https://github.com/pivotx/corebundle.git
-    php composer.phar config repositories.pxback vcs https://github.com/pivotx/backendbundle.git
-    php composer.phar require -v pivotx/corebundle:dev-master pivotx/backendbundle:dev-master
+    php [path-to-composer]/composer.phar config repositories.pxcore vcs https://github.com/pivotx/corebundle.git
+    php [path-to-composer]/composer.phar config repositories.pxback vcs https://github.com/pivotx/backendbundle.git
+    php [path-to-composer]/composer.phar require -v pivotx/corebundle:dev-master pivotx/backendbundle:dev-master
 
 
 ### Adding Bundles to the kernel

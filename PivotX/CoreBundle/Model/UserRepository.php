@@ -18,7 +18,7 @@ class UserRepository extends \PivotX\Doctrine\Repository\AutoEntityRepository
     /**
      * Find all records as used by the Crud
      * 
-     * @PivotX\UpdateDate     2013-02-08 14:20:45
+     * @PivotX\UpdateDate     2013-02-25 17:45:40
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
@@ -37,6 +37,7 @@ class UserRepository extends \PivotX\Doctrine\Repository\AutoEntityRepository
         }
 
         $builder  = new \Doctrine\Common\Collections\ExpressionBuilder;
+
 
         if (is_array($order_by)) {
             $criteria->orderBy($order_by);
@@ -65,7 +66,7 @@ class UserRepository extends \PivotX\Doctrine\Repository\AutoEntityRepository
     /**
      * Add generated views
      * 
-     * @PivotX\UpdateDate     2013-02-08 14:20:45
+     * @PivotX\UpdateDate     2013-02-25 17:45:40
      * @PivotX\AutoUpdateCode code will be updated by PivotX
      * @author                PivotX Generator
      */
