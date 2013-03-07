@@ -23,7 +23,13 @@ class CacheWarmer extends BaseCacheWarmer
 
         $languages = false;
 
-        $translations = $this->doctrine->getRepository('PivotX\\CoreBundle\\Entity\\TranslationText')->findAll();
+        $translations = array();
+        try {
+            $translations = $this->doctrine->getRepository('PivotX\\CoreBundle\\Entity\\TranslationText')->findAll();
+        }
+        catch (\Doctrine\DBAL\DBALException $exception) {
+            // silently ignore (or initial setup will fail)
+        }
         foreach($translations as $translation) {
             if ($languages === false) {
                 $languages = array();

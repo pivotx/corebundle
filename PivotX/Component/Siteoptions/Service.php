@@ -192,10 +192,10 @@ class Service
             $this->cache_initted = true;
         }
         catch (\Doctrine\DBAL\DBALException $exception) {
-            return false;
+            // just ignore this
         }
 
-        return true;
+        return $this->cache_initted;
     }
 
     /**
@@ -231,13 +231,19 @@ class Service
             return $this->cache[$cachekey];
         }
 
-        $siteoption = $this->doctrine_registry->getRepository($this->entity_class)->findOneBy($arguments);
+        $siteoption = null;
+        try {
+            $siteoption = $this->doctrine_registry->getRepository($this->entity_class)->findOneBy($arguments);
 
-        $this->cache[$cachekey] = $siteoption;
-        $this->cache_misses++;
+            $this->cache[$cachekey] = $siteoption;
+            $this->cache_misses++;
 
-        // only enable when developing PX4
-        $this->cache_miss_keys[] = $cachekey;
+            // @todo only enable when developing PX4
+            $this->cache_miss_keys[] = $cachekey;
+        }
+        catch (\Doctrine\DBAL\DBALException $exception) {
+            // silently ignore (or initial setup will fail)
+        }
 
         return $siteoption;
     }
